@@ -52,7 +52,7 @@ public class GameState {
         }
     }
 
-    private void computeIncome(int playerId) {
+    private void computeGold(int playerId) {
         // increments golds of player
         for (int x = 0; x < MAP_WIDTH; ++x) {
             for (int y = 0; y < MAP_HEIGHT; ++y) {
@@ -65,15 +65,6 @@ public class GameState {
         for (Unit unit : this.units.values()) {
             if (unit.getOwner() == playerId && unit.isAlive())
                 this.playerGolds.get(playerId).addAndGet(- UNIT_UPKEEP[unit.getLevel()]);
-        }
-
-        // Negative amount of gold: kill all units and reset to 0
-        if (this.playerGolds.get(playerId).intValue() < 0) {
-            this.playerGolds.get(playerId).set(0);
-
-            List<Unit> toKill = new ArrayList<>();
-            this.units.forEach((key, unit)-> {if (unit.getOwner() == playerId) toKill.add(unit); });
-            killUnits(toKill);
         }
     }
 
@@ -116,11 +107,24 @@ public class GameState {
         newPosition.setUnit(unit);
     }
 
+    private void negativeGoldWipeout(int playerId) {
+        // Negative amount of gold: kill all units and reset to 0
+        this.playerGolds.get(playerId).set(0);
+
+        List<Unit> toKill = new ArrayList<>();
+        this.units.forEach((key, unit)-> {if (unit.getOwner() == playerId) toKill.add(unit); });
+        killUnits(toKill);
+    }
+
     public void initTurn(int playerId) {
         this.computeActiveCells(playerId);
         this.killSeparatedUnits(playerId);
-        this.computeIncome(playerId);
+        this.computeGold(playerId);
+        if (this.playerGolds.get(playerId).intValue() < 0) {
+            negativeGoldWipeout(playerId);
+        }
         this.units.forEach( (key, unit) -> { if (unit.getOwner() == playerId) unit.newTurn(); });
+
     }
 
     public void computeAllActiveCells() {

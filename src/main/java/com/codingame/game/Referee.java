@@ -192,7 +192,7 @@ public class Referee extends AbstractReferee {
             try {
                 player.getOutputs();
             } catch (Exception e) {
-                // should not occur
+                // should not occur since no output is required
             }
         }
     }
@@ -266,17 +266,7 @@ public class Referee extends AbstractReferee {
         if (!moveTrainMatcher.find())
             return false;
 
-        ACTIONTYPE type;
-        String typeStr = moveTrainMatcher.group(1);
-        if (typeStr.equals("TRAIN"))
-            type = ACTIONTYPE.TRAIN;
-        else if (typeStr.equals("MOVE"))
-            type = ACTIONTYPE.MOVE;
-        else {
-            System.err.println("Unknown action type in matchMoveTrain: " + typeStr);
-            return false;
-        }
-
+        ACTIONTYPE type = (moveTrainMatcher.group(1).equals("TRAIN")) ? ACTIONTYPE.TRAIN : ACTIONTYPE.MOVE;
         int idOrLevel = Integer.parseInt(moveTrainMatcher.group(2));
         int x = Integer.parseInt(moveTrainMatcher.group(3));
         int y = Integer.parseInt(moveTrainMatcher.group(4));
@@ -288,7 +278,7 @@ public class Referee extends AbstractReferee {
 
         if (type == ACTIONTYPE.TRAIN) {
             createTrainAction(player, idOrLevel, x, y, actionStr);
-        } else {
+        } else { // MOVE
             createMoveAction(player, idOrLevel, x, y, actionStr);
         }
 
