@@ -20,6 +20,7 @@ public abstract class AbstractView implements Observer {
     }
 
     public void doDispose() {
+        System.out.println("Disposing");
         disposable = true;
     }
 

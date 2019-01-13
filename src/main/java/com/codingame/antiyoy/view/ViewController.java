@@ -43,7 +43,7 @@ public class ViewController {
     public void update() {
         gameStateView.updateView();
 
-        for(AbstractView view : views) {
+        for (AbstractView view : views) {
             view.updateView();
         }
         disposeViews();
@@ -57,25 +57,9 @@ public class ViewController {
     public void createCellView(Cell cell) {
         this.views.add(this.gameStateView.createCellView(cell));
     }
-    public void createUnitView(Unit unit) { this.views.add(this.gameStateView.createUnitView(unit)); }
-//
-//    public void createCardDeckView(Player player) {
-//        CardDeckView deckView = new CardDeckView(entityModule, player.getPlayer());
-//        views.add(deckView);
-//    }
-//
-//    public void createTileView(TileModel tile) {
-//        views.add(board.createTileView(tile));
-//    }
-//
-//    public void createPlayerView(Player player) {
-//        //create view with player name and avatar
-//        views.add(new PlayerTextView(entityModule, player) );
-//        views.add(board.createPlayerView(player));
-//    }
-//
-//    public void createTextView() {
-//        TurnTextView textView = new TurnTextView(entityModule);
-//        views.add(textView);
-//    }
+    public void createUnitView(Unit unit) {
+        UnitView view = this.gameStateView.createUnitView(unit);
+        unit.setViewer(view);
+        this.views.add(view);
+    }
 }

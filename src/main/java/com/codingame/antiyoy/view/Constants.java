@@ -17,7 +17,8 @@ public final class Constants {
     static public final int GRID_Y = (BOARD_HEIGHT - CELL_SIZE * MAP_HEIGHT) / 2;
 
     static private final int PLAYER_UNIT_COLOR[] = {0xcc0000, 0x00cc00};
-    static private final int PLAYER_CELL_COLOR[] = {0x880000, 0x008800};
+    static private final int PLAYER_ACTIVE_CELL_COLOR[] = {0x880000, 0x008800};
+    static private final int PLAYER_INACTIVE_CELL_COLOR[] = {0x440000, 0x004400};
 
     static public final int PLAYER_AVATAR_RADIUS = 200;
 
@@ -25,14 +26,17 @@ public final class Constants {
         return PLAYER_UNIT_COLOR[playerId];
     }
 
-    static public int getPlayerCellColor(int playerId) {
+    static public int getPlayerCellColor(int playerId, boolean isActive) {
         if (playerId == NEUTRAL)
             return 0x666666;
         if (playerId == VOID)
             return 0x000000;
 
         // owned by a player
-        return PLAYER_CELL_COLOR[playerId];
+        if (isActive)
+            return PLAYER_ACTIVE_CELL_COLOR[playerId];
+        else
+            return PLAYER_INACTIVE_CELL_COLOR[playerId];
     }
 
     private Constants() {

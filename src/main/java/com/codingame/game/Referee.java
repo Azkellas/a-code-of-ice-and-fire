@@ -53,8 +53,6 @@ public class Referee extends AbstractReferee {
         }
 
 
-        this.gameState.computeNeighbours();
-
         this.gameState.getCell(0, 0).setOwner(0);
         this.gameState.getCell(MAP_WIDTH-1, MAP_HEIGHT-1).setOwner(1);
 
@@ -62,6 +60,8 @@ public class Referee extends AbstractReferee {
         Unit unit1 = new Unit(MAP_WIDTH-1, MAP_HEIGHT-1, 1, 1);
         this.gameState.addUnit(unit0);
         this.gameState.addUnit(unit1);
+
+        this.gameState.computeNeighbours();
 
         // Initialize viewer
         initializeView();
@@ -99,12 +99,12 @@ public class Referee extends AbstractReferee {
 
             if (!gameState.getCell(action.getX(), action.getY()).isFree()) {
                 gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell occupied) " + action);
-                System.err.println("Invalid occupied: " + action + " " + action.getX() + " " + action.getY() + " " + action.getPlayer());
+                // System.err.println("Invalid occupied: " + action + " " + action.getX() + " " + action.getY() + " " + action.getPlayer());
                 return;
             }
             if (!gameState.getCell(action.getX(), action.getY()).isPlayable(player.getIndex())) {
                 gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (out of range) " + action);
-                System.err.println("Invalid oor: " + action + " " + action.getX() + " " + action.getY() + " " + action.getPlayer());
+                // System.err.println("Invalid oor: " + action + " " + action.getX() + " " + action.getY() + " " + action.getPlayer());
                 return;
             }
 
@@ -118,6 +118,7 @@ public class Referee extends AbstractReferee {
                 int unitId = action.getUnitId();
                 Unit unit = gameState.getUnit(unitId);
                 this.gameState.moveUnit(unit, action.getX(), action.getY());
+                this.gameState.computeAllActiveCells();
                 gameManager.addToGameSummary(player.getNicknameToken() + " moved " + unitId + " to (" + action.getX() + ", " + action.getY() + ")");
 
                 updateView();
@@ -126,6 +127,7 @@ public class Referee extends AbstractReferee {
             if (action.getType() == ACTIONTYPE.TRAIN) {
                 Unit unit = new Unit(action.getX(), action.getY(), action.getPlayer(), 2);
                 this.gameState.addUnit(unit);
+                this.gameState.computeAllActiveCells();
                 viewController.createUnitView(unit);
                 gameManager.addToGameSummary(player.getNicknameToken() + " trained a unit in (" + action.getX() + ", " + action.getY() + ")");
                 updateView();
@@ -135,6 +137,7 @@ public class Referee extends AbstractReferee {
         else {
             forceGameFrame();
             gameManager.setFrameDuration(1000);
+            gameState.initTurn(this.currentPlayer);
 
             Player player = gameManager.getPlayer(this.currentPlayer);
 
@@ -154,8 +157,6 @@ public class Referee extends AbstractReferee {
 
             // read input
             readInput(player);
-            // end turn
-            this.gameState.endTurn();
             // update viewer
             updateView();
 

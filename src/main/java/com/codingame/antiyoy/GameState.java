@@ -5,7 +5,6 @@ import static com.codingame.antiyoy.Constants.*;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
-
 public class GameState {
     private  Cell[][] map;
 
@@ -46,18 +45,19 @@ public class GameState {
         }
     }
 
-    public void endTurn() {
+    public void computeIncome(int playerId) {
         // increments golds of player
         for (int x = 0; x < MAP_WIDTH; ++x) {
             for (int y = 0; y < MAP_HEIGHT; ++y) {
-                if (map[x][y].getOwner() >=0)
+                if (map[x][y].getOwner() == playerId)
                     this.playerGolds.get(map[x][y].getOwner()).addAndGet(CELL_INCOME);
             }
         }
 
         // decrement for units
         for (Unit unit : this.units) {
-            this.playerGolds.get(unit.getOwner()).addAndGet(- UNIT_UPKEEP[unit.getLevel()]);
+            if (unit.getOwner() == playerId)
+                this.playerGolds.get(unit.getOwner()).addAndGet(- UNIT_UPKEEP[unit.getLevel()]);
         }
     }
 
@@ -82,21 +82,11 @@ public class GameState {
     }
 
     public void addUnit(Unit unit) {
+        unit.setCell(this.map[unit.getX()][unit.getY()]);
         this.units.add(unit);
         this.map[unit.getX()][unit.getY()].setOwner(unit.getOwner());
         this.map[unit.getX()][unit.getY()].setUnit(unit);
         this.playerGolds.get(unit.getOwner()).addAndGet(-10);
-    }
-
-    public boolean moveUnit(int idx, Cell position) {
-        if (idx >= this.units.size())
-            return false;
-
-        Unit unit = this.units.get(idx);
-        unit.setX(position.getX());
-        unit.setY(position.getY());
-        map[unit.getX()][unit.getY()].setOwner(unit.getOwner());
-        return true;
     }
 
     public void moveUnit(Unit unit, int x, int y) {
@@ -105,9 +95,57 @@ public class GameState {
 
         unit.setX(x);
         unit.setY(y);
+        unit.setCell(this.map[unit.getX()][unit.getY()]);
+
         map[unit.getX()][unit.getY()].setOwner(unit.getOwner());
         // occupy new cell
         map[unit.getX()][unit.getY()].setUnit(unit);
     }
 
+    public void initTurn(int playerId) {
+        this.computeIncome(playerId);
+        this.computeActiveCells(playerId);
+        this.killSeparatedUnits(playerId);
+        for (Unit unit : this.units) {
+            if (unit.getOwner() == playerId)
+                unit.newTurn();
+        }
+    }
+
+    public void computeAllActiveCells() {
+        for (int playerId = 0; playerId < PLAYER_COUNT; ++playerId)
+            this.computeActiveCells(playerId);
+    }
+
+    public void computeActiveCells(int playerId) {
+        // Set all inactive
+        for (int x = 0; x < MAP_WIDTH; ++x) {
+            for (int y = 0; y < MAP_HEIGHT; ++y) {
+                if (this.map[x][y].getOwner() == playerId)
+                    this.map[x][y].setInactive();
+            }
+        }
+
+        ArrayList<Cell> queue = new ArrayList<>();
+        Cell start = (playerId == 0) ? this.map[0][0] : this.map[MAP_WIDTH-1][MAP_HEIGHT-1];
+        queue.add(start);
+        this.map[start.getX()][start.getY()].setActive();
+
+        // Reactivate cells connected to starting point
+        while (!queue.isEmpty()) {
+            Cell currentCell = queue.get(0);
+            queue.remove(0);
+            for (Cell cell : currentCell.neighbours) {
+                if (cell != null && !cell.isActive() && cell.getOwner() == playerId) {
+                    cell.setActive();
+                    queue.add(cell);
+                }
+            }
+        }
+    }
+
+    public void killSeparatedUnits(int playerId) {
+        this.units.forEach(unit -> {if (unit.getOwner() == playerId && !unit.getCell().isActive()) unit.doDispose(); });
+        this.units.removeIf(unit -> unit.getOwner() == playerId && !unit.getCell().isActive());
+    }
 }

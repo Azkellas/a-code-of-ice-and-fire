@@ -4,19 +4,14 @@ import com.codingame.antiyoy.view.CellView;
 
 import com.codingame.antiyoy.Unit;
 
-public class Cell {
-    private int x;
-    private int y;
-    private int ownerId;  // -1 if neutral, -2 if void
+public class Cell extends Entity {
     private boolean active;
     private Unit unit;
 
     public Cell neighbours[];
     private CellView observer;
     public Cell(int x, int y) {
-        this.x = x;
-        this.y = y;
-        this.ownerId = -1;
+        super(x, y, -1);
         this.unit = null;
         this.active = true;
         this.neighbours = new Cell[4];
@@ -24,12 +19,8 @@ public class Cell {
             this.neighbours[i] = null;
     }
 
-    public int getX() { return this.x; }
-    public int getY() { return this.y; }
     public Unit getUnit() { return this.unit; }
     public void setUnit(Unit unit) { this.unit = unit; }
-    public int getOwner() { return this.ownerId; }
-    public void setOwner(int newOwner) { this.ownerId = newOwner; }
 
     public boolean isFree() { return this.unit == null; }
     public boolean isActive() { return this.active; }

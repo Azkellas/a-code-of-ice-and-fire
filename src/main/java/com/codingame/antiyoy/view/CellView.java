@@ -29,7 +29,7 @@ public class CellView extends AbstractView {
         decors = entityModule.createRectangle()
                 .setHeight(CELL_SIZE -2)
                 .setWidth(CELL_SIZE -2)
-                .setFillColor(getPlayerCellColor(this.model.getOwner()))
+                .setFillColor(getPlayerCellColor(this.model.getOwner(), this.model.isActive()))
                 .setLineColor(255)
                 .setZIndex(1);
         group = entityModule.createGroup()
@@ -62,7 +62,7 @@ public class CellView extends AbstractView {
 
     public void updateView(){
         group.setX(model.getX() * CELL_SIZE).setY(model.getY() * CELL_SIZE);
-        decors.setFillColor(getPlayerCellColor(this.model.getOwner()));
+        decors.setFillColor(getPlayerCellColor(this.model.getOwner(), this.model.isActive()));
     }
 
     public Entity getEntity() {
