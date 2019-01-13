@@ -26,7 +26,7 @@ public class Referee extends AbstractReferee {
 
     private List<Action> actionList = new ArrayList<>();
 
-    private int currentPlayer = 0;
+    private int currentPlayer = -1;
 
     private int realTurn = 0;
 
@@ -38,52 +38,36 @@ public class Referee extends AbstractReferee {
         // Initialize your game here.
         this.gameState = new GameState();
 
-        this.gameManager.setMaxTurns(2000); // the turns are determined by realTurns
+        this.gameManager.setMaxTurns(2000); // Turns are determined by realTurns, this is actually maxFrames
 
-        for (int x = 0; x < MAP_WIDTH; ++x) {
-            for (int y = 0; y < MAP_HEIGHT; ++y) {
-                double random = Math.random() * 100;
-                int owner = random < 20 ? -2 : -1;
-                this.gameState.getCell(x, y).setOwner(owner);
-                this.gameState.getSymmetricCell(x, y).setOwner(owner);
-            }
+        // Random generation
+        this.gameState.generateMap();
+
+        try {
+            this.gameState.createHQs(this.gameManager.getPlayerCount());
         }
-
-
-        this.gameState.getCell(0, 0).setOwner(0);
-        this.gameState.getCell(MAP_WIDTH-1, MAP_HEIGHT-1).setOwner(1);
-        this.gameState.computeNeighbours();
-
-        Building HQ0 = new Building(0, 0, 0, BUILDING_TYPE.HQ);
-        HQ0.setCell(this.gameState.getCell(HQ0.getX(), HQ0.getY()));
-        Building HQ1 = new Building(MAP_WIDTH-1, MAP_HEIGHT-1, 1, BUILDING_TYPE.HQ);
-        HQ1.setCell(this.gameState.getCell(HQ1.getX(), HQ1.getY()));
-        this.gameState.HQs.add(HQ0);
-        this.gameState.HQs.add(HQ1);
-        this.gameState.getCell(HQ0.getX(), HQ0.getY()).setOwner(0);
-        this.gameState.getCell(HQ1.getX(), HQ1.getY()).setOwner(1);
-
+        catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
 
         // Initialize viewer
         initializeView();
     }
 
     private void initializeView() {
-        // init
+        // Init
         this.viewController = new ViewController(graphicEntityModule, gameManager.getPlayers(), this.gameState);
 
-        // add all cells
+        // Add all cells
         for (int x = 0; x < MAP_WIDTH; ++x)
             for (int y = 0; y < MAP_HEIGHT; ++y)
                 this.viewController.createCellView(this.gameState.getCell(x, y));
 
-        for (int idx = 0; idx < this.gameState.getUnitsSize(); ++idx)
-                this.viewController.createUnitView(this.gameState.getUnit(idx));
-
+        // Add HQs
         for (Building HQ : this.gameState.HQs)
             this.viewController.createBuildingView(HQ);
 
-        // display grid
+        // Display grid
         updateView();
     }
 
@@ -96,82 +80,110 @@ public class Referee extends AbstractReferee {
         if (hasAction()) {
             gameManager.setFrameDuration(400);
             forceAnimationFrame();
-            Action action = this.actionList.get(0);
-            this.actionList.remove(0);
-
-            Player player = gameManager.getPlayer(action.getPlayer());
-
-            if (!gameState.getCell(action.getX(), action.getY()).isFree()) {
-                gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell occupied) " + action);
-                // System.err.println("Invalid occupied: " + action + " " + action.getX() + " " + action.getY() + " " + action.getPlayer());
-                return;
-            }
-            if (!gameState.getCell(action.getX(), action.getY()).isPlayable(player.getIndex())) {
-                gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (out of range) " + action);
-                // System.err.println("Invalid oor: " + action + " " + action.getX() + " " + action.getY() + " " + action.getPlayer());
-                return;
-            }
-
-            if (action.getType() == ACTIONTYPE.TRAIN && gameState.getGold(player.getIndex()) < UNIT_COST[action.getLevel()]) {
-                gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (not enough gold) " + action);
-                return;
-            }
-
-
-            if (action.getType() == ACTIONTYPE.MOVE) {
-                int unitId = action.getUnitId();
-                Unit unit = gameState.getUnit(unitId);
-                this.gameState.moveUnit(unit, action.getX(), action.getY());
-                this.gameState.computeAllActiveCells();
-                gameManager.addToGameSummary(player.getNicknameToken() + " moved " + unitId + " to (" + action.getX() + ", " + action.getY() + ")");
-
-                updateView();
-                checkForEndGame();
-            }
-
-            if (action.getType() == ACTIONTYPE.TRAIN) {
-                Unit unit = new Unit(action.getX(), action.getY(), action.getPlayer(), 2);
-                this.gameState.addUnit(unit);
-                this.gameState.computeAllActiveCells();
-                viewController.createUnitView(unit);
-                gameManager.addToGameSummary(player.getNicknameToken() + " trained a unit in (" + action.getX() + ", " + action.getY() + ")");
-                updateView();
-                checkForEndGame();
-            }
+            makeAction();
         }
-
         else {
             forceGameFrame();
-            gameManager.setFrameDuration(1000);
-            gameState.initTurn(this.currentPlayer);
+            gameManager.setFrameDuration(400);
 
+            // get current player
+            if (!computeCurrentPlayer())
+                return;
             Player player = gameManager.getPlayer(this.currentPlayer);
 
-            this.currentPlayer = (this.currentPlayer + 1) % PLAYER_COUNT;
-            if (this.currentPlayer == 0) {
-                this.realTurn++;
-                if (this.realTurn > MAX_TURNS) {
-                    gameManager.endGame();
-                    return;
-                }
-            }
-
-            /// send input
-            sendInput(player);
-
-            player.execute();
-
-            // read input
-            readInput(player);
-            // update viewer
+            // compute new golds / zones / killed units
+            gameState.initTurn(this.currentPlayer);
             updateView();
 
+            /// Send input
+            sendInput(player);
+            player.execute();
+
+            // Read and parse answer
+            readInput(player);
+
+            // Make the first action to save frames
+            if (hasAction())
+                makeAction();
         }
+    }
+
+    // return true if there is a next player, false if this is the end of the game
+    private boolean computeCurrentPlayer() {
+        this.currentPlayer = (this.currentPlayer + 1) % PLAYER_COUNT;
+        if (this.currentPlayer == 0) {
+            this.realTurn++;
+            if (this.realTurn > MAX_TURNS) {
+                gameManager.endGame();
+                return false;
+            }
+        }
+        return true;
     }
 
     private boolean hasAction() {
         return !actionList.isEmpty();
     }
+
+
+    private void makeMoveAction(Action action) {
+        Player player = gameManager.getPlayer(action.getPlayer());
+
+        if (!gameState.getUnit(action.getUnitId()).canPlay()) {
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (unit already moved) " + action);
+            return;
+        }
+
+        int unitId = action.getUnitId();
+        Unit unit = gameState.getUnit(unitId);
+        this.gameState.moveUnit(unit, action.getCell());
+        this.gameState.computeAllActiveCells();
+        gameManager.addToGameSummary(player.getNicknameToken() + " moved " + unitId + " to (" + action.getCell().getX() + ", " + action.getCell().getY() + ")");
+    }
+
+    private void makeTrainAction(Action action) {
+        Player player = gameManager.getPlayer(action.getPlayer());
+
+        if (gameState.getGold(player.getIndex()) < UNIT_COST[action.getLevel()]) {
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (not enough gold) " + action);
+            return;
+        }
+
+        Unit unit = new Unit(action.getCell(), action.getPlayer(), action.getLevel());
+        this.gameState.addUnit(unit);
+        this.gameState.computeAllActiveCells();
+        viewController.createUnitView(unit);
+        gameManager.addToGameSummary(player.getNicknameToken() + " trained a unit in (" + action.getCell().getX() + ", " + action.getCell().getY() + ")");
+    }
+
+    private void makeAction() {
+        Action action = this.actionList.get(0);
+        this.actionList.remove(0);
+
+        Player player = gameManager.getPlayer(action.getPlayer());
+
+        if (!action.getCell().isPlayable(player.getIndex())) {
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (out of range) " + action);
+            return;
+        }
+        if (!action.getCell().isFree()) {
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell occupied) " + action);
+            return;
+        }
+
+
+        if (action.getType() == ACTIONTYPE.MOVE) {
+            makeMoveAction(action);
+        } else if (action.getType() == ACTIONTYPE.TRAIN) {
+            makeTrainAction(action);
+        } else { // ACTIONTYPE.BUILD
+            // TODO: implement BUILD action
+        }
+
+        updateView();
+        checkForEndGame();
+    }
+
 
     private void forceAnimationFrame() {
         for (Player player : gameManager.getPlayers()) {
@@ -202,42 +214,7 @@ public class Referee extends AbstractReferee {
 
 
     private void sendInput(Player player) {
-        // send gold
-        player.sendInputLine(String.valueOf(gameState.getGold(player.getIndex())));
-
-        // send map
-        for (int y = 0; y < MAP_HEIGHT; ++y) {
-            StringBuilder line = new StringBuilder();
-            for (int x = 0; x < MAP_WIDTH; ++x) {
-                int owner = gameState.getCell(x, y).getOwner();
-                if (owner >= 0)
-                    owner = (owner  - player.getIndex() + PLAYER_COUNT) % PLAYER_COUNT;
-                line.append(owner);
-                if (x != MAP_WIDTH - 1) {
-                    line.append(" ");
-                }
-            }
-            // System.err.println(line.toString());
-            player.sendInputLine(line.toString());
-        }
-
-        // send unit count
-        player.sendInputLine(String.valueOf(gameState.getUnitsSize()));
-
-        // send units
-        for (Unit unit : gameState.units) {
-            StringBuilder line = new StringBuilder();
-            line.append(unit.getId());
-            line.append(" ");
-            line.append( (unit.getOwner() - player.getIndex() + PLAYER_COUNT) % PLAYER_COUNT); // always 0 for the player
-            line.append(" ");
-            line.append(unit.getLevel());
-            line.append(" ");
-            line.append(unit.getX());
-            line.append(" ");
-            line.append(unit.getY());
-            player.sendInputLine(line.toString());
-        }
+        this.gameState.sendState(player);
     }
 
 
@@ -245,64 +222,99 @@ public class Referee extends AbstractReferee {
         try {
             List<String> outputs = player.getOutputs();
             if (outputs.isEmpty()) {
-                System.err.println("Empty outputs: " + this.realTurn);
                 return;
             }
+
             String[] actions = outputs.get(0).split(";");
 
             for (String actionStr : actions) {
                 actionStr = actionStr.trim();
-                Matcher moveMatcher = MOVE_PATTERN.matcher(actionStr);
-                Matcher buildMatcher = BUILD_PATTERN.matcher(actionStr);
-                Matcher trainMatcher = TRAIN_PATTERN.matcher(actionStr);
-                if (moveMatcher.find()) {
-                    int id = Integer.parseInt(moveMatcher.group(1));
-                    int x = Integer.parseInt(moveMatcher.group(2));
-                    int y = Integer.parseInt(moveMatcher.group(3));
 
-                    if (!gameState.isLegal(x, y)) {
-                        gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (out of bound) " + actionStr);
-                        System.err.println("Invalid oob: " + x + " " + y + " " + player.getIndex());
-                        continue;
-                    }
-                    if (gameState.getUnit(id) == null) {
-                        gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (invalid id) " + actionStr);
-                        System.err.println("Invalid id: " + x + " " + y + " " + player.getIndex());
-                        continue;
-                    }
-
-                    Action action = new Action(actionStr, ACTIONTYPE.MOVE, player.getIndex(), id, x, y);
-                    this.actionList.add(action);
-
-                } else if (buildMatcher.find()) {
-                    String type = buildMatcher.group(1);
-                    int x = Integer.parseInt(buildMatcher.group(2));
-                    int y = Integer.parseInt(buildMatcher.group(3));
-                    // TODO: implement buildings
-
-                } else if (trainMatcher.find()) {
-                    int level = Integer.parseInt(trainMatcher.group(1));
-                    int x = Integer.parseInt(trainMatcher.group(2));
-                    int y = Integer.parseInt(trainMatcher.group(3));
-                    if (!gameState.isLegal(x, y)) {
-                        gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (out of bound) " + actionStr);
-                        continue;
-                    }
-                    if (level < 0 || level > MAX_LEVEL) {
-                        gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (invalid level) " + actionStr);
-                        continue;
-                    }
-
-                    Action action = new Action(actionStr, ACTIONTYPE.TRAIN, player.getIndex(), level, x, y);
-                    this.actionList.add(action);
-                } else {
-                    gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action " + actionStr);
-                }
+                if (!matchMoveTrain(player, actionStr) && !matchBuild(player, actionStr))
+                    gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (unknown pattern) " + actionStr);
             }
         } catch (TimeoutException e) {
             player.deactivate(String.format("$%d timeout!", player.getIndex()));
         }
     }
+
+
+    private void createTrainAction(Player player, int level, int x, int y, String actionStr) {
+        if (level <= 0 || level > MAX_LEVEL) {
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (invalid level) " + actionStr);
+            return;
+        }
+
+        Action action = new Action(actionStr, ACTIONTYPE.TRAIN, player.getIndex(), level, this.gameState.getCell(x, y));
+        this.actionList.add(action);
+    }
+
+
+    private void createMoveAction(Player player, int id, int x, int y, String actionStr) {
+        if (gameState.getUnit(id) == null) {
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (invalid id) " + actionStr);
+            return;
+        }
+
+        Action action = new Action(actionStr, ACTIONTYPE.MOVE, player.getIndex(), id, this.gameState.getCell(x, y));
+        this.actionList.add(action);
+    }
+
+
+    private boolean matchMoveTrain(Player player, String actionStr) {
+        Matcher moveTrainMatcher = MOVETRAIN_PATTERN.matcher(actionStr);
+        if (!moveTrainMatcher.find())
+            return false;
+
+        ACTIONTYPE type;
+        String typeStr = moveTrainMatcher.group(1);
+        if (typeStr.equals("TRAIN"))
+            type = ACTIONTYPE.TRAIN;
+        else if (typeStr.equals("MOVE"))
+            type = ACTIONTYPE.MOVE;
+        else {
+            System.err.println("Unknown action type in matchMoveTrain: " + typeStr);
+            return false;
+        }
+
+        int idOrLevel = Integer.parseInt(moveTrainMatcher.group(2));
+        int x = Integer.parseInt(moveTrainMatcher.group(3));
+        int y = Integer.parseInt(moveTrainMatcher.group(4));
+
+        if (!gameState.isInside(x, y)) {
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (out of bound) " + actionStr);
+            return true;
+        }
+
+        if (type == ACTIONTYPE.TRAIN) {
+            createTrainAction(player, idOrLevel, x, y, actionStr);
+        } else {
+            createMoveAction(player, idOrLevel, x, y, actionStr);
+        }
+
+        return true;
+    }
+
+
+    private boolean matchBuild(Player player, String actionStr) {
+        Matcher buildMatcher = BUILD_PATTERN.matcher(actionStr);
+        if (!buildMatcher.find())
+            return false;
+
+        String type = buildMatcher.group(1);
+        int x = Integer.parseInt(buildMatcher.group(2));
+        int y = Integer.parseInt(buildMatcher.group(3));
+
+        if (!gameState.isInside(x, y)) {
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (out of bound) " + actionStr);
+            return true;
+        }
+
+        // TODO: implement buildings
+
+        return true;
+    }
+
 
     private void checkForEndGame() {
         for (Building HQ : this.gameState.HQs) {

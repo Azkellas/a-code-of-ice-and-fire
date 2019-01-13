@@ -14,12 +14,12 @@ public class Unit extends Entity {
 
     private UnitView viewer;
 
-    public Unit(int x, int y, int ownerId, int level) {
-        super(x, y, ownerId);
+    public Unit(Cell cell, int ownerId, int level) {
+        super(cell.getX(), cell.getY(), ownerId);
         this.alive = true;
         this.canMove = false;  // cannot play after TRAIN
 
-        this.cell = null;
+        this.cell = cell;
 
         // Grant a unique id
         this.id = unitIdCount;
@@ -35,6 +35,7 @@ public class Unit extends Entity {
     public void die() { this.alive = false; }
     public void newTurn() { this.canMove = true; }
 
+    public void moved() { this.canMove = false; }
     public void setCell(Cell cell) {this.cell = cell; }
     public Cell getCell() { return this.cell; }
 

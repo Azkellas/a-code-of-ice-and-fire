@@ -2,8 +2,6 @@ package com.codingame.antiyoy;
 
 import com.codingame.antiyoy.view.CellView;
 
-import com.codingame.antiyoy.Unit;
-
 public class Cell extends Entity {
     private boolean active;
     private Unit unit;

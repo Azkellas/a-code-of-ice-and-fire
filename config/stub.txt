@@ -1,0 +1,6 @@
+read width:int
+read height:int
+loop height loop width read owner:int
+read unitCount:int
+loop unitCount read id:int owner:int level:int x:int y:int
+write ANSWER

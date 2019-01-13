@@ -3,14 +3,19 @@ package com.codingame.antiyoy;
 // Grants access to Constants.CONSTANTE
 import static com.codingame.antiyoy.Constants.*;
 
+import com.codingame.game.Player;
+
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.List;
+import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 public class GameState {
     private  Cell[][] map;
 
-    public ArrayList<Building> HQs = new ArrayList<>();
+    public List<Building> HQs = new ArrayList<>();
     private ArrayList<Building> buildings = new ArrayList<>();
-    public ArrayList<Unit> units = new ArrayList<>();
+    private Map<Integer, Unit> units = new HashMap<>();
 
     public ArrayList<AtomicInteger> playerGolds = new ArrayList<>();
 
@@ -25,29 +30,29 @@ public class GameState {
             this.playerGolds.add(new AtomicInteger(2 * UNIT_COST[1]));
     }
 
-    public boolean isInside(int x, int y) {
+    private boolean isWithinBounds(int x, int y) {
         return x >= 0 && x < MAP_WIDTH && y >= 0 && y < MAP_HEIGHT;
     }
-    public boolean isLegal(int x, int y) {
-        return isInside(x, y) && this.map[x][y].getOwner() != VOID;
+    public boolean isInside(int x, int y) {
+        return isWithinBounds(x, y) && this.map[x][y].getOwner() != VOID;
     }
 
-    public void computeNeighbours() {
+    private void computeNeighbours() {
         for (int x = 0; x < MAP_WIDTH; ++x) {
             for (int y = 0; y < MAP_HEIGHT; ++y) {
-                if (isInside(x, y-1) && map[x][y-1].getOwner() != VOID)
+                if (isInside(x, y-1))
                     map[x][y].neighbours[UP] = map[x][y-1];
-                if (isInside(x+1, y) && map[x+1][y].getOwner() != VOID)
+                if (isInside(x+1, y))
                     map[x][y].neighbours[RIGHT] = map[x+1][y];
-                if (isInside(x, y+1) && map[x][y+1].getOwner() != VOID)
+                if (isInside(x, y+1))
                     map[x][y].neighbours[DOWN] = map[x][y+1];
-                if (isInside(x-1, y) && map[x-1][y].getOwner() != VOID)
+                if (isInside(x-1, y))
                     map[x][y].neighbours[LEFT] = map[x-1][y];
             }
         }
     }
 
-    public void computeIncome(int playerId) {
+    private void computeIncome(int playerId) {
         // increments golds of player
         for (int x = 0; x < MAP_WIDTH; ++x) {
             for (int y = 0; y < MAP_HEIGHT; ++y) {
@@ -57,24 +62,31 @@ public class GameState {
         }
 
         // decrement for units
-        for (Unit unit : this.units) {
+        for (Unit unit : this.units.values()) {
             if (unit.getOwner() == playerId && unit.isAlive())
                 this.playerGolds.get(playerId).addAndGet(- UNIT_UPKEEP[unit.getLevel()]);
         }
+
+        // Negative amount of gold: kill all units and reset to 0
+        if (this.playerGolds.get(playerId).intValue() < 0) {
+            this.playerGolds.get(playerId).set(0);
+
+            List<Unit> toKill = new ArrayList<>();
+            this.units.forEach((key, unit)-> {if (unit.getOwner() == playerId) toKill.add(unit); });
+            killUnits(toKill);
+        }
+    }
+
+    private void killUnit(Unit unit) {
+        unit.doDispose();
+        this.units.remove(unit.getId());
     }
 
     public Cell getCell(int x, int y) { return this.map[x][y]; }
-    public Cell getSymmetricCell(int x, int y) { return this.map[MAP_WIDTH - x - 1][MAP_HEIGHT - y - 1]; }
+    private Cell getSymmetricCell(int x, int y) { return this.map[MAP_WIDTH - x - 1][MAP_HEIGHT - y - 1]; }
 
-    public int getUnitsSize() {
-        return this.units.size();
-    }
     public Unit getUnit(int id) {
-        for (Unit unit : this.units) {
-            if (unit.getId() == id)
-                return unit;
-        }
-        return null;
+        return this.units.get(id);
     }
 
     public int getGold(int idx) {
@@ -84,34 +96,31 @@ public class GameState {
     }
 
     public void addUnit(Unit unit) {
-        unit.setCell(this.map[unit.getX()][unit.getY()]);
-        this.units.add(unit);
-        this.map[unit.getX()][unit.getY()].setOwner(unit.getOwner());
-        this.map[unit.getX()][unit.getY()].setUnit(unit);
+        this.units.put(unit.getId(), unit);
+        unit.getCell().setOwner(unit.getOwner());
+        unit.getCell().setUnit(unit);
         this.playerGolds.get(unit.getOwner()).addAndGet(-UNIT_COST[unit.getLevel()]);
     }
 
-    public void moveUnit(Unit unit, int x, int y) {
+    public void moveUnit(Unit unit, Cell newPosition) {
         // free current cell
-        map[unit.getX()][unit.getY()].setUnit(null);
+        unit.getCell().setUnit(null);
 
-        unit.setX(x);
-        unit.setY(y);
-        unit.setCell(this.map[unit.getX()][unit.getY()]);
+        unit.moved();
+        unit.setX(newPosition.getX());
+        unit.setY(newPosition.getY());
+        unit.setCell(newPosition);
 
-        map[unit.getX()][unit.getY()].setOwner(unit.getOwner());
+        newPosition.setOwner(unit.getOwner());
         // occupy new cell
-        map[unit.getX()][unit.getY()].setUnit(unit);
+        newPosition.setUnit(unit);
     }
 
     public void initTurn(int playerId) {
         this.computeActiveCells(playerId);
         this.killSeparatedUnits(playerId);
         this.computeIncome(playerId);
-        for (Unit unit : this.units) {
-            if (unit.getOwner() == playerId)
-                unit.newTurn();
-        }
+        this.units.forEach( (key, unit) -> { if (unit.getOwner() == playerId) unit.newTurn(); });
     }
 
     public void computeAllActiveCells() {
@@ -119,7 +128,7 @@ public class GameState {
             this.computeActiveCells(playerId);
     }
 
-    public void computeActiveCells(int playerId) {
+    private void computeActiveCells(int playerId) {
         // Set all inactive
         for (int x = 0; x < MAP_WIDTH; ++x) {
             for (int y = 0; y < MAP_HEIGHT; ++y) {
@@ -131,7 +140,7 @@ public class GameState {
         ArrayList<Cell> queue = new ArrayList<>();
         Cell start = this.HQs.get(playerId).getCell();
         queue.add(start);
-        this.map[start.getX()][start.getY()].setActive();
+        start.setActive();
 
         // Reactivate cells connected to starting point
         while (!queue.isEmpty()) {
@@ -146,8 +155,91 @@ public class GameState {
         }
     }
 
-    public void killSeparatedUnits(int playerId) {
-        this.units.forEach(unit -> {if (unit.getOwner() == playerId && !unit.getCell().isActive()) unit.doDispose(); });
-        this.units.removeIf(unit -> unit.getOwner() == playerId && !unit.getCell().isActive());
+    private void killSeparatedUnits(int playerId) {
+        List<Unit> toKill = new ArrayList<>();
+        this.units.forEach((key, unit)-> {if (unit.getOwner() == playerId && !unit.getCell().isActive()) toKill.add(unit); });
+        killUnits(toKill);
+    }
+
+    private void killUnits(List<Unit> units) {
+        units.forEach(unit -> killUnit(unit));
+    }
+
+
+    private void sendMap(Player player) {
+        for (int y = 0; y < MAP_HEIGHT; ++y) {
+            StringBuilder line = new StringBuilder();
+            for (int x = 0; x < MAP_WIDTH; ++x) {
+                int owner = this.map[x][y].getOwner();
+                if (owner >= 0)
+                    owner = (owner  - player.getIndex() + PLAYER_COUNT) % PLAYER_COUNT; // own unit = owner 0
+                line.append(owner);
+                if (x != MAP_WIDTH - 1) {
+                    line.append(" ");
+                }
+            }
+            player.sendInputLine(line.toString());
+        }
+    }
+
+    private void sendUnits(Player player) {
+        // send unit count
+        player.sendInputLine(String.valueOf(this.units.size()));
+
+        // send units
+        this.units.forEach((id, unit) -> {
+            StringBuilder line = new StringBuilder();
+            line.append(unit.getId())
+                    .append(" ")
+                    .append( (unit.getOwner() - player.getIndex() + PLAYER_COUNT) % PLAYER_COUNT) // always 0 for the player
+                    .append(" ")
+                    .append(unit.getLevel())
+                    .append(" ")
+                    .append(unit.getX())
+                    .append(" ")
+                    .append(unit.getY());
+            player.sendInputLine(line.toString());
+        });
+    }
+
+    public void sendState(Player player) {
+        // send gold
+        player.sendInputLine(String.valueOf(this.playerGolds.get(player.getIndex())));
+
+        sendMap(player);
+        sendUnits(player);
+    }
+
+    public void generateMap() {
+        for (int x = 0; x < MAP_WIDTH; ++x) {
+            for (int y = 0; y < MAP_HEIGHT; ++y) {
+                // do not modify nearby HQs cells
+                if (x + y <= 3)
+                    continue;
+                if (MAP_WIDTH - x + MAP_HEIGHT - y <= 3)
+                    continue;
+
+                double random = Math.random() * 100;
+                int owner = random < 20 ? -2 : -1;
+                this.map[x][y].setOwner(owner);
+                this.getSymmetricCell(x, y).setOwner(owner);
+            }
+        }
+        // Restore HQs cells
+        this.computeNeighbours();
+    }
+
+    public void createHQs(int playersCount) throws Exception {
+        if (playersCount != 2) {
+            throw new Exception("More than 2 players mode not implemented");
+        }
+
+        // Build players HQs
+        Building HQ0 = new Building(this.map[0][0], 0, BUILDING_TYPE.HQ);
+        Building HQ1 = new Building(this.map[MAP_WIDTH-1][MAP_HEIGHT-1], 1, BUILDING_TYPE.HQ);
+        this.HQs.add(HQ0);
+        this.HQs.add(HQ1);
+        HQ0.getCell().setOwner(0);
+        HQ1.getCell().setOwner(1);
     }
 }

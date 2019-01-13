@@ -14,5 +14,4 @@ public class Player extends AbstractMultiplayerPlayer {
     public void setExpectedOutputLines(int lines) {
         this.expectedOutputLines = lines;
     }
-
 }

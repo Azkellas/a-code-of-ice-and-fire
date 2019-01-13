@@ -11,16 +11,14 @@ public class Building extends Entity {
 
     private BuildingView viewer;
 
-    public Building(int x, int y, int ownerId, BUILDING_TYPE type) {
-        super(x, y, ownerId);
+    public Building(Cell cell, int ownerId, BUILDING_TYPE type) {
+        super(cell.getX(), cell.getY(), ownerId);
         this.type = type;
-
-        this.cell = null;
+        this.cell = cell;
     }
 
     public BUILDING_TYPE getType() { return this.type; }
 
-    public void setCell(Cell cell) {this.cell = cell; }
     public Cell getCell() { return this.cell; }
 
     public void setViewer(BuildingView viewer) { this.viewer = viewer; }

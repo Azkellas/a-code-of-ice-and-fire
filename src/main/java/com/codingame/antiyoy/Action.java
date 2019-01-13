@@ -10,12 +10,11 @@ public class Action {
     private String string;
     private int player;
     private int unitId;
-    private int x;
-    private int y;
+    private Cell cell;
     private int level;
 
-    public Action(String string, ACTIONTYPE type, int player, int idlevel, int x, int y) {
-        // Constructor for type == MOVE
+    public Action(String string, ACTIONTYPE type, int player, int idlevel, Cell cell) {
+        // Constructor for type == MOVE or TRAIN
         this.string = string;
         this.type = type;
         this.player = player;
@@ -23,24 +22,21 @@ public class Action {
             this.unitId = idlevel;
         else if (type == ACTIONTYPE.TRAIN)
             this.level = idlevel;
-        this.x = x;
-        this.y = y;
+        this.cell = cell;
     }
 
-    public Action(String string, ACTIONTYPE type, int player, int x, int y) {
-        // Constructor for type == TRAIN
+    public Action(String string, ACTIONTYPE type, int player, Cell cell) {
+        // Constructor for type == BUILD
         this.type = type;
         this.player = player;
-        this.x = x;
-        this.y = y;
+        this.cell = cell;
     }
 
     public ACTIONTYPE getType() { return this.type; }
     public int getUnitId() { return this.unitId; }
     public int getLevel() { return this.level; }
     public int getPlayer() { return this.player; }
-    public int getX() { return this.x; }
-    public int getY() { return this.y; }
+    public Cell getCell() { return this.cell; }
 
     public String toString() { return this.string; }
 }

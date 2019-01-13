@@ -100,7 +100,7 @@ int main() {
                 cout << (first ? "" : " ") << "MOVE " << unit.id << " " << neighbour->x << " " << neighbour->y << ";";
                 neighbour->owner = 0;
                 first = false;
-                break;
+                // break;
             }
         }
         cerr << "finished moving" << endl;
@@ -119,7 +119,7 @@ int main() {
                         if (map[x][y].neighbours[dir] != nullptr && map[x][y].neighbours[dir]->owner == 0 && !map[x][y].neighbours[dir]->occupied)
                             can = true;
                     if (can) {
-                        cout << (first ? "" : " ") << "TRAIN " << 2 << " " << x << " " << y << ";";
+                        cout << (first ? "" : " ") << "TRAIN " << 1 << " " << x << " " << y << ";";
                         first = false;
                         map[x][y].owner = 0;
                         mad = true;
