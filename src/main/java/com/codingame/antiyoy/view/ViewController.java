@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.codingame.antiyoy.Cell;
+import com.codingame.antiyoy.Building;
 import com.codingame.antiyoy.Unit;
 import com.codingame.antiyoy.GameState;
 
@@ -60,6 +61,11 @@ public class ViewController {
     public void createUnitView(Unit unit) {
         UnitView view = this.gameStateView.createUnitView(unit);
         unit.setViewer(view);
+        this.views.add(view);
+    }
+    public void createBuildingView(Building building) {
+        BuildingView view = this.gameStateView.createBuildingView(building);
+        building.setViewer(view);
         this.views.add(view);
     }
 }

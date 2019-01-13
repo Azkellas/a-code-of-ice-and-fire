@@ -3,6 +3,7 @@ package com.codingame.antiyoy.view;
 import com.codingame.game.Player;
 import com.codingame.antiyoy.Cell;
 import com.codingame.antiyoy.Unit;
+import com.codingame.antiyoy.Building;
 import com.codingame.gameengine.module.entities.GraphicEntityModule;
 import com.codingame.gameengine.module.entities.Group;
 
@@ -16,12 +17,14 @@ public class GameStateView extends AbstractView {
 
     List<CellView> cells;
     List<UnitView> units;
+    List<BuildingView> buildings;
 
     public GameStateView(GraphicEntityModule entityModule){
         super(entityModule);
 
         cells = new ArrayList<>();
         units = new ArrayList<>();
+        buildings = new ArrayList<>();
 
         this.group = this.entityModule.createGroup()
                 .setX(GRID_X)
@@ -43,6 +46,13 @@ public class GameStateView extends AbstractView {
         group.add(unitView.getEntity().setZIndex(2));
         units.add(unitView);
         return unitView;
+    }
+
+    public BuildingView createBuildingView(Building building) {
+        BuildingView buildingView = new BuildingView(entityModule, building);
+        group.add(buildingView.getEntity().setZIndex(2));
+        buildings.add(buildingView);
+        return buildingView;
     }
 
 //    public PlayerView createPlayerView(Player player) {

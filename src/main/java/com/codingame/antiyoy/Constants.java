@@ -25,6 +25,7 @@ public final class Constants {
 
     public enum ACTIONTYPE {MOVE, BUILD, TRAIN};
 
+    public enum BUILDING_TYPE {HQ, MINE, TOWER};
 
     public static final Pattern MOVE_PATTERN = Pattern.compile("^MOVE ([0-9]*) ([0-9]*) ([0-9]*)$");
     public static final Pattern TRAIN_PATTERN = Pattern.compile("^TRAIN ([0-9]*) ([0-9]*) ([0-9]*)$");

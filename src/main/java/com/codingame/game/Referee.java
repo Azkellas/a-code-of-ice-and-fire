@@ -4,20 +4,17 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.codingame.antiyoy.*;
 import com.codingame.gameengine.core.AbstractPlayer.TimeoutException;
 import com.codingame.gameengine.core.AbstractReferee;
 import com.codingame.gameengine.core.MultiplayerGameManager;
 import com.codingame.gameengine.module.entities.GraphicEntityModule;
 
-import com.codingame.antiyoy.GameState;
 import com.codingame.antiyoy.view.ViewController;
 
 import com.google.inject.Inject;
 
 import static com.codingame.antiyoy.Constants.*;
-import com.codingame.antiyoy.Cell;
-import com.codingame.antiyoy.Unit;
-import com.codingame.antiyoy.Action;
 
 public class Referee extends AbstractReferee {
     @Inject private MultiplayerGameManager<Player> gameManager;
@@ -55,13 +52,17 @@ public class Referee extends AbstractReferee {
 
         this.gameState.getCell(0, 0).setOwner(0);
         this.gameState.getCell(MAP_WIDTH-1, MAP_HEIGHT-1).setOwner(1);
-
-        Unit unit0 = new Unit(0, 0, 0, 1);
-        Unit unit1 = new Unit(MAP_WIDTH-1, MAP_HEIGHT-1, 1, 1);
-        this.gameState.addUnit(unit0);
-        this.gameState.addUnit(unit1);
-
         this.gameState.computeNeighbours();
+
+        Building HQ0 = new Building(0, 0, 0, BUILDING_TYPE.HQ);
+        HQ0.setCell(this.gameState.getCell(HQ0.getX(), HQ0.getY()));
+        Building HQ1 = new Building(MAP_WIDTH-1, MAP_HEIGHT-1, 1, BUILDING_TYPE.HQ);
+        HQ1.setCell(this.gameState.getCell(HQ1.getX(), HQ1.getY()));
+        this.gameState.HQs.add(HQ0);
+        this.gameState.HQs.add(HQ1);
+        this.gameState.getCell(HQ0.getX(), HQ0.getY()).setOwner(0);
+        this.gameState.getCell(HQ1.getX(), HQ1.getY()).setOwner(1);
+
 
         // Initialize viewer
         initializeView();
@@ -78,6 +79,9 @@ public class Referee extends AbstractReferee {
 
         for (int idx = 0; idx < this.gameState.getUnitsSize(); ++idx)
                 this.viewController.createUnitView(this.gameState.getUnit(idx));
+
+        for (Building HQ : this.gameState.HQs)
+            this.viewController.createBuildingView(HQ);
 
         // display grid
         updateView();
@@ -122,6 +126,7 @@ public class Referee extends AbstractReferee {
                 gameManager.addToGameSummary(player.getNicknameToken() + " moved " + unitId + " to (" + action.getX() + ", " + action.getY() + ")");
 
                 updateView();
+                checkForEndGame();
             }
 
             if (action.getType() == ACTIONTYPE.TRAIN) {
@@ -131,6 +136,7 @@ public class Referee extends AbstractReferee {
                 viewController.createUnitView(unit);
                 gameManager.addToGameSummary(player.getNicknameToken() + " trained a unit in (" + action.getX() + ", " + action.getY() + ")");
                 updateView();
+                checkForEndGame();
             }
         }
 
@@ -295,6 +301,17 @@ public class Referee extends AbstractReferee {
             }
         } catch (TimeoutException e) {
             player.deactivate(String.format("$%d timeout!", player.getIndex()));
+        }
+    }
+
+    private void checkForEndGame() {
+        for (Building HQ : this.gameState.HQs) {
+            if (HQ.getCell().getOwner() != HQ.getOwner()) {
+                int playerIdx = HQ.getCell().getOwner();
+                gameManager.getPlayer(playerIdx).setScore(0);
+                gameManager.getPlayer(1 - playerIdx).setScore(1);
+                gameManager.endGame();
+            }
         }
     }
 }

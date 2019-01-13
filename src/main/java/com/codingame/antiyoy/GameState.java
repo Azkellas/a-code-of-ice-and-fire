@@ -8,6 +8,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class GameState {
     private  Cell[][] map;
 
+    public ArrayList<Building> HQs = new ArrayList<>();
+    private ArrayList<Building> buildings = new ArrayList<>();
     public ArrayList<Unit> units = new ArrayList<>();
 
     public ArrayList<AtomicInteger> playerGolds = new ArrayList<>();
@@ -49,15 +51,15 @@ public class GameState {
         // increments golds of player
         for (int x = 0; x < MAP_WIDTH; ++x) {
             for (int y = 0; y < MAP_HEIGHT; ++y) {
-                if (map[x][y].getOwner() == playerId)
-                    this.playerGolds.get(map[x][y].getOwner()).addAndGet(CELL_INCOME);
+                if (map[x][y].getOwner() == playerId && map[x][y].isActive())
+                    this.playerGolds.get(playerId).addAndGet(CELL_INCOME);
             }
         }
 
         // decrement for units
         for (Unit unit : this.units) {
-            if (unit.getOwner() == playerId)
-                this.playerGolds.get(unit.getOwner()).addAndGet(- UNIT_UPKEEP[unit.getLevel()]);
+            if (unit.getOwner() == playerId && unit.isAlive())
+                this.playerGolds.get(playerId).addAndGet(- UNIT_UPKEEP[unit.getLevel()]);
         }
     }
 
@@ -86,7 +88,7 @@ public class GameState {
         this.units.add(unit);
         this.map[unit.getX()][unit.getY()].setOwner(unit.getOwner());
         this.map[unit.getX()][unit.getY()].setUnit(unit);
-        this.playerGolds.get(unit.getOwner()).addAndGet(-10);
+        this.playerGolds.get(unit.getOwner()).addAndGet(-UNIT_COST[unit.getLevel()]);
     }
 
     public void moveUnit(Unit unit, int x, int y) {
@@ -103,9 +105,9 @@ public class GameState {
     }
 
     public void initTurn(int playerId) {
-        this.computeIncome(playerId);
         this.computeActiveCells(playerId);
         this.killSeparatedUnits(playerId);
+        this.computeIncome(playerId);
         for (Unit unit : this.units) {
             if (unit.getOwner() == playerId)
                 unit.newTurn();
@@ -127,7 +129,7 @@ public class GameState {
         }
 
         ArrayList<Cell> queue = new ArrayList<>();
-        Cell start = (playerId == 0) ? this.map[0][0] : this.map[MAP_WIDTH-1][MAP_HEIGHT-1];
+        Cell start = this.HQs.get(playerId).getCell();
         queue.add(start);
         this.map[start.getX()][start.getY()].setActive();
 
