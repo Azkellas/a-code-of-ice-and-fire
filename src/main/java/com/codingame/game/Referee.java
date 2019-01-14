@@ -1,6 +1,7 @@
 package com.codingame.game;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -93,7 +94,6 @@ public class Referee extends AbstractReferee {
 
             // compute new golds / zones / killed units
             gameState.initTurn(this.currentPlayer);
-            updateView();
 
             /// Send input
             sendInput(player);
@@ -106,6 +106,8 @@ public class Referee extends AbstractReferee {
             if (hasAction())
                 makeAction();
         }
+        updateView();
+        checkForEndGame();
     }
 
     // return true if there is a next player, false if this is the end of the game
@@ -113,8 +115,9 @@ public class Referee extends AbstractReferee {
         this.currentPlayer = (this.currentPlayer + 1) % PLAYER_COUNT;
         if (this.currentPlayer == 0) {
             this.realTurn++;
+            System.out.println("Turn: " + this.realTurn);
             if (this.realTurn > MAX_TURNS) {
-                gameManager.endGame();
+                discriminateEndGame();
                 return false;
             }
         }
@@ -137,7 +140,7 @@ public class Referee extends AbstractReferee {
         int unitId = action.getUnitId();
         Unit unit = gameState.getUnit(unitId);
 
-        if (!action.getCell().isCapturable(unit.getLevel())) {
+        if (!action.getCell().isCapturable(action.getPlayer(), unit.getLevel())) {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell occupied) " + action);
             return;
         }
@@ -155,7 +158,7 @@ public class Referee extends AbstractReferee {
             return;
         }
 
-        if (!action.getCell().isCapturable(action.getLevel())) {
+        if (!action.getCell().isCapturable(action.getPlayer(), action.getLevel())) {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell occupied) " + action);
             return;
         }
@@ -174,9 +177,22 @@ public class Referee extends AbstractReferee {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell occupied) " + action);
             return;
         }
-        // TODO: implement BUILD action
 
+        if (action.getCell().getOwner() != action.getPlayer()) {
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell not owned) " + action);
+            return;
+        }
+
+        if (gameState.getGold(player.getIndex()) < BUILDING_COST(action.getBuildType())) {
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (not enough gold) " + action);
+            return;
+        }
+
+        Building building = new Building(action.getCell(), action.getPlayer(), action.getBuildType());
+        this.gameState.addBuilding(building);
+        viewController.createBuildingView(building);
     }
+
     private void makeAction() {
         Action action = this.actionList.get(0);
         this.actionList.remove(0);
@@ -196,9 +212,6 @@ public class Referee extends AbstractReferee {
         } else { // ACTIONTYPE.BUILD
             makeBuildAction(action);
         }
-
-        updateView();
-        checkForEndGame();
     }
 
 
@@ -313,7 +326,8 @@ public class Referee extends AbstractReferee {
         if (!buildMatcher.find())
             return false;
 
-        String type = buildMatcher.group(1);
+        String typeStr = buildMatcher.group(1);
+        BUILDING_TYPE buildType = Building.convertType(typeStr);
         int x = Integer.parseInt(buildMatcher.group(2));
         int y = Integer.parseInt(buildMatcher.group(3));
 
@@ -322,8 +336,8 @@ public class Referee extends AbstractReferee {
             return true;
         }
 
-        // TODO: implement buildings
-
+        Action action = new Action(actionStr, ACTIONTYPE.BUILD, player.getIndex(), this.gameState.getCell(x, y), buildType);
+        this.actionList.add(action);
         return true;
     }
 
@@ -338,5 +352,22 @@ public class Referee extends AbstractReferee {
                 gameManager.endGame();
             }
         }
+    }
+
+    private void discriminateEndGame() {
+        List<AtomicInteger> scores = this.gameState.getScores();
+        if (scores.get(0).intValue() < scores.get(1).intValue()) {
+            gameManager.getPlayer(0).setScore(2);
+            gameManager.getPlayer(1).setScore(1);
+        }
+        else if (scores.get(0).intValue() > scores.get(1).intValue()) {
+            gameManager.getPlayer(0).setScore(1);
+            gameManager.getPlayer(1).setScore(2);
+        }
+        else {
+            gameManager.getPlayer(0).setScore(1);
+            gameManager.getPlayer(1).setScore(1);
+        }
+        gameManager.endGame();
     }
 }

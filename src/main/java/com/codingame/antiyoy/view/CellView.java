@@ -15,6 +15,7 @@ public class CellView extends AbstractView {
 
     private Group group;
     private Rectangle decors;
+    private Rectangle protect;
 
     private Cell model;
 
@@ -32,9 +33,21 @@ public class CellView extends AbstractView {
                 .setFillColor(getPlayerCellColor(this.model.getOwner(), this.model.isActive()))
                 .setLineColor(255)
                 .setZIndex(1);
+        protect = this.entityModule.createRectangle()
+                .setHeight( (CELL_SIZE -2) / 5)
+                .setWidth( (CELL_SIZE -2) / 5)
+                .setFillColor(PROTECTED_COLOR)
+                .setX((int)((CELL_SIZE-2)/2.5))
+                .setY((int)((CELL_SIZE-2)/2.5))
+                .setZIndex(2)
+                .setAlpha(0);
+
         group = entityModule.createGroup()
-                .setScale(1);
-        group.add(decors);
+                .setScale(1)
+                .setX(model.getX() * CELL_SIZE)
+                .setY(model.getY() * CELL_SIZE);
+
+        group.add(decors, protect);
     }
 //
 //    private void addItem() {
@@ -61,8 +74,13 @@ public class CellView extends AbstractView {
 //    }
 
     public void updateView(){
-        group.setX(model.getX() * CELL_SIZE).setY(model.getY() * CELL_SIZE);
-        decors.setFillColor(getPlayerCellColor(this.model.getOwner(), this.model.isActive()));
+        int cellColor = getPlayerCellColor(this.model.getOwner(), this.model.isActive());
+        if (decors.getFillColor() != cellColor)
+            decors.setFillColor(cellColor);
+        boolean isProtected = this.model.isProtected();
+        double alpha = isProtected ? 0.8 : 0.0;
+        if (protect.getAlpha() != alpha)
+            protect.setAlpha(alpha);
     }
 
     public Entity getEntity() {

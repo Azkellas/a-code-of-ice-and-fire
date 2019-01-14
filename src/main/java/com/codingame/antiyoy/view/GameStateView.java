@@ -1,6 +1,7 @@
 package com.codingame.antiyoy.view;
 
 import com.codingame.game.Player;
+import com.codingame.antiyoy.GameState;
 import com.codingame.antiyoy.Cell;
 import com.codingame.antiyoy.Unit;
 import com.codingame.antiyoy.Building;
@@ -19,9 +20,11 @@ public class GameStateView extends AbstractView {
     List<UnitView> units;
     List<BuildingView> buildings;
 
-    public GameStateView(GraphicEntityModule entityModule){
+    GameState model;
+    public GameStateView(GraphicEntityModule entityModule, GameState gameState){
         super(entityModule);
 
+        this.model = gameState;
         cells = new ArrayList<>();
         units = new ArrayList<>();
         buildings = new ArrayList<>();
@@ -66,6 +69,7 @@ public class GameStateView extends AbstractView {
     public void updateView() {
     }
 
+    public GameState getModel() { return this.model; }
 
 
     public void update(AbstractMap.SimpleEntry<String, Integer> action) {

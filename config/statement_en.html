@@ -7,10 +7,25 @@
       <span>The Goal</span>
     </h1>
     <div class="statement-goal-content">
-      The aim of this game is to win.
+      Strategic turn-based game. <br/>
+      You control a faction, starting from an edge of the map.<br/>
+      Each turn, you can:<br/>
+      move units<br/>
+      train units (with a level, 1, 2 or 3)<br/>
+      build something: a mine (that produces more gold), or a tower (that protects nearby cells)<br/>
+      You capture a cell if you walk on it<br/>
+      Each turn, you gain 1 gold per owned cell and 4 per owned mine<br/>
+      You only control/own cells that are connected to your HQ<br/>
+      fight: to kill a unit, yours must be of higher level, or at max level (2 kill 1, 3 kill 3 and 2 and 1, 1 kills nothing)<br/>
+      to kill towers and neighbour cell (4-connex), your unit must be 2 or 3<br/>
+      <br/>
+      Win condition: capture the enemy HQ<br/>
+      Have more military power at the end (100 turns)<br/>
+      military power = currentGold + unitsCost for units alive<br/>
+      <br/>
+      Each action is performed sequentially<br/>
       <br>
       <br>
-      For this question, you will be asked to output a single line as a solution.
     </div>
   </div>
   <!-- RULES -->
@@ -96,8 +111,21 @@
     <!-- Protocol block -->
     <div class="blk">
       <div class="title">Input</div>
+      <div class="title">Initialization input</div>
       <div class="text">
-        <p><span class="statement-lineno">Line 1: </span>one string <var>...</var>, the ...</p>
+        <p><span class="statement-lineno">1 Line: </span>Two ints <var>WIDTH</var> and <var>HEIGHT</var>, the dimensions of the map</p>
+      </div>
+
+      <div class="title">Game turn input</div>
+      <div class="text">
+        <p>First <var>HEIGHT</var> lines:</p>
+        <p><var>WIDTH</var> ints, the <var>owner</var> of the cell <b>(x, y)</b> (-2 = void, -1 = neutral, 0 = yours, 1 = theirs)</p>
+        <p>Next line: 1 int: <var>buildingCount</var></p>
+        <p>Next <var>buildingCount</var> lines:</p>
+        <p>Four ints: <var>type</var> (0 = HQ, 1 = mine, 2 = tower) <var>owner</var> <var>x</var><var>y</var></p>
+        <p>Next line: 1 int: <var>unitCount</var></p>
+        <p>Next <var>unitCount</var> lines:</p>
+        <p>Five ints: <var>id</var> <var>owner</var> <var>level</var> <var>x</var><var>y</var></p>
       </div>
     </div>
 
@@ -105,7 +133,12 @@
     <div class="blk">
       <div class="title">Output</div>
       <div class="text">
-        <span class="statement-lineno">A single line</span> containing ...
+        <span class="statement-lineno">A single line</span>
+        MOVE id x y<br>
+        TRAIN level x y<br>
+        BUILD "MINE"|"TOWER" x y<br>
+        separated by ;<br>
+        Example "MOVE 1 2 3; TRAIN 3 3 3; BUILD MINE 0 1"<br>
         <br>
       </div>
     </div>
@@ -113,6 +146,7 @@
     <!-- Protocol block -->
     <div class="blk">
       <div class="title">Constraints</div>
+      WIDTH, HEIGHT <= 15
       <div class="text"><var>...</var> contains between 1 and 500 characters.<br>
         <br>Allotted response time to output
         is ≤ <const>2</const> seconds.</div>

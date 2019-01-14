@@ -27,7 +27,7 @@ public class ViewController {
     public ViewController(GraphicEntityModule entityModule, List<Player> players, GameState gameState) {
         this.entityModule = entityModule;
 
-        this.gameStateView = new GameStateView(entityModule);
+        this.gameStateView = new GameStateView(entityModule, gameState);
 
         this.playerViews= new ArrayList<>();
         for (Player player : players)
@@ -47,11 +47,16 @@ public class ViewController {
         for (AbstractView view : views) {
             view.updateView();
         }
+        // System.err.println("Views: " + views.size());
+        if (views.size() > 100)
+            this.gameStateView.getModel().debugViews();
         disposeViews();
     }
 
     private void disposeViews() {
+        int currSize = views.size();
         views.removeIf(view -> view.isDisposable());
+        // System.err.println("Disposing " + currSize + " -> " + views.size());
     }
 
 

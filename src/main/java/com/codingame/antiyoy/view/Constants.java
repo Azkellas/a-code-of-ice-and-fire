@@ -20,6 +20,8 @@ public final class Constants {
     static private final int PLAYER_ACTIVE_CELL_COLOR[] = {0x880000, 0x008800};
     static private final int PLAYER_INACTIVE_CELL_COLOR[] = {0x440000, 0x004400};
 
+    static public final int PROTECTED_COLOR = 0x999999;
+
     static public final int PLAYER_AVATAR_RADIUS = 200;
 
     static public int getPlayerUnitColor(int playerId) {
