@@ -320,4 +320,12 @@ public class GameState {
         System.err.println(buildings.size() + " buildings, " + units.size() + " units");
         // units.forEach((id, unit) -> {System.err.println(unit.getId() + ": " +unit.getX() + " " + unit.getY());});
     }
+
+    public List<AtomicInteger> getScores() {
+        List<AtomicInteger> scores = new ArrayList<>(this.playerGolds);
+        this.units.forEach((id, unit) -> {
+            scores.get(unit.getOwner()).addAndGet(UNIT_COST[unit.getLevel()]);
+        });
+        return scores;
+    }
 }

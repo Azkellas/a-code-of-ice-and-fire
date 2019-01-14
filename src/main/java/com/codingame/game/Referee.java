@@ -1,6 +1,7 @@
 package com.codingame.game;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -116,7 +117,7 @@ public class Referee extends AbstractReferee {
             this.realTurn++;
             System.out.println("Turn: " + this.realTurn);
             if (this.realTurn > MAX_TURNS) {
-                gameManager.endGame();
+                discriminateEndGame();
                 return false;
             }
         }
@@ -351,5 +352,22 @@ public class Referee extends AbstractReferee {
                 gameManager.endGame();
             }
         }
+    }
+
+    private void discriminateEndGame() {
+        List<AtomicInteger> scores = this.gameState.getScores();
+        if (scores.get(0).intValue() < scores.get(1).intValue()) {
+            gameManager.getPlayer(0).setScore(2);
+            gameManager.getPlayer(1).setScore(1);
+        }
+        else if (scores.get(0).intValue() > scores.get(1).intValue()) {
+            gameManager.getPlayer(0).setScore(1);
+            gameManager.getPlayer(1).setScore(2);
+        }
+        else {
+            gameManager.getPlayer(0).setScore(1);
+            gameManager.getPlayer(1).setScore(1);
+        }
+        gameManager.endGame();
     }
 }
