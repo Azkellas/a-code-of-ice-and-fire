@@ -29,6 +29,14 @@ class Unit {
     Unit() = default;
 };
 
+class Building {
+    public:
+    int x, y;
+    int owner;
+    int type;
+    Building() = default;
+};
+
 int MAP_WIDTH;
 int MAP_HEIGHT;
 bool isInside(int x, int y) {
@@ -71,6 +79,19 @@ int main() {
                 map[x][y].neighbours[LEFT]  = (isValid(x-1, y, map)) ? &map[x-1][y] : nullptr;
             }
         }
+
+        int buildingCount;
+        cin >> buildingCount;
+        cerr << "buildingCount count: " << buildingCount << endl;
+
+        vector<Building> buildings;
+        for (int i = 0; i < buildingCount; ++i) {
+            Building building;
+            cin >> building.owner >> building.type >> building.x >> building.y; cin.ignore();
+            cerr << building.owner << " " << building.type << " " << building.x << " " << building.y << endl;
+            buildings.push_back(building);
+        }
+
         int unitCount;
         cin >> unitCount;
         cerr << "unit count: " << unitCount << endl;

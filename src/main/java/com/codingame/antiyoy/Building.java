@@ -18,6 +18,15 @@ public class Building extends Entity {
     }
 
     public BUILDING_TYPE getType() { return this.type; }
+    public int getIntType() {
+        if (this.type == BUILDING_TYPE.HQ)
+            return 0;
+        if (this.type == BUILDING_TYPE.TOWER)
+            return 1;
+        if (this.type == BUILDING_TYPE.MINE)
+            return 2;
+        return -1;  // impossible case
+    }
 
     public Cell getCell() { return this.cell; }
 
@@ -25,5 +34,12 @@ public class Building extends Entity {
 
     public void doDispose() {
         this.viewer.doDispose();
+    }
+
+    static public BUILDING_TYPE convertType(String string) {
+        if (string.equals("MINE"))
+            return BUILDING_TYPE.MINE;
+        else  // (string.equals("TOWER"))
+            return BUILDING_TYPE.TOWER;
     }
 }

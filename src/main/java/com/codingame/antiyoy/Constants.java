@@ -18,6 +18,7 @@ public final class Constants {
     static public final int  LEFT = 3;
 
     static public final int CELL_INCOME = 1;
+    static public final int MINE_INCOME = 4; // So a cell with a mine earns 1+4 = 5
 
     static public final int UNIT_COST[] = {0, 10, 20, 30};
     static public final int UNIT_UPKEEP[] = {0, 1, 4, 20};
@@ -32,5 +33,11 @@ public final class Constants {
     public static final Pattern TRAIN_PATTERN = Pattern.compile("^TRAIN ([0-9]*) ([0-9]*) ([0-9]*)$");
     public  static final Pattern BUILD_PATTERN = Pattern.compile("^BUILD ([A-Z]*) ([0-9]*) ([0-9]*)$");
 
+    public static final int BUILDING_COST(BUILDING_TYPE type) {
+        if (type == BUILDING_TYPE.MINE)
+            return 20;
+        else
+            return 15;
+    }
     private Constants() {}
 }

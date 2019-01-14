@@ -106,9 +106,14 @@ public class GameState {
         this.units.remove(unit.getId());
     }
 
-    private void killCellUnit(Cell cell) {
+    private void clearCell(Cell cell) {
         if (cell.getUnit() != null) {
             killUnit(cell.getUnit());
+        }
+        if (cell.getBuilding() != null) {
+            Building building = cell.getBuilding();
+            building.doDispose();
+            this.buildings.removeIf(building1 -> building1.getX() == building.getX() && building1.getY() == building.getY());
         }
     }
 
@@ -176,6 +181,12 @@ public class GameState {
             }
         }
 
+        // increments golds for active mines
+        for (Building building : this.buildings) {
+            if (building.getOwner() == playerId && building.getType() == BUILDING_TYPE.MINE && building.getCell().isActive())
+                this.playerGolds.get(playerId).addAndGet(MINE_INCOME);
+        }
+
         // decrement for units
         for (Unit unit : this.units.values()) {
             if (unit.getOwner() == playerId && unit.isAlive())
@@ -196,7 +207,7 @@ public class GameState {
     public void addUnit(Unit unit) {
         // TRAIN method
         // kill previous unit
-        killCellUnit(unit.getCell());
+        clearCell(unit.getCell());
 
         this.units.put(unit.getId(), unit);
         unit.getCell().setOwner(unit.getOwner());
@@ -207,7 +218,7 @@ public class GameState {
     public void moveUnit(Unit unit, Cell newPosition) {
         // MOVE method
         // free current cell
-        unit.getCell().setUnit(null);
+        clearCell(newPosition);
 
         // kill unit
         killCellUnit(newPosition);
@@ -220,6 +231,12 @@ public class GameState {
         newPosition.setOwner(unit.getOwner());
         // occupy new cell
         newPosition.setUnit(unit);
+    }
+
+    public void addBuilding(Building building) {
+        this.buildings.add(building);
+        building.getCell().setBuilding(building);
+        this.playerGolds.get(building.getOwner()).addAndGet(-BUILDING_COST(building.getType()));
     }
 
 
@@ -260,11 +277,42 @@ public class GameState {
         });
     }
 
+    private void sendBuildings(Player player) {
+        // send building count
+        player.sendInputLine(String.valueOf(this.HQs.size() + this.buildings.size()));
+
+        // send HQ
+        this.HQs.forEach(building -> {
+            StringBuilder line = new StringBuilder();
+            line.append(building.getIntType())
+                    .append(" ")
+                    .append( (building.getOwner() - player.getIndex() + PLAYER_COUNT) % PLAYER_COUNT) // always 0 for the player
+                    .append(" ")
+                    .append(building.getX())
+                    .append(" ")
+                    .append(building.getY());
+            player.sendInputLine(line.toString());
+        });
+
+        this.buildings.forEach(building -> {
+            StringBuilder line = new StringBuilder();
+            line.append( (building.getOwner() - player.getIndex() + PLAYER_COUNT) % PLAYER_COUNT) // always 0 for the player
+                    .append(" ")
+                    .append(building.getIntType())
+                    .append(" ")
+                    .append(building.getX())
+                    .append(" ")
+                    .append(building.getY());
+            player.sendInputLine(line.toString());
+        });
+    }
+
     public void sendState(Player player) {
         // send gold
         player.sendInputLine(String.valueOf(this.playerGolds.get(player.getIndex())));
 
         sendMap(player);
+        sendBuildings(player);
         sendUnits(player);
     }
 

@@ -137,7 +137,7 @@ public class Referee extends AbstractReferee {
         int unitId = action.getUnitId();
         Unit unit = gameState.getUnit(unitId);
 
-        if (!action.getCell().isCapturable(unit.getLevel())) {
+        if (!action.getCell().isCapturable(action.getPlayer(), unit.getLevel())) {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell occupied) " + action);
             return;
         }
@@ -155,7 +155,7 @@ public class Referee extends AbstractReferee {
             return;
         }
 
-        if (!action.getCell().isCapturable(action.getLevel())) {
+        if (!action.getCell().isCapturable(action.getPlayer(), action.getLevel())) {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell occupied) " + action);
             return;
         }
@@ -174,6 +174,14 @@ public class Referee extends AbstractReferee {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell occupied) " + action);
             return;
         }
+
+        if (gameState.getGold(player.getIndex()) < BUILDING_COST(action.getBuildType())) {
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (not enough gold) " + action);
+            return;
+        }
+
+        Building building = new Building(action.getCell(), action.getPlayer(), action.getBuildType());
+        this.gameState.addBuilding(building);
         // TODO: implement BUILD action
 
     }
@@ -313,7 +321,8 @@ public class Referee extends AbstractReferee {
         if (!buildMatcher.find())
             return false;
 
-        String type = buildMatcher.group(1);
+        String typeStr = buildMatcher.group(1);
+        BUILDING_TYPE buildType = Building.convertType(typeStr);
         int x = Integer.parseInt(buildMatcher.group(2));
         int y = Integer.parseInt(buildMatcher.group(3));
 
@@ -322,8 +331,8 @@ public class Referee extends AbstractReferee {
             return true;
         }
 
-        // TODO: implement buildings
-
+        Action action = new Action(actionStr, ACTIONTYPE.TRAIN, player.getIndex(), this.gameState.getCell(x, y), buildType);
+        this.actionList.add(action);
         return true;
     }
 

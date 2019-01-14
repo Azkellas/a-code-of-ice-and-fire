@@ -7,12 +7,14 @@ import static com.codingame.antiyoy.Constants.*;
 public class Cell extends Entity {
     private boolean active;
     private Unit unit;
+    private Building building;
 
     private Cell neighbours[];
 
     public Cell(int x, int y) {
         super(x, y, -1);
         this.unit = null;
+        this.building = null;
         this.active = true;
         this.neighbours = new Cell[4];
         for (int i = 0; i < 4; ++i)
@@ -22,6 +24,9 @@ public class Cell extends Entity {
     public Unit getUnit() { return this.unit; }
     public void setUnit(Unit unit) { this.unit = unit; }
 
+    public Building getBuilding() { return this.building; }
+    public void setBuilding(Building building) { this.building = building; }
+
     public Cell[] getNeighbours() { return this.neighbours; }
     public void setNeighbour(int idx, Cell cell) { this.neighbours[idx] = cell; }
 
@@ -29,8 +34,44 @@ public class Cell extends Entity {
     public void setActive() { this.active = true; }
     public void setInactive() { this.active = false; }
 
-    public boolean isFree() { return this.unit == null; }
-    public boolean isCapturable(int level) { return this.isFree() || level == MAX_LEVEL || level > this.unit.getLevel(); }
+    public boolean isFree() { return this.unit == null && this.building == null; }
+    public boolean isCapturable(int playerId, int level) {
+        // nothing on the cell
+        if (this.isFree())
+            return true;
+
+        // On own cell: ok (since free)
+        if (this.getOwner() == playerId)
+            return true;
+
+        // not on enemy cells protected by towers
+        if (this.getOwner() != playerId && this.isProtected() && level < 2)
+            return false;
+
+        // cannot kill enemy unit if level too small
+        if (this.unit != null) {
+            if (level != MAX_LEVEL && level < this.unit.getLevel())
+                return false;
+            return true;
+        }
+
+        return true;
+    }
+
+    private boolean isProtected() {
+        if (this.building != null && this.building.getType() == BUILDING_TYPE.TOWER)
+            return true;
+
+        for (Cell neighbour : this.neighbours) {
+            if (neighbour == null || neighbour.getOwner() != this.getOwner())
+                continue;
+            Building neighbourBuilding = neighbour.getBuilding();
+            if (neighbourBuilding == null || neighbourBuilding.getType() != BUILDING_TYPE.TOWER)
+                continue;
+            return true;
+        }
+        return false;
+    }
 
     public boolean isPlayable(int playerId) {
         for (Cell neighbour : this.neighbours) {
