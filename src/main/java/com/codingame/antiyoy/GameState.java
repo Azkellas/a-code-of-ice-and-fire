@@ -13,11 +13,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class GameState {
     private  Cell[][] map;
 
-    public List<Building> HQs = new ArrayList<>();
+    private List<Building> HQs = new ArrayList<>();
     private ArrayList<Building> buildings = new ArrayList<>();
     private Map<Integer, Unit> units = new HashMap<>();
 
-    public ArrayList<AtomicInteger> playerGolds = new ArrayList<>();
+    private ArrayList<AtomicInteger> playerGolds = new ArrayList<>();
 
     public GameState() {
         // create full map
@@ -30,6 +30,17 @@ public class GameState {
             this.playerGolds.add(new AtomicInteger(2 * UNIT_COST[1]));
     }
 
+    // getters
+    public Cell getCell(int x, int y) { return this.map[x][y]; }
+
+    public Unit getUnit(int id) { return this.units.get(id); }
+
+    public int getGold(int idx) { return playerGolds.get(idx).intValue(); }
+    public AtomicInteger getAtomicGold(int idx) { return playerGolds.get(idx); }
+
+    // map creation methods
+    private Cell getSymmetricCell(int x, int y) { return this.map[MAP_WIDTH - x - 1][MAP_HEIGHT - y - 1]; }
+
     private boolean isWithinBounds(int x, int y) {
         return x >= 0 && x < MAP_WIDTH && y >= 0 && y < MAP_HEIGHT;
     }
@@ -41,49 +52,58 @@ public class GameState {
         for (int x = 0; x < MAP_WIDTH; ++x) {
             for (int y = 0; y < MAP_HEIGHT; ++y) {
                 if (isInside(x, y-1))
-                    map[x][y].neighbours[UP] = map[x][y-1];
+                    map[x][y].setNeighbour(UP, map[x][y-1]);
                 if (isInside(x+1, y))
-                    map[x][y].neighbours[RIGHT] = map[x+1][y];
+                    map[x][y].setNeighbour(RIGHT, map[x+1][y]);
                 if (isInside(x, y+1))
-                    map[x][y].neighbours[DOWN] = map[x][y+1];
+                    map[x][y].setNeighbour(DOWN, map[x][y+1]);
                 if (isInside(x-1, y))
-                    map[x][y].neighbours[LEFT] = map[x-1][y];
+                    map[x][y].setNeighbour(LEFT, map[x-1][y]);
             }
         }
     }
 
-    private void computeGold(int playerId) {
-        // increments golds of player
+    public void generateMap() {
         for (int x = 0; x < MAP_WIDTH; ++x) {
             for (int y = 0; y < MAP_HEIGHT; ++y) {
-                if (map[x][y].getOwner() == playerId && map[x][y].isActive())
-                    this.playerGolds.get(playerId).addAndGet(CELL_INCOME);
+                // do not modify nearby HQs cells
+                if (x + y <= 4)
+                    continue;
+                if (MAP_WIDTH - x + MAP_HEIGHT - y <= 4)
+                    continue;
+
+                double random = Math.random() * 100;
+                int owner = random < 20 ? -2 : -1;
+                this.map[x][y].setOwner(owner);
+                this.getSymmetricCell(x, y).setOwner(owner);
             }
         }
-
-        // decrement for units
-        for (Unit unit : this.units.values()) {
-            if (unit.getOwner() == playerId && unit.isAlive())
-                this.playerGolds.get(playerId).addAndGet(- UNIT_UPKEEP[unit.getLevel()]);
-        }
+        // Restore HQs cells
+        this.computeNeighbours();
     }
 
+    public void createHQs(int playersCount) throws Exception {
+        if (playersCount != 2) {
+            throw new Exception("More than 2 players mode not implemented");
+        }
+
+        // Build players HQs
+        Building HQ0 = new Building(this.map[0][0], 0, BUILDING_TYPE.HQ);
+        Building HQ1 = new Building(this.map[MAP_WIDTH-1][MAP_HEIGHT-1], 1, BUILDING_TYPE.HQ);
+        this.HQs.add(HQ0);
+        this.HQs.add(HQ1);
+        HQ0.getCell().setOwner(0);
+        HQ1.getCell().setOwner(1);
+    }
+
+
+    public List<Building> getHQs() { return this.HQs; }
+
+
+    // kill methods
     private void killUnit(Unit unit) {
         unit.doDispose();
         this.units.remove(unit.getId());
-    }
-
-    public Cell getCell(int x, int y) { return this.map[x][y]; }
-    private Cell getSymmetricCell(int x, int y) { return this.map[MAP_WIDTH - x - 1][MAP_HEIGHT - y - 1]; }
-
-    public Unit getUnit(int id) {
-        return this.units.get(id);
-    }
-
-    public int getGold(int idx) {
-        if (idx < 0 || idx >= PLAYER_COUNT)
-                return -1;
-        return playerGolds.get(idx).intValue();
     }
 
     private void killCellUnit(Cell cell) {
@@ -92,42 +112,11 @@ public class GameState {
         }
     }
 
-    public void addUnit(Unit unit) {
-        // kill previous unit
-        killCellUnit(unit.getCell());
-
-        this.units.put(unit.getId(), unit);
-        unit.getCell().setOwner(unit.getOwner());
-        unit.getCell().setUnit(unit);
-        this.playerGolds.get(unit.getOwner()).addAndGet(-UNIT_COST[unit.getLevel()]);
+    private void killUnits(List<Unit> units) {
+        units.forEach(unit -> killUnit(unit));
     }
 
-    public void moveUnit(Unit unit, Cell newPosition) {
-        // free current cell
-        unit.getCell().setUnit(null);
-
-        // kill unit
-        killCellUnit(newPosition);
-
-        unit.moved();
-        unit.setX(newPosition.getX());
-        unit.setY(newPosition.getY());
-        unit.setCell(newPosition);
-
-        newPosition.setOwner(unit.getOwner());
-        // occupy new cell
-        newPosition.setUnit(unit);
-    }
-
-    private void negativeGoldWipeout(int playerId) {
-        // Negative amount of gold: kill all units and reset to 0
-        this.playerGolds.get(playerId).set(0);
-
-        List<Unit> toKill = new ArrayList<>();
-        this.units.forEach((key, unit)-> {if (unit.getOwner() == playerId) toKill.add(unit); });
-        killUnits(toKill);
-    }
-
+    // init turn methods
     public void initTurn(int playerId) {
         this.computeActiveCells(playerId);
         this.killSeparatedUnits(playerId);
@@ -162,7 +151,7 @@ public class GameState {
         while (!queue.isEmpty()) {
             Cell currentCell = queue.get(0);
             queue.remove(0);
-            for (Cell cell : currentCell.neighbours) {
+            for (Cell cell : currentCell.getNeighbours()) {
                 if (cell != null && !cell.isActive() && cell.getOwner() == playerId) {
                     cell.setActive();
                     queue.add(cell);
@@ -171,17 +160,70 @@ public class GameState {
         }
     }
 
+
     private void killSeparatedUnits(int playerId) {
         List<Unit> toKill = new ArrayList<>();
         this.units.forEach((key, unit)-> {if (unit.getOwner() == playerId && !unit.getCell().isActive()) toKill.add(unit); });
         killUnits(toKill);
     }
 
-    private void killUnits(List<Unit> units) {
-        units.forEach(unit -> killUnit(unit));
+    private void computeGold(int playerId) {
+        // increments golds of player
+        for (int x = 0; x < MAP_WIDTH; ++x) {
+            for (int y = 0; y < MAP_HEIGHT; ++y) {
+                if (map[x][y].getOwner() == playerId && map[x][y].isActive())
+                    this.playerGolds.get(playerId).addAndGet(CELL_INCOME);
+            }
+        }
+
+        // decrement for units
+        for (Unit unit : this.units.values()) {
+            if (unit.getOwner() == playerId && unit.isAlive())
+                this.playerGolds.get(playerId).addAndGet(- UNIT_UPKEEP[unit.getLevel()]);
+        }
+    }
+
+    private void negativeGoldWipeout(int playerId) {
+        // Negative amount of gold: kill all units and reset to 0
+        this.playerGolds.get(playerId).set(0);
+
+        List<Unit> toKill = new ArrayList<>();
+        this.units.forEach((key, unit)-> {if (unit.getOwner() == playerId) toKill.add(unit); });
+        killUnits(toKill);
+    }
+
+    // action methods
+    public void addUnit(Unit unit) {
+        // TRAIN method
+        // kill previous unit
+        killCellUnit(unit.getCell());
+
+        this.units.put(unit.getId(), unit);
+        unit.getCell().setOwner(unit.getOwner());
+        unit.getCell().setUnit(unit);
+        this.playerGolds.get(unit.getOwner()).addAndGet(-UNIT_COST[unit.getLevel()]);
+    }
+
+    public void moveUnit(Unit unit, Cell newPosition) {
+        // MOVE method
+        // free current cell
+        unit.getCell().setUnit(null);
+
+        // kill unit
+        killCellUnit(newPosition);
+
+        unit.moved();
+        unit.setX(newPosition.getX());
+        unit.setY(newPosition.getY());
+        unit.setCell(newPosition);
+
+        newPosition.setOwner(unit.getOwner());
+        // occupy new cell
+        newPosition.setUnit(unit);
     }
 
 
+    // referee methods
     private void sendMap(Player player) {
         for (int y = 0; y < MAP_HEIGHT; ++y) {
             StringBuilder line = new StringBuilder();
@@ -226,36 +268,4 @@ public class GameState {
         sendUnits(player);
     }
 
-    public void generateMap() {
-        for (int x = 0; x < MAP_WIDTH; ++x) {
-            for (int y = 0; y < MAP_HEIGHT; ++y) {
-                // do not modify nearby HQs cells
-                if (x + y <= 3)
-                    continue;
-                if (MAP_WIDTH - x + MAP_HEIGHT - y <= 3)
-                    continue;
-
-                double random = Math.random() * 100;
-                int owner = random < 20 ? -2 : -1;
-                this.map[x][y].setOwner(owner);
-                this.getSymmetricCell(x, y).setOwner(owner);
-            }
-        }
-        // Restore HQs cells
-        this.computeNeighbours();
-    }
-
-    public void createHQs(int playersCount) throws Exception {
-        if (playersCount != 2) {
-            throw new Exception("More than 2 players mode not implemented");
-        }
-
-        // Build players HQs
-        Building HQ0 = new Building(this.map[0][0], 0, BUILDING_TYPE.HQ);
-        Building HQ1 = new Building(this.map[MAP_WIDTH-1][MAP_HEIGHT-1], 1, BUILDING_TYPE.HQ);
-        this.HQs.add(HQ0);
-        this.HQs.add(HQ1);
-        HQ0.getCell().setOwner(0);
-        HQ1.getCell().setOwner(1);
-    }
 }

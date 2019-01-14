@@ -28,7 +28,7 @@ public class PlayerView extends AbstractView {
     public PlayerView(GraphicEntityModule entityModule, Player player, GameState gameState) {
         super(entityModule);
         this.model = player;
-        this.goldModel = gameState.playerGolds.get(player.getIndex());
+        this.goldModel = gameState.getAtomicGold(player.getIndex());
         createPlayerView();
     }
 

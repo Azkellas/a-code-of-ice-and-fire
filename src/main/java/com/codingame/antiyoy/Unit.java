@@ -30,12 +30,14 @@ public class Unit extends Entity {
 
     public int getId() { return this.id; }
     public int getLevel() { return this.level; }
-    public boolean canPlay() { return this.canMove; }
+
     public boolean isAlive() { return this.alive; }
     public void die() { this.alive = false; }
-    public void newTurn() { this.canMove = true; }
 
+    public void newTurn() { this.canMove = true; }
     public void moved() { this.canMove = false; }
+    public boolean canPlay() { return this.canMove; }
+
     public void setCell(Cell cell) {this.cell = cell; }
     public Cell getCell() { return this.cell; }
 

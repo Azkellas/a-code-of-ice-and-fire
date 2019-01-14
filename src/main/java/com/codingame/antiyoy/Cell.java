@@ -8,8 +8,8 @@ public class Cell extends Entity {
     private boolean active;
     private Unit unit;
 
-    public Cell neighbours[];
-    private CellView observer;
+    private Cell neighbours[];
+
     public Cell(int x, int y) {
         super(x, y, -1);
         this.unit = null;
@@ -22,10 +22,15 @@ public class Cell extends Entity {
     public Unit getUnit() { return this.unit; }
     public void setUnit(Unit unit) { this.unit = unit; }
 
-    public boolean isFree() { return this.unit == null; }
+    public Cell[] getNeighbours() { return this.neighbours; }
+    public void setNeighbour(int idx, Cell cell) { this.neighbours[idx] = cell; }
+
     public boolean isActive() { return this.active; }
     public void setActive() { this.active = true; }
     public void setInactive() { this.active = false; }
+
+    public boolean isFree() { return this.unit == null; }
+    public boolean isCapturable(int level) { return this.isFree() || level == MAX_LEVEL || level > this.unit.getLevel(); }
 
     public boolean isPlayable(int playerId) {
         for (Cell neighbour : this.neighbours) {
@@ -34,7 +39,4 @@ public class Cell extends Entity {
         }
         return false;
     }
-
-    public boolean isCapturable(int level) { return this.isFree() || level == MAX_LEVEL || level > this.unit.getLevel(); }
-
 }

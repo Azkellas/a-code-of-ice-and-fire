@@ -22,9 +22,8 @@ public class Building extends Entity {
     public Cell getCell() { return this.cell; }
 
     public void setViewer(BuildingView viewer) { this.viewer = viewer; }
+
     public void doDispose() {
-        this.cell.setUnit(null);
-//        this.alive = false;
         this.viewer.doDispose();
     }
 }

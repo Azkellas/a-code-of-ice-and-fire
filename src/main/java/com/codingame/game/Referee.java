@@ -64,7 +64,7 @@ public class Referee extends AbstractReferee {
                 this.viewController.createCellView(this.gameState.getCell(x, y));
 
         // Add HQs
-        for (Building HQ : this.gameState.HQs)
+        for (Building HQ : this.gameState.getHQs())
             this.viewController.createBuildingView(HQ);
 
         // Display grid
@@ -273,6 +273,11 @@ public class Referee extends AbstractReferee {
             return;
         }
 
+        if (player.getIndex() != gameState.getUnit(id).getOwner()) {
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (not your unit) " + actionStr);
+            return;
+        }
+
         Action action = new Action(actionStr, ACTIONTYPE.MOVE, player.getIndex(), id, this.gameState.getCell(x, y));
         this.actionList.add(action);
     }
@@ -324,10 +329,11 @@ public class Referee extends AbstractReferee {
 
 
     private void checkForEndGame() {
-        for (Building HQ : this.gameState.HQs) {
+        for (Building HQ : this.gameState.getHQs()) {
             if (HQ.getCell().getOwner() != HQ.getOwner()) {
                 int playerIdx = HQ.getCell().getOwner();
-                gameManager.getPlayer(playerIdx).setScore(0);
+                // score = rank
+                gameManager.getPlayer(playerIdx).setScore(2);
                 gameManager.getPlayer(1 - playerIdx).setScore(1);
                 gameManager.endGame();
             }
