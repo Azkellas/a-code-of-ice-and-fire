@@ -2,6 +2,8 @@ package com.codingame.antiyoy;
 
 import com.codingame.antiyoy.view.CellView;
 
+import static com.codingame.antiyoy.Constants.*;
+
 public class Cell extends Entity {
     private boolean active;
     private Unit unit;
@@ -32,4 +34,7 @@ public class Cell extends Entity {
         }
         return false;
     }
+
+    public boolean isCapturable(int level) { return this.isFree() || level == MAX_LEVEL || level > this.unit.getLevel(); }
+
 }

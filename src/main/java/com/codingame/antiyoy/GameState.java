@@ -86,7 +86,16 @@ public class GameState {
         return playerGolds.get(idx).intValue();
     }
 
+    private void killCellUnit(Cell cell) {
+        if (cell.getUnit() != null) {
+            killUnit(cell.getUnit());
+        }
+    }
+
     public void addUnit(Unit unit) {
+        // kill previous unit
+        killCellUnit(unit.getCell());
+
         this.units.put(unit.getId(), unit);
         unit.getCell().setOwner(unit.getOwner());
         unit.getCell().setUnit(unit);
@@ -96,6 +105,9 @@ public class GameState {
     public void moveUnit(Unit unit, Cell newPosition) {
         // free current cell
         unit.getCell().setUnit(null);
+
+        // kill unit
+        killCellUnit(newPosition);
 
         unit.moved();
         unit.setX(newPosition.getX());

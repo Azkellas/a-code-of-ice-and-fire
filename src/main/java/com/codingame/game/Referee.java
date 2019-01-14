@@ -136,6 +136,12 @@ public class Referee extends AbstractReferee {
 
         int unitId = action.getUnitId();
         Unit unit = gameState.getUnit(unitId);
+
+        if (!action.getCell().isCapturable(unit.getLevel())) {
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell occupied) " + action);
+            return;
+        }
+
         this.gameState.moveUnit(unit, action.getCell());
         this.gameState.computeAllActiveCells();
         gameManager.addToGameSummary(player.getNicknameToken() + " moved " + unitId + " to (" + action.getCell().getX() + ", " + action.getCell().getY() + ")");
@@ -149,6 +155,11 @@ public class Referee extends AbstractReferee {
             return;
         }
 
+        if (!action.getCell().isCapturable(action.getLevel())) {
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell occupied) " + action);
+            return;
+        }
+
         Unit unit = new Unit(action.getCell(), action.getPlayer(), action.getLevel());
         this.gameState.addUnit(unit);
         this.gameState.computeAllActiveCells();
@@ -156,6 +167,16 @@ public class Referee extends AbstractReferee {
         gameManager.addToGameSummary(player.getNicknameToken() + " trained a unit in (" + action.getCell().getX() + ", " + action.getCell().getY() + ")");
     }
 
+    private void makeBuildAction(Action action) {
+        Player player = gameManager.getPlayer(action.getPlayer());
+
+        if (!action.getCell().isFree()) {
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell occupied) " + action);
+            return;
+        }
+        // TODO: implement BUILD action
+
+    }
     private void makeAction() {
         Action action = this.actionList.get(0);
         this.actionList.remove(0);
@@ -166,10 +187,6 @@ public class Referee extends AbstractReferee {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (out of range) " + action);
             return;
         }
-        if (!action.getCell().isFree()) {
-            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell occupied) " + action);
-            return;
-        }
 
 
         if (action.getType() == ACTIONTYPE.MOVE) {
@@ -177,7 +194,7 @@ public class Referee extends AbstractReferee {
         } else if (action.getType() == ACTIONTYPE.TRAIN) {
             makeTrainAction(action);
         } else { // ACTIONTYPE.BUILD
-            // TODO: implement BUILD action
+            makeBuildAction(action);
         }
 
         updateView();
