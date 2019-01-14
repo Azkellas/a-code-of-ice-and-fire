@@ -28,6 +28,7 @@ public class Action {
 
     public Action(String string, ACTIONTYPE type, int player, Cell cell, BUILDING_TYPE buildType) {
         // Constructor for type == BUILD
+        this.string = string;
         this.type = type;
         this.player = player;
         this.cell = cell;

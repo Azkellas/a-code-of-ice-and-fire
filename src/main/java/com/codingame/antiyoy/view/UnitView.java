@@ -49,7 +49,10 @@ public class UnitView extends AbstractView {
     public void updateView() {
         if (this.isDisposable())
             group.setVisible(false);
-        group.setX(model.getX() * CELL_SIZE + (CELL_SIZE-2)/2).setY(model.getY() * CELL_SIZE + (CELL_SIZE-2)/2);
+        int x = model.getX() * CELL_SIZE + (CELL_SIZE-2)/2;
+        int y = model.getY() * CELL_SIZE + (CELL_SIZE-2)/2;
+        if (x != group.getX() || y != group.getY())
+            group.setX(x).setY(y);
     }
 
     public Entity getEntity() {

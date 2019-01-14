@@ -102,6 +102,7 @@ public class GameState {
 
     // kill methods
     private void killUnit(Unit unit) {
+        unit.die();
         unit.doDispose();
         this.units.remove(unit.getId());
     }
@@ -109,11 +110,13 @@ public class GameState {
     private void clearCell(Cell cell) {
         if (cell.getUnit() != null) {
             killUnit(cell.getUnit());
+            cell.setUnit(null);
         }
         if (cell.getBuilding() != null) {
             Building building = cell.getBuilding();
             building.doDispose();
             this.buildings.removeIf(building1 -> building1.getX() == building.getX() && building1.getY() == building.getY());
+            cell.setBuilding(null);
         }
     }
 
@@ -130,7 +133,6 @@ public class GameState {
             negativeGoldWipeout(playerId);
         }
         this.units.forEach( (key, unit) -> { if (unit.getOwner() == playerId) unit.newTurn(); });
-
     }
 
     public void computeAllActiveCells() {
@@ -168,7 +170,7 @@ public class GameState {
 
     private void killSeparatedUnits(int playerId) {
         List<Unit> toKill = new ArrayList<>();
-        this.units.forEach((key, unit)-> {if (unit.getOwner() == playerId && !unit.getCell().isActive()) toKill.add(unit); });
+        this.units.forEach((key, unit)-> {if (unit.isAlive() && unit.getOwner() == playerId && !unit.getCell().isActive()) toKill.add(unit); });
         killUnits(toKill);
     }
 
@@ -199,7 +201,7 @@ public class GameState {
         this.playerGolds.get(playerId).set(0);
 
         List<Unit> toKill = new ArrayList<>();
-        this.units.forEach((key, unit)-> {if (unit.getOwner() == playerId) toKill.add(unit); });
+        this.units.forEach((key, unit)-> {if (unit.isAlive() && unit.getOwner() == playerId) toKill.add(unit); });
         killUnits(toKill);
     }
 
@@ -220,9 +222,7 @@ public class GameState {
         // free current cell
         clearCell(newPosition);
 
-        // kill unit
-        killCellUnit(newPosition);
-
+        unit.getCell().setUnit(null);
         unit.moved();
         unit.setX(newPosition.getX());
         unit.setY(newPosition.getY());
@@ -316,4 +316,8 @@ public class GameState {
         sendUnits(player);
     }
 
+    public void debugViews() {
+        System.err.println(buildings.size() + " buildings, " + units.size() + " units");
+        // units.forEach((id, unit) -> {System.err.println(unit.getId() + ": " +unit.getX() + " " + unit.getY());});
+    }
 }

@@ -67,11 +67,7 @@ public class PlayerView extends AbstractView {
                 .setY(playerIndex * 500 + 200);
         group.add(avatar, pseudo, gold);
     }
-
-    public void update() {
-        this.gold.setText(goldModel.toString());
-    }
-
+    
     public void updateView() {
         this.gold.setText(goldModel.toString());
     }

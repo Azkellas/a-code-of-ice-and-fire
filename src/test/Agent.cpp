@@ -89,6 +89,8 @@ int main() {
             Building building;
             cin >> building.owner >> building.type >> building.x >> building.y; cin.ignore();
             cerr << building.owner << " " << building.type << " " << building.x << " " << building.y << endl;
+            map[building.x][building.y].occupied = true;
+
             buildings.push_back(building);
         }
 
@@ -119,37 +121,77 @@ int main() {
                 if (neighbour == nullptr || neighbour->owner == 0 || neighbour->occupied)
                     continue;
                 cout << (first ? "" : " ") << "MOVE " << unit.id << " " << neighbour->x << " " << neighbour->y << ";";
+                map[unit.x][unit.y].occupied = false;
+                map[neighbour->x][neighbour->y].occupied = true;
                 neighbour->owner = 0;
                 first = false;
-                // break;
+                break;
             }
         }
         cerr << "finished moving" << endl;
-        // train
+        // build
         bool mad = true;
+        while (gold >= 15 && mad) {
+            mad = false;
+            for (int x = 0; x < MAP_WIDTH; ++x) {
+                for (int y = 0; y < MAP_HEIGHT; ++y) {
+                    if (gold < 15)
+                        break;
+                    if (map[x][y].owner != 0 || map[x][y].occupied)
+                        continue;
+                    if (rand() % 100 < 50)
+                    {
+                        cout << (first ? "" : " ") << "BUILD " << "TOWER" << " " << x << " " << y << ";";
+                        cerr << (first ? "" : " ") << "BUILD " << "TOWER" << " " << x << " " << y << ";";
+                        gold -= 15;
+                    }
+                    else {
+                        cout << (first ? "" : " ") << "BUILD " << "MINE" << " " << x << " " << y << ";";
+                        cerr << (first ? "" : " ") << "BUILD " << "MINE" << " " << x << " " << y << ";";
+                        gold -= 20;
+                    }
+                    map[x][y].occupied = true;
+                    first = false;
+                    mad = (rand() % 100 < 10);
+                }
+            }
+        }
+        // train
+        mad = true;
         while (gold >= 20 && mad) {
             mad = false;
             for (int x = 0; x < MAP_WIDTH; ++x) {
                 for (int y = 0; y < MAP_HEIGHT; ++y) {
-                    if (gold < 20)
+                    if (gold < 10)
                         break;
                     if (map[x][y].owner == VOID || map[x][y].owner == 0)
                         continue;
                     bool can = false;
                     for (int dir = 0; dir < 4; ++dir)
-                        if (map[x][y].neighbours[dir] != nullptr && map[x][y].neighbours[dir]->owner == 0 && !map[x][y].neighbours[dir]->occupied)
+                        if (map[x][y].neighbours[dir] != nullptr && map[x][y].neighbours[dir]->owner == 0)
                             can = true;
                     if (can) {
-                        cout << (first ? "" : " ") << "TRAIN " << 1 << " " << x << " " << y << ";";
+                        int random = rand()% 100;
+                        int level;
+                        if (random < 20)
+                            level = 3;
+                        else if (random < 70)
+                            level = 2;
+                        else
+                            level = 1;
+                        if (gold < level * 10)
+                            continue;
+                        cout << (first ? "" : " ") << "TRAIN " << level << " " << x << " " << y << ";";
                         first = false;
                         map[x][y].owner = 0;
                         mad = true;
-                        gold -= 20;
+                        gold -= level * 10;
                     }
                 }
             }
         }
         cerr << "finished training" << endl;
+        cerr << "end gold: " << gold << endl;
         cout << endl;
     }
     return 0;

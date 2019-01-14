@@ -23,6 +23,7 @@ public final class Constants {
     static public final int UNIT_COST[] = {0, 10, 20, 30};
     static public final int UNIT_UPKEEP[] = {0, 1, 4, 20};
     static public final int MAX_LEVEL = 3;
+    static public final int CAPTURE_LEVEL = 2;
 
     public enum ACTIONTYPE {MOVE, BUILD, TRAIN};
 
