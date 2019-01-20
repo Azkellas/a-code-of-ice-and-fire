@@ -58,6 +58,6 @@ public final class Constants {
 
     // MAP GENERATOR CONSTANTS
     static public final float MAPGENERATOR_R = 0.45f; // percentage of NON-VOID cells initially
-    static public final int MAPGENERATOR_ITERATIONSAUTOMATA = 1;
+    static public final int MAPGENERATOR_ITERATIONSAUTOMATA = 3;
     static public final int MAPGENERATOR_T = 6;  // neighbourhood threshold that defines a TILE
 }

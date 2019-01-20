@@ -57,7 +57,7 @@ public class Referee extends AbstractReferee {
         sendInitialInput();
 
         // Initialize your game here.
-        this.gameState = new GameState();
+        this.gameState = new GameState(this.gameManager.getSeed());
         // this.endScreenModule = new EndScreenModule();
         this.gameManager.setMaxTurns(2000); // Turns are determined by realTurns, this is actually maxFrames
 
