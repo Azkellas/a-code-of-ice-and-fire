@@ -3,8 +3,8 @@ package com.codingame.antiyoy;
 import java.util.regex.Pattern;
 
 public final class Constants {
-    static public final int MAP_WIDTH = 8;
-    static public final int MAP_HEIGHT = 8;
+    static public final int MAP_WIDTH = 12;
+    static public final int MAP_HEIGHT = 12;
 
     static public final int MAX_TURNS = 100;
     static public final int PLAYER_COUNT = 2;
@@ -55,4 +55,9 @@ public final class Constants {
     }
 
     private Constants() {}
+
+    // MAP GENERATOR CONSTANTS
+    static public final float MAPGENERATOR_R = 0.45f; // percentage of NON-VOID cells initially
+    static public final int MAPGENERATOR_ITERATIONSAUTOMATA = 1;
+    static public final int MAPGENERATOR_T = 6;  // neighbourhood threshold that defines a TILE
 }
