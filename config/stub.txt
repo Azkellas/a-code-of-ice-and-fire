@@ -2,7 +2,7 @@ read width:int
 read height:int
 gameloop
 read gold:int
-loop height loop width read owner:int
+loop height read line:string(width)
 read buildingCount:int
 loop buildingCount read owner:int type:int x:int y:int
 read unitCount:int

@@ -57,12 +57,22 @@ int main() {
         cerr << "gold: " << gold << endl;
     
         for (int y = 0; y < MAP_HEIGHT; ++y) {
+            string line;
+            getline(cin, line);
             for (int x = 0; x < MAP_WIDTH; ++x) {
                 map[x][y].x = x;
                 map[x][y].y = y;
                 map[x][y].occupied = false;
+                char data = line[x];
                 int owner;
-                cin >> owner; cin.ignore();
+                if (data == '#')
+                    owner = -2;
+                else if (data == '.')
+                    owner = -1;
+                else if (data == 'O' || data == 'o')
+                    owner = 0;
+                else
+                    owner = 1;
                 map[x][y].owner = owner;
                 cerr << map[x][y].owner << " ";
 

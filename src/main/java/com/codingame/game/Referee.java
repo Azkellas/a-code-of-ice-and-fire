@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import com.codingame.antiyoy.*;
 import com.codingame.gameengine.core.AbstractPlayer.TimeoutException;
 import com.codingame.gameengine.core.AbstractReferee;
+import com.codingame.gameengine.core.GameManager;
 import com.codingame.gameengine.core.MultiplayerGameManager;
 import com.codingame.gameengine.module.entities.GraphicEntityModule;
 
@@ -107,7 +108,7 @@ public class Referee extends AbstractReferee {
                 makeAction();
         }
         updateView();
-        checkForEndGame();
+        checkForHqCapture();
     }
 
     // return true if there is a next player, false if this is the end of the game
@@ -260,11 +261,18 @@ public class Referee extends AbstractReferee {
             for (String actionStr : actions) {
                 actionStr = actionStr.trim();
 
-                if (!matchMoveTrain(player, actionStr) && !matchBuild(player, actionStr))
+                if (!matchMoveTrain(player, actionStr) && !matchBuild(player, actionStr)) {
+                    // unrecognized pattern: timeout
                     gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (unknown pattern) " + actionStr);
+                    // clear actions
+                    actionList.clear();
+                    player.deactivate();
+                    checkForEndGame();
+                }
             }
         } catch (TimeoutException e) {
             player.deactivate(String.format("$%d timeout!", player.getIndex()));
+            checkForEndGame();
         }
     }
 
@@ -342,15 +350,27 @@ public class Referee extends AbstractReferee {
     }
 
 
-    private void checkForEndGame() {
+    private void checkForHqCapture() {
         for (Building HQ : this.gameState.getHQs()) {
             if (HQ.getCell().getOwner() != HQ.getOwner()) {
                 int playerIdx = HQ.getCell().getOwner();
-                // score = rank
-                gameManager.getPlayer(playerIdx).setScore(2);
-                gameManager.getPlayer(1 - playerIdx).setScore(1);
-                gameManager.endGame();
+                gameManager.getPlayer(playerIdx).deactivate();
+                checkForEndGame();
             }
+        }
+    }
+    private void checkForEndGame() {
+        if (!gameManager.getPlayer(0).isActive()) {
+            // score = rank
+            gameManager.getPlayer(0).setScore(2);
+            gameManager.getPlayer(1).setScore(1);
+            gameManager.endGame();
+        }
+        if (!gameManager.getPlayer(1).isActive()) {
+            // score = rank
+            gameManager.getPlayer(1).setScore(2);
+            gameManager.getPlayer(0).setScore(1);
+            gameManager.endGame();
         }
     }
 

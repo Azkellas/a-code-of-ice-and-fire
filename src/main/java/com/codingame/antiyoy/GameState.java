@@ -246,12 +246,27 @@ public class GameState {
             StringBuilder line = new StringBuilder();
             for (int x = 0; x < MAP_WIDTH; ++x) {
                 int owner = this.map[x][y].getOwner();
-                if (owner >= 0)
-                    owner = (owner  - player.getIndex() + PLAYER_COUNT) % PLAYER_COUNT; // own unit = owner 0
-                line.append(owner);
-                if (x != MAP_WIDTH - 1) {
-                    line.append(" ");
+                char data;
+                switch (owner) {
+                    case VOID:
+                        data = '#';
+                        break;
+                    case NEUTRAL:
+                        data = '.';
+                        break;
+                    default:
+                        // o for own player, x for opponent
+                        if (owner == player.getIndex()) {
+                            data = 'o';
+                        } else {
+                            data = 'x';
+                        }
+                        // capital letter iif active cell
+                        if (this.map[x][y].isActive()) {
+                            data = Character.toUpperCase(data);
+                        }
                 }
+                line.append(data);
             }
             player.sendInputLine(line.toString());
         }
