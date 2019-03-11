@@ -7,6 +7,8 @@ import com.codingame.gameengine.module.entities.Rectangle;
 import com.codingame.gameengine.module.entities.Text;
 
 import com.codingame.antiyoy.Building;
+import com.codingame.gameengine.module.tooltip.TooltipModule;
+
 import static com.codingame.antiyoy.view.Constants.*;
 import static com.codingame.antiyoy.Constants.*;
 
@@ -19,8 +21,8 @@ public class BuildingView extends AbstractView {
     private Text type;
     private Building model;
 
-    public BuildingView(GraphicEntityModule entityModule, Building building) {
-        super(entityModule);
+    public BuildingView(GraphicEntityModule entityModule, TooltipModule tooltipModule, Building building) {
+        super(entityModule, tooltipModule);
         this.model = building;
 
         createBuildingView();

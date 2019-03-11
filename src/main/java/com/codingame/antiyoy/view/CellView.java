@@ -7,6 +7,8 @@ import com.codingame.gameengine.module.entities.Rectangle;
 // import org.graalvm.compiler.core.common.type.ArithmeticOpTable;
 
 import com.codingame.antiyoy.Cell;
+import com.codingame.gameengine.module.tooltip.TooltipModule;
+
 import static com.codingame.antiyoy.view.Constants.*;
 
 import java.util.Observable;
@@ -19,8 +21,8 @@ public class CellView extends AbstractView {
 
     private Cell model;
 
-    public CellView(GraphicEntityModule entityModule, Cell cell) {
-        super(entityModule);
+    public CellView(GraphicEntityModule entityModule, TooltipModule tooltipModule, Cell cell) {
+        super(entityModule, tooltipModule);
         this.model = cell;
 
         createCellView();

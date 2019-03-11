@@ -10,6 +10,7 @@ import com.codingame.gameengine.core.AbstractPlayer.TimeoutException;
 import com.codingame.gameengine.core.AbstractReferee;
 import com.codingame.gameengine.core.GameManager;
 import com.codingame.gameengine.module.endscreen.EndScreenModule;
+import com.codingame.gameengine.module.tooltip.TooltipModule;
 import com.codingame.gameengine.core.MultiplayerGameManager;
 import com.codingame.gameengine.module.entities.GraphicEntityModule;
 
@@ -23,6 +24,7 @@ public class Referee extends AbstractReferee {
     @Inject private MultiplayerGameManager<Player> gameManager;
     @Inject private GraphicEntityModule graphicEntityModule;
     @Inject private EndScreenModule endScreenModule;
+    @Inject TooltipModule tooltipModule;
 
     private GameState gameState;
 
@@ -75,7 +77,7 @@ public class Referee extends AbstractReferee {
 
     private void initializeView() {
         // Init
-        this.viewController = new ViewController(graphicEntityModule, gameManager.getPlayers(), this.gameState);
+        this.viewController = new ViewController(graphicEntityModule, tooltipModule, gameManager.getPlayers(), this.gameState);
 
         // Add all cells
         for (int x = 0; x < MAP_WIDTH; ++x)

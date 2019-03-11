@@ -11,6 +11,7 @@ import com.codingame.gameengine.module.entities.GraphicEntityModule;
 import com.codingame.gameengine.module.entities.Group;
 import com.codingame.gameengine.module.entities.Sprite;
 import com.codingame.gameengine.module.entities.Text;
+import com.codingame.gameengine.module.tooltip.TooltipModule;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -25,8 +26,8 @@ public class PlayerView extends AbstractView {
     private Text pseudo;
     AtomicInteger goldModel;
 
-    public PlayerView(GraphicEntityModule entityModule, Player player, GameState gameState) {
-        super(entityModule);
+    public PlayerView(GraphicEntityModule entityModule, TooltipModule tooltipModule, Player player, GameState gameState) {
+        super(entityModule, tooltipModule);
         this.model = player;
         this.goldModel = gameState.getAtomicGold(player.getIndex());
         createPlayerView();

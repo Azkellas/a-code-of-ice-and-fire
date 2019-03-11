@@ -7,6 +7,7 @@ import com.codingame.antiyoy.Unit;
 import com.codingame.antiyoy.Building;
 import com.codingame.gameengine.module.entities.GraphicEntityModule;
 import com.codingame.gameengine.module.entities.Group;
+import com.codingame.gameengine.module.tooltip.TooltipModule;
 
 import java.util.*;
 
@@ -21,8 +22,8 @@ public class GameStateView extends AbstractView {
     List<BuildingView> buildings;
 
     GameState model;
-    public GameStateView(GraphicEntityModule entityModule, GameState gameState){
-        super(entityModule);
+    public GameStateView(GraphicEntityModule entityModule, TooltipModule tooltipModule, GameState gameState){
+        super(entityModule, tooltipModule);
 
         this.model = gameState;
         cells = new ArrayList<>();
@@ -38,21 +39,22 @@ public class GameStateView extends AbstractView {
     }
 
     public CellView createCellView(Cell cell) {
-        CellView cellView = new CellView (entityModule, cell);
+        CellView cellView = new CellView (entityModule, tooltipModule, cell);
+        tooltipModule.setTooltipText(cellView.getEntity(), "x: " + cell.getX() + "\ny: " + cell.getY());
         group.add(cellView.getEntity().setZIndex(1));
         cells.add(cellView);
         return cellView;
     }
 
     public UnitView createUnitView(Unit unit) {
-        UnitView unitView= new UnitView(entityModule, unit);
+        UnitView unitView= new UnitView(entityModule, tooltipModule, unit);
         group.add(unitView.getEntity().setZIndex(2));
         units.add(unitView);
         return unitView;
     }
 
     public BuildingView createBuildingView(Building building) {
-        BuildingView buildingView = new BuildingView(entityModule, building);
+        BuildingView buildingView = new BuildingView(entityModule, tooltipModule, building);
         group.add(buildingView.getEntity().setZIndex(2));
         buildings.add(buildingView);
         return buildingView;
