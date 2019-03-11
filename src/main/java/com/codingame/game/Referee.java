@@ -9,6 +9,7 @@ import com.codingame.antiyoy.*;
 import com.codingame.gameengine.core.AbstractPlayer.TimeoutException;
 import com.codingame.gameengine.core.AbstractReferee;
 import com.codingame.gameengine.core.GameManager;
+import com.codingame.gameengine.module.endscreen.EndScreenModule;
 import com.codingame.gameengine.core.MultiplayerGameManager;
 import com.codingame.gameengine.module.entities.GraphicEntityModule;
 
@@ -21,8 +22,10 @@ import static com.codingame.antiyoy.Constants.*;
 public class Referee extends AbstractReferee {
     @Inject private MultiplayerGameManager<Player> gameManager;
     @Inject private GraphicEntityModule graphicEntityModule;
+    @Inject private EndScreenModule endScreenModule;
 
     private GameState gameState;
+
 
     private ViewController viewController;
 
@@ -33,13 +36,27 @@ public class Referee extends AbstractReferee {
     private int realTurn = 0;
 
     @Override
+    public void onEnd() {
+        //int[] scores = new int[2];
+        //scores[0] = gameManager.getPlayer(0).getScore();
+        //scores[1] = gameManager.getPlayer(1).getScore();
+        String[] text = {"", ""};
+        if (gameManager.getPlayer(0).getScore() == -1 || gameManager.getPlayer(1).getScore() == -1) {
+            // timeout or capture: no need to display scores
+            text[0] = " ";
+            text[1] = " ";
+        }
+        endScreenModule.setScores(gameManager.getPlayers().stream().mapToInt(p -> p.getScore()).toArray(), text);
+    }
+
+    @Override
     public void init() {
         // send map size
         sendInitialInput();
 
         // Initialize your game here.
         this.gameState = new GameState();
-
+        // this.endScreenModule = new EndScreenModule();
         this.gameManager.setMaxTurns(2000); // Turns are determined by realTurns, this is actually maxFrames
 
         // Random generation
@@ -353,7 +370,7 @@ public class Referee extends AbstractReferee {
     private void checkForHqCapture() {
         for (Building HQ : this.gameState.getHQs()) {
             if (HQ.getCell().getOwner() != HQ.getOwner()) {
-                int playerIdx = HQ.getCell().getOwner();
+                int playerIdx = HQ.getOwner();
                 gameManager.getPlayer(playerIdx).deactivate();
                 checkForEndGame();
             }
@@ -362,13 +379,13 @@ public class Referee extends AbstractReferee {
     private void checkForEndGame() {
         if (!gameManager.getPlayer(0).isActive()) {
             // score = rank
-            gameManager.getPlayer(0).setScore(2);
+            gameManager.getPlayer(0).setScore(-1);
             gameManager.getPlayer(1).setScore(1);
             gameManager.endGame();
         }
         if (!gameManager.getPlayer(1).isActive()) {
             // score = rank
-            gameManager.getPlayer(1).setScore(2);
+            gameManager.getPlayer(1).setScore(-1);
             gameManager.getPlayer(0).setScore(1);
             gameManager.endGame();
         }
@@ -376,18 +393,8 @@ public class Referee extends AbstractReferee {
 
     private void discriminateEndGame() {
         List<AtomicInteger> scores = this.gameState.getScores();
-        if (scores.get(0).intValue() < scores.get(1).intValue()) {
-            gameManager.getPlayer(0).setScore(2);
-            gameManager.getPlayer(1).setScore(1);
-        }
-        else if (scores.get(0).intValue() > scores.get(1).intValue()) {
-            gameManager.getPlayer(0).setScore(1);
-            gameManager.getPlayer(1).setScore(2);
-        }
-        else {
-            gameManager.getPlayer(0).setScore(1);
-            gameManager.getPlayer(1).setScore(1);
-        }
+        gameManager.getPlayer(0).setScore(scores.get(0).intValue());
+        gameManager.getPlayer(1).setScore(scores.get(1).intValue());
         gameManager.endGame();
     }
 }
