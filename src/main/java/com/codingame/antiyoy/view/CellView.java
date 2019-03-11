@@ -10,6 +10,7 @@ import com.codingame.antiyoy.Cell;
 import com.codingame.gameengine.module.tooltip.TooltipModule;
 
 import static com.codingame.antiyoy.view.Constants.*;
+import static com.codingame.antiyoy.Constants.*;
 
 import java.util.Observable;
 
@@ -50,6 +51,10 @@ public class CellView extends AbstractView {
                 .setY(model.getY() * CELL_SIZE);
 
         group.add(decors, protect);
+
+        if (model.getOwner() != VOID) {
+            tooltipModule.setTooltipText(group, "x: " + model.getX() + "\ny: " + model.getY());
+        }
     }
 //
 //    private void addItem() {

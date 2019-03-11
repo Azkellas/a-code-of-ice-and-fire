@@ -45,6 +45,9 @@ public class UnitView extends AbstractView {
         group = entityModule.createGroup()
                 .setScale(1);
         group.add(decors, level);
+
+        tooltipModule.setTooltipText(group,  "level: " + model.getLevel() + "\nx: " + model.getX() + "\ny: " + model.getY());
+
     }
 //
 

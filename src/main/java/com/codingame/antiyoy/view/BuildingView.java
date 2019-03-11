@@ -61,6 +61,9 @@ public class BuildingView extends AbstractView {
                 .setX(model.getX() * CELL_SIZE + (CELL_SIZE-2)/2)
                 .setY(model.getY() * CELL_SIZE + (CELL_SIZE-2)/2);
         group.add(decors, type);
+
+        tooltipModule.setTooltipText(group,  TYPE_TO_STRING(model.getType()) + "\nx: " + model.getX() + "\ny: " + model.getY());
+
     }
 //
 

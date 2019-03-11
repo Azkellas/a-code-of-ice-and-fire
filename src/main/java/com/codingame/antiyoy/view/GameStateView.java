@@ -40,7 +40,6 @@ public class GameStateView extends AbstractView {
 
     public CellView createCellView(Cell cell) {
         CellView cellView = new CellView (entityModule, tooltipModule, cell);
-        tooltipModule.setTooltipText(cellView.getEntity(), "x: " + cell.getX() + "\ny: " + cell.getY());
         group.add(cellView.getEntity().setZIndex(1));
         cells.add(cellView);
         return cellView;

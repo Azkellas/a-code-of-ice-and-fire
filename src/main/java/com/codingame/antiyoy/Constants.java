@@ -40,5 +40,19 @@ public final class Constants {
         else
             return 15;
     }
+
+    public static final String TYPE_TO_STRING(BUILDING_TYPE type) {
+        switch (type) {
+            case HQ:
+                return "HQ";
+            case MINE:
+                return "MINE";
+            case TOWER:
+                return "TOWER";
+            default:
+                return "";
+        }
+    }
+
     private Constants() {}
 }
