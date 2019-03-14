@@ -61,6 +61,8 @@ public class Referee extends AbstractReferee {
         // this.endScreenModule = new EndScreenModule();
         this.gameManager.setMaxTurns(2000); // Turns are determined by realTurns, this is actually maxFrames
 
+        this.gameManager.setFrameDuration(400);
+
         // Random generation
         this.gameState.generateMap();
 
@@ -99,14 +101,9 @@ public class Referee extends AbstractReferee {
     @Override
     public void gameTurn(int turn) {
         if (hasAction()) {
-            gameManager.setFrameDuration(400);
-            forceAnimationFrame();
             makeAction();
         }
         else {
-            forceGameFrame();
-            gameManager.setFrameDuration(400);
-
             // get current player
             if (!computeCurrentPlayer())
                 return;
@@ -234,25 +231,6 @@ public class Referee extends AbstractReferee {
         }
     }
 
-
-    private void forceAnimationFrame() {
-        for (Player player : gameManager.getPlayers()) {
-            player.setExpectedOutputLines(0);
-            player.execute();
-            try {
-                player.getOutputs();
-            } catch (Exception e) {
-                // should not occur since no output is required
-            }
-        }
-    }
-
-    private void forceGameFrame() {
-        for (Player player : gameManager.getActivePlayers()) {
-            player.setExpectedOutputLines(1);
-        }
-    }
-
     private void sendInitialInput() {
         StringBuilder firstLine = new StringBuilder();
         firstLine.append(MAP_WIDTH);
@@ -279,6 +257,10 @@ public class Referee extends AbstractReferee {
 
             for (String actionStr : actions) {
                 actionStr = actionStr.trim();
+
+                if (actionStr.equals("WAIT")) {
+                    continue;
+                }
 
                 if (!matchMoveTrain(player, actionStr) && !matchBuild(player, actionStr)) {
                     // unrecognized pattern: timeout
@@ -321,7 +303,6 @@ public class Referee extends AbstractReferee {
         Action action = new Action(actionStr, ACTIONTYPE.MOVE, player.getIndex(), id, this.gameState.getCell(x, y));
         this.actionList.add(action);
     }
-
 
     private boolean matchMoveTrain(Player player, String actionStr) {
         Matcher moveTrainMatcher = MOVETRAIN_PATTERN.matcher(actionStr);
