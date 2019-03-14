@@ -7,8 +7,11 @@
       <span>The Goal</span>
     </h1>
     <div class="statement-goal-content">
-      Strategic turn-based game. <br/>
-      You control a faction, starting from an edge of the map.<br/>
+      Each player control a faction, starting from an edge of a grid-map.<br/>
+      Build armies to defeat your opponent by destroying their headquarters.<br/>
+      
+      <!--
+      <p>This is a strategic turn-based game.</p>
       Each turn, you can:<br/>
       move units<br/>
       train units (with a level, 1, 2 or 3)<br/>
@@ -19,15 +22,12 @@
       fight: to kill a unit, yours must be of higher level, or at max level (2 kill 1, 3 kill 3 and 2 and 1, 1 kills nothing)<br/>
       to kill towers and neighbour cell (4-connex), your unit must be 2 or 3<br/>
       <br/>
-      Win condition: capture the enemy HQ<br/>
-      Have more military power at the end (100 turns)<br/>
-      military power = currentGold + unitsCost for units alive<br/>
-      <br/>
       Each action is performed sequentially<br/>
-      <br>
-      <br>
+      -->
+      <br/>
     </div>
   </div>
+  
   <!-- RULES -->
   <div class="statement-section statement-rules">
     <h1>
@@ -35,7 +35,44 @@
       <span>Rules</span>
     </h1>
     <div>
-      <div class="statement-rules-content">Your program receives characters.<br>
+      <div class="statement-rules-content">
+      
+      <!-- marquer qu'income arrive au début du tour -->
+      
+      <p><strong>The map</strong></p>
+      <p>
+      <p>The map is a grid of size 12x12, where the top-left corner is the case <const>(0,0)</const>.</p>
+      <p>
+        A cell can be either
+        <ul>
+          <li> neutral: the cell belongs to no player and is colored in grey.</li>
+          <li> captured: the cell belongs to a player and is of the color of the owner. A cell is owned by a player only if the cell is connected to the headquarters. Each cell a player control grants <const>+1</const> income.</li>
+        </ul>
+      </p>
+      
+      <p><strong>Buildings</strong></p>
+      <p>
+      There are 2 differents buildings that can be built:
+      <ul>
+        <li><action>MINE</action>: mines product gold each turn and are the main source of income. A mine costs (10 + 2*<var>nbMines</var>) to build. So the first costs 10, the second one 12, and so on and so forth.</li>
+        <li><action>TOWER</action>: towers protect nearby cells. Cells protected by a tower can only be reached by units of level <const>3</const>. Likewise, the tower can only be destroyed by a level <const>3</const> unit.</li>
+      </ul>
+      </p>
+      Another building is the <strong>headquarters</strong>. A player has to protect their own headquarters while trying to destroy opponent's one. Losing their headquarters results to a lost game.<br/>
+      
+      
+      <p><strong>Armies</strong></p>
+      To destroy opponent's headquarters, a player has to train armies. Armies are used to capture cells and destroy opponent's buildings and units. <br/>
+      
+      There are <const>3</const> levels of units and the higher the level, the stronger the unit is. When a player unit walks on a cell not owned by this player, the cell is <strong>captured</strong>. Also, when a player unit walks on a cell where another enemy unit is, the enemy unit is instantly killed (without harm to the player unit).
+      <ul>
+        <li>Level <const>1</const> units can only move on empty cells, mines or headquarters.</li>
+        <li>Level <const>2</const> units, in addition, can kill level <const>1</const> units.
+        <li>Level <const>3</const> units, besides, can kill any units or buildings.
+      <ul>
+      
+      <!--
+      Your program receives characters.<br>
         Your actions have an effect.<br>
         <br>
         The game zone works as follows:
@@ -47,12 +84,35 @@
         <ul>
           <li>They move around.</li>
         </ul>
-        You <strong>lose</strong> if:
-        <ul>
-          <li>You mess up.</li>
-          <li>You do not supply a valid sequence of actions.</li>
-        </ul>
+    -->
       </div>
+      
+            <!-- Victory conditions -->
+            <div class="statement-victory-conditions">
+                <div class="icon victory"></div>
+                <div class="blk">
+                    <div class="title">Victory Conditions</div>
+                    <div class="text">
+                        <ul style="padding-bottom: 0;">
+                            <li>Capture the enemy headquarters.</li>
+                            <li>After <const>100</const> turns, you have more military power than your opponent, where the military power is computed by <var>currentGold</var> + <var>unitsCost</var> for units alive.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lose conditions -->
+            <div class="statement-lose-conditions">
+                <div class="icon lose"></div>
+                <div class="blk">
+                    <div class="title">Lose Conditions</div>
+                    <div class="text">
+                        <ul style="padding-bottom: 0;">
+                            <li>Output an invalid command.</li>
+                        </ul>
+                    </div>
+                </div>
+          </div>
     </div>
   </div>
   <!-- EXPERT RULES -->
