@@ -25,9 +25,11 @@ public final class Constants {
     static public final int MAX_LEVEL = 3;
     static public final int CAPTURE_LEVEL = 2;
 
-    public enum ACTIONTYPE {MOVE, BUILD, TRAIN};
+    public enum ACTIONTYPE {MOVE, BUILD, TRAIN}
 
-    public enum BUILDING_TYPE {HQ, MINE, TOWER};
+    public enum BUILDING_TYPE {HQ, MINE, TOWER}
+
+    public enum LEAGUE {WOOD3, WOOD2, WOOD1, BRONZE}
 
     public static final Pattern MOVETRAIN_PATTERN = Pattern.compile("^(MOVE|TRAIN) ([0-9]*) ([0-9]*) ([0-9]*)$");
     public static final Pattern MOVE_PATTERN = Pattern.compile("^MOVE ([0-9]*) ([0-9]*) ([0-9]*)$");

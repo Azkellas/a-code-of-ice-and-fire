@@ -1,0 +1,167 @@
+<div id="statement_back" class="statement_back" style="display:none"></div>
+<div class="statement-body">
+  <!-- GOAL -->
+  Wood 1
+  <div class="statement-section statement-goal">
+    <h1>
+      <span class="icon icon-goal">&nbsp;</span>
+      <span>The Goal</span>
+    </h1>
+    <div class="statement-goal-content">
+      Strategic turn-based game. <br/>
+      You control a faction, starting from an edge of the map.<br/>
+      Each turn, you can:<br/>
+      move units<br/>
+      train units (with a level, 1, 2 or 3)<br/>
+      build something: a mine (that produces more gold), or a tower (that protects nearby cells)<br/>
+      You capture a cell if you walk on it<br/>
+      Each turn, you gain 1 gold per owned cell and 4 per owned mine<br/>
+      You only control/own cells that are connected to your HQ<br/>
+      fight: to kill a unit, yours must be of higher level, or at max level (2 kill 1, 3 kill 3 and 2 and 1, 1 kills nothing)<br/>
+      to kill towers and neighbour cell (4-connex), your unit must be 2 or 3<br/>
+      <br/>
+      Win condition: capture the enemy HQ<br/>
+      Have more military power at the end (100 turns)<br/>
+      military power = currentGold + unitsCost for units alive<br/>
+      <br/>
+      Each action is performed sequentially<br/>
+      <br>
+      <br>
+    </div>
+  </div>
+  <!-- RULES -->
+  <div class="statement-section statement-rules">
+    <h1>
+      <span class="icon icon-rules">&nbsp;</span>
+      <span>Rules</span>
+    </h1>
+    <div>
+      <div class="statement-rules-content">Your program receives characters.<br>
+        Your actions have an effect.<br>
+        <br>
+        The game zone works as follows:
+        <ul>
+          <li>There are coordinates.</li>
+        </ul>
+        <br>
+        The units work as follows:
+        <ul>
+          <li>They move around.</li>
+        </ul>
+        You <strong>lose</strong> if:
+        <ul>
+          <li>You mess up.</li>
+          <li>You do not supply a valid sequence of actions.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- EXPERT RULES -->
+  <div class="statement-section statement-expertrules">
+    <h1>
+      <span class="icon icon-expertrules">&nbsp;</span>
+      <span>Expert Rules</span>
+    </h1>
+    <div class="statement-expert-rules-content">
+      If you're going to run local simulations, you'll need to know this!
+    </div>
+  </div>
+  <!-- EXAMPLES -->
+  <div class="statement-section statement-examples">
+    <h1>
+      <span class="icon icon-example">&nbsp;</span>
+      <span>Example</span>
+    </h1>
+
+    <div class="statement-examples-text">
+      A basic situation, an instruction, a result.
+    </div>
+
+  </div>
+  <!-- WARNING -->
+  <div class="statement-section statement-warning">
+    <h1>
+      <span class="icon icon-warning">&nbsp;</span>
+      <span>Note</span>
+    </h1>
+    <div class="statement-warning-content">
+      <b>Don’t forget to run the tests by launching them from the “Test cases” window</b>. You can submit at any time
+      to recieve a score against the training validators. <b>You can submit as many times as you like</b>. Your most
+      recent submission will be used for the final ranking.<br>
+      <br>
+      <strong>Warning:</strong> the validation tests used to compute the final score are not the same as the ones used
+      during the event.
+      Harcoded solutions will not score highly.<br>
+      <br>
+      Don't hesitate to change the viewer's options to help debug your code (<img style="opacity:.8;background:#20252a;"
+        height="18" src="https://www.codingame.com/servlet/fileservlet?id=3463235186409" width="18">).
+    </div>
+  </div>
+  <!-- PROTOCOL -->
+  <div class="statement-section statement-protocol">
+    <h1>
+      <span class="icon icon-protocol">&nbsp;</span>
+      <span>Game Input</span>
+    </h1>
+    <!-- Protocol block -->
+    <div class="blk">
+      <div class="text">The program must first read the initialization data from standard input. Then, provide to the
+        standard output one line with ...</div>
+    </div>
+
+    <!-- Protocol block -->
+    <div class="blk">
+      <div class="title">Input</div>
+      <div class="title">Initialization input</div>
+      <div class="text">
+        <p><span class="statement-lineno">1 Line: </span>Two ints <var>WIDTH</var> and <var>HEIGHT</var>, the dimensions of the map</p>
+      </div>
+
+      <div class="title">Game turn input</div>
+      <div class="text">
+        <p>First <var>HEIGHT</var> lines:</p>
+        <p><var>WIDTH</var> characters: # = void, . = neutral, O = own & active, o = own & inactive, X = active opponent cell, x = inactive opponent cell
+        <p>Next line: 1 int: <var>buildingCount</var></p>
+        <p>Next <var>buildingCount</var> lines:</p>
+        <p>Four ints: <var>type</var> (0 = HQ, 1 = mine, 2 = tower) <var>owner</var> <var>x</var><var>y</var></p>
+        <p>Next line: 1 int: <var>unitCount</var></p>
+        <p>Next <var>unitCount</var> lines:</p>
+        <p>Five ints: <var>id</var> <var>owner</var> <var>level</var> <var>x</var><var>y</var></p>
+      </div>
+    </div>
+
+    <!-- Protocol block -->
+    <div class="blk">
+      <div class="title">Output</div>
+      <div class="text">
+        <span class="statement-lineno">A single line</span>
+        MOVE id x y<br>
+        TRAIN level x y<br>
+        BUILD "MINE"|"TOWER" x y<br>
+        separated by ;<br>
+        Example "MOVE 1 2 3; TRAIN 3 3 3; BUILD MINE 0 1"<br>
+        <br>
+      </div>
+    </div>
+
+    <!-- Protocol block -->
+    <div class="blk">
+      <div class="title">Constraints</div>
+      WIDTH, HEIGHT <= 15
+      <div class="text"><var>...</var> contains between 1 and 500 characters.<br>
+        <br>Allotted response time to output
+        is ≤ <const>2</const> seconds.</div>
+    </div>
+  </div>
+  <!-- STORY -->
+  <div class="statement-story-background">
+    <div class="statement-story-cover" style="background-size: cover; background-image: url(https://www.codingame.com/servlet/fileservlet?id=2210505809934)">
+      <div class="statement-story" style="min-height: 300px; position: relative">
+        <h1>Title</h1>
+        <div class="story-text">Story
+          <br>
+          Totally optional</div>
+      </div>
+    </div>
+  </div>
+</div>

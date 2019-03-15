@@ -24,10 +24,11 @@ public class Referee extends AbstractReferee {
     @Inject private MultiplayerGameManager<Player> gameManager;
     @Inject private GraphicEntityModule graphicEntityModule;
     @Inject private EndScreenModule endScreenModule;
-    @Inject TooltipModule tooltipModule;
+    @Inject private TooltipModule tooltipModule;
 
     private GameState gameState;
 
+    private LEAGUE league;
 
     private ViewController viewController;
 
@@ -62,6 +63,25 @@ public class Referee extends AbstractReferee {
         this.gameManager.setMaxTurns(2000); // Turns are determined by realTurns, this is actually maxFrames
 
         this.gameManager.setFrameDuration(400);
+
+        // Get league
+        switch (this.gameManager.getLeagueLevel()) {
+            case 1:
+                this.league = LEAGUE.WOOD3;
+                // Only T1 units, no building
+                break;
+            case 2:
+                this.league = LEAGUE.WOOD2;
+                // Now T2/T3 units, kill mechanism
+                break;
+            case 3:
+                this.league = LEAGUE.WOOD1;
+                // Now Mines
+                break;
+            default:
+                this.league = LEAGUE.BRONZE;
+                // Now Towers
+        }
 
         // Random generation
         this.gameState.generateMap();
@@ -105,8 +125,9 @@ public class Referee extends AbstractReferee {
         }
         else {
             // get current player
-            if (!computeCurrentPlayer())
+            if (!computeCurrentPlayer()) {
                 return;
+            }
             Player player = gameManager.getPlayer(this.currentPlayer);
 
             // compute new golds / zones / killed units
@@ -120,8 +141,9 @@ public class Referee extends AbstractReferee {
             readInput(player);
 
             // Make the first action to save frames
-            if (hasAction())
+            if (hasAction()) {
                 makeAction();
+            }
         }
         updateView();
         checkForHqCapture();
@@ -157,6 +179,7 @@ public class Referee extends AbstractReferee {
         int unitId = action.getUnitId();
         Unit unit = gameState.getUnit(unitId);
 
+        // Free cell or killable unit / destroyable building
         if (!action.getCell().isCapturable(action.getPlayer(), unit.getLevel())) {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell occupied) " + action);
             return;
@@ -175,6 +198,7 @@ public class Referee extends AbstractReferee {
             return;
         }
 
+        // Free cell or killable unit / destroyable building
         if (!action.getCell().isCapturable(action.getPlayer(), action.getLevel())) {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell occupied) " + action);
             return;
@@ -189,6 +213,16 @@ public class Referee extends AbstractReferee {
 
     private void makeBuildAction(Action action) {
         Player player = gameManager.getPlayer(action.getPlayer());
+
+        if (league == LEAGUE.WOOD3 || league == LEAGUE.WOOD2) {
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (no building in this league) " + action);
+            return;
+        }
+
+        if (league == LEAGUE.WOOD1 && action.getBuildType() == BUILDING_TYPE.TOWER) {
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (no Tower in this league) " + action);
+            return;
+        }
 
         if (!action.getCell().isFree()) {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell occupied) " + action);
@@ -320,6 +354,10 @@ public class Referee extends AbstractReferee {
         }
 
         if (type == ACTIONTYPE.TRAIN) {
+            if (league == LEAGUE.WOOD3 && idOrLevel != 1) {
+                gameManager.addToGameSummary(player.getNicknameToken() + ": expected a level 1 in wood 3 " + actionStr);
+                return true;
+            }
             createTrainAction(player, idOrLevel, x, y, actionStr);
         } else { // MOVE
             createMoveAction(player, idOrLevel, x, y, actionStr);
