@@ -9,6 +9,7 @@ public class SkeletonMain {
         // gameRunner.addAgent(Agent2.class);
 
         // Another way to add a player
+        gameRunner.setLeagueLevel(4);
         gameRunner.addAgent("./src/test/Agent");
         gameRunner.addAgent("./src/test/Agent");
 
