@@ -8,6 +8,9 @@ import java.util.regex.Pattern;
 import com.codingame.antiyoy.*;
 import com.codingame.gameengine.core.AbstractPlayer.TimeoutException;
 import com.codingame.gameengine.core.AbstractReferee;
+import com.codingame.gameengine.core.GameManager;
+import com.codingame.gameengine.module.endscreen.EndScreenModule;
+import com.codingame.gameengine.module.tooltip.TooltipModule;
 import com.codingame.gameengine.core.MultiplayerGameManager;
 import com.codingame.gameengine.module.entities.GraphicEntityModule;
 
@@ -20,8 +23,12 @@ import static com.codingame.antiyoy.Constants.*;
 public class Referee extends AbstractReferee {
     @Inject private MultiplayerGameManager<Player> gameManager;
     @Inject private GraphicEntityModule graphicEntityModule;
+    @Inject private EndScreenModule endScreenModule;
+    @Inject private TooltipModule tooltipModule;
 
     private GameState gameState;
+
+    private LEAGUE league;
 
     private ViewController viewController;
 
@@ -32,14 +39,49 @@ public class Referee extends AbstractReferee {
     private int realTurn = 0;
 
     @Override
+    public void onEnd() {
+        //int[] scores = new int[2];
+        //scores[0] = gameManager.getPlayer(0).getScore();
+        //scores[1] = gameManager.getPlayer(1).getScore();
+        String[] text = {"", ""};
+        if (gameManager.getPlayer(0).getScore() == -1 || gameManager.getPlayer(1).getScore() == -1) {
+            // timeout or capture: no need to display scores
+            text[0] = " ";
+            text[1] = " ";
+        }
+        endScreenModule.setScores(gameManager.getPlayers().stream().mapToInt(p -> p.getScore()).toArray(), text);
+    }
+
+    @Override
     public void init() {
         // send map size
         sendInitialInput();
 
         // Initialize your game here.
-        this.gameState = new GameState();
-
+        this.gameState = new GameState(this.gameManager.getSeed());
+        // this.endScreenModule = new EndScreenModule();
         this.gameManager.setMaxTurns(2000); // Turns are determined by realTurns, this is actually maxFrames
+
+        this.gameManager.setFrameDuration(400);
+
+        // Get league
+        switch (this.gameManager.getLeagueLevel()) {
+            case 1:
+                this.league = LEAGUE.WOOD3;
+                // Only T1 units, no building
+                break;
+            case 2:
+                this.league = LEAGUE.WOOD2;
+                // Now T2/T3 units, kill mechanism
+                break;
+            case 3:
+                this.league = LEAGUE.WOOD1;
+                // Now Mines
+                break;
+            default:
+                this.league = LEAGUE.BRONZE;
+                // Now Towers
+        }
 
         // Random generation
         this.gameState.generateMap();
@@ -57,7 +99,7 @@ public class Referee extends AbstractReferee {
 
     private void initializeView() {
         // Init
-        this.viewController = new ViewController(graphicEntityModule, gameManager.getPlayers(), this.gameState);
+        this.viewController = new ViewController(graphicEntityModule, tooltipModule, gameManager.getPlayers(), this.gameState);
 
         // Add all cells
         for (int x = 0; x < MAP_WIDTH; ++x)
@@ -79,17 +121,13 @@ public class Referee extends AbstractReferee {
     @Override
     public void gameTurn(int turn) {
         if (hasAction()) {
-            gameManager.setFrameDuration(400);
-            forceAnimationFrame();
             makeAction();
         }
         else {
-            forceGameFrame();
-            gameManager.setFrameDuration(400);
-
             // get current player
-            if (!computeCurrentPlayer())
+            if (!computeCurrentPlayer()) {
                 return;
+            }
             Player player = gameManager.getPlayer(this.currentPlayer);
 
             // compute new golds / zones / killed units
@@ -103,11 +141,12 @@ public class Referee extends AbstractReferee {
             readInput(player);
 
             // Make the first action to save frames
-            if (hasAction())
+            if (hasAction()) {
                 makeAction();
+            }
         }
         updateView();
-        checkForEndGame();
+        checkForHqCapture();
     }
 
     // return true if there is a next player, false if this is the end of the game
@@ -140,6 +179,7 @@ public class Referee extends AbstractReferee {
         int unitId = action.getUnitId();
         Unit unit = gameState.getUnit(unitId);
 
+        // Free cell or killable unit / destroyable building
         if (!action.getCell().isCapturable(action.getPlayer(), unit.getLevel())) {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell occupied) " + action);
             return;
@@ -158,6 +198,7 @@ public class Referee extends AbstractReferee {
             return;
         }
 
+        // Free cell or killable unit / destroyable building
         if (!action.getCell().isCapturable(action.getPlayer(), action.getLevel())) {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell occupied) " + action);
             return;
@@ -172,6 +213,16 @@ public class Referee extends AbstractReferee {
 
     private void makeBuildAction(Action action) {
         Player player = gameManager.getPlayer(action.getPlayer());
+
+        if (league == LEAGUE.WOOD3 || league == LEAGUE.WOOD2) {
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (no building in this league) " + action);
+            return;
+        }
+
+        if (league == LEAGUE.WOOD1 && action.getBuildType() == BUILDING_TYPE.TOWER) {
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (no Tower in this league) " + action);
+            return;
+        }
 
         if (!action.getCell().isFree()) {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell occupied) " + action);
@@ -214,25 +265,6 @@ public class Referee extends AbstractReferee {
         }
     }
 
-
-    private void forceAnimationFrame() {
-        for (Player player : gameManager.getPlayers()) {
-            player.setExpectedOutputLines(0);
-            player.execute();
-            try {
-                player.getOutputs();
-            } catch (Exception e) {
-                // should not occur since no output is required
-            }
-        }
-    }
-
-    private void forceGameFrame() {
-        for (Player player : gameManager.getActivePlayers()) {
-            player.setExpectedOutputLines(1);
-        }
-    }
-
     private void sendInitialInput() {
         StringBuilder firstLine = new StringBuilder();
         firstLine.append(MAP_WIDTH);
@@ -260,11 +292,22 @@ public class Referee extends AbstractReferee {
             for (String actionStr : actions) {
                 actionStr = actionStr.trim();
 
-                if (!matchMoveTrain(player, actionStr) && !matchBuild(player, actionStr))
+                if (actionStr.equals("WAIT")) {
+                    continue;
+                }
+
+                if (!matchMoveTrain(player, actionStr) && !matchBuild(player, actionStr)) {
+                    // unrecognized pattern: timeout
                     gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (unknown pattern) " + actionStr);
+                    // clear actions
+                    actionList.clear();
+                    player.deactivate();
+                    checkForEndGame();
+                }
             }
         } catch (TimeoutException e) {
             player.deactivate(String.format("$%d timeout!", player.getIndex()));
+            checkForEndGame();
         }
     }
 
@@ -295,7 +338,6 @@ public class Referee extends AbstractReferee {
         this.actionList.add(action);
     }
 
-
     private boolean matchMoveTrain(Player player, String actionStr) {
         Matcher moveTrainMatcher = MOVETRAIN_PATTERN.matcher(actionStr);
         if (!moveTrainMatcher.find())
@@ -312,6 +354,10 @@ public class Referee extends AbstractReferee {
         }
 
         if (type == ACTIONTYPE.TRAIN) {
+            if (league == LEAGUE.WOOD3 && idOrLevel != 1) {
+                gameManager.addToGameSummary(player.getNicknameToken() + ": expected a level 1 in wood 3 " + actionStr);
+                return true;
+            }
             createTrainAction(player, idOrLevel, x, y, actionStr);
         } else { // MOVE
             createMoveAction(player, idOrLevel, x, y, actionStr);
@@ -342,32 +388,34 @@ public class Referee extends AbstractReferee {
     }
 
 
-    private void checkForEndGame() {
+    private void checkForHqCapture() {
         for (Building HQ : this.gameState.getHQs()) {
             if (HQ.getCell().getOwner() != HQ.getOwner()) {
-                int playerIdx = HQ.getCell().getOwner();
-                // score = rank
-                gameManager.getPlayer(playerIdx).setScore(2);
-                gameManager.getPlayer(1 - playerIdx).setScore(1);
-                gameManager.endGame();
+                int playerIdx = HQ.getOwner();
+                gameManager.getPlayer(playerIdx).deactivate();
+                checkForEndGame();
             }
+        }
+    }
+    private void checkForEndGame() {
+        if (!gameManager.getPlayer(0).isActive()) {
+            // score = rank
+            gameManager.getPlayer(0).setScore(-1);
+            gameManager.getPlayer(1).setScore(1);
+            gameManager.endGame();
+        }
+        if (!gameManager.getPlayer(1).isActive()) {
+            // score = rank
+            gameManager.getPlayer(1).setScore(-1);
+            gameManager.getPlayer(0).setScore(1);
+            gameManager.endGame();
         }
     }
 
     private void discriminateEndGame() {
         List<AtomicInteger> scores = this.gameState.getScores();
-        if (scores.get(0).intValue() < scores.get(1).intValue()) {
-            gameManager.getPlayer(0).setScore(2);
-            gameManager.getPlayer(1).setScore(1);
-        }
-        else if (scores.get(0).intValue() > scores.get(1).intValue()) {
-            gameManager.getPlayer(0).setScore(1);
-            gameManager.getPlayer(1).setScore(2);
-        }
-        else {
-            gameManager.getPlayer(0).setScore(1);
-            gameManager.getPlayer(1).setScore(1);
-        }
+        gameManager.getPlayer(0).setScore(scores.get(0).intValue());
+        gameManager.getPlayer(1).setScore(scores.get(1).intValue());
         gameManager.endGame();
     }
 }

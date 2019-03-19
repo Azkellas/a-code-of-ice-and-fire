@@ -4,14 +4,14 @@ package com.codingame.antiyoy;
 import static com.codingame.antiyoy.Constants.*;
 
 import com.codingame.game.Player;
+import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.List;
-import java.util.HashMap;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+
 public class GameState {
     private  Cell[][] map;
+    private long seed;
 
     private List<Building> HQs = new ArrayList<>();
     private ArrayList<Building> buildings = new ArrayList<>();
@@ -19,7 +19,7 @@ public class GameState {
 
     private ArrayList<AtomicInteger> playerGolds = new ArrayList<>();
 
-    public GameState() {
+    public GameState(long seed) {
         // create full map
         this.map = new Cell[MAP_WIDTH][MAP_HEIGHT];
         for(int x = 0; x < MAP_WIDTH; ++x)
@@ -28,6 +28,8 @@ public class GameState {
 
         for (int i = 0; i < PLAYER_COUNT; ++i)
             this.playerGolds.add(new AtomicInteger(2 * UNIT_COST[1]));
+
+        this.seed = seed;
     }
 
     // getters
@@ -63,24 +65,240 @@ public class GameState {
         }
     }
 
-    public void generateMap() {
-        for (int x = 0; x < MAP_WIDTH; ++x) {
-            for (int y = 0; y < MAP_HEIGHT; ++y) {
-                // do not modify nearby HQs cells
-                if (x + y <= 4)
-                    continue;
-                if (MAP_WIDTH - x + MAP_HEIGHT - y <= 4)
-                    continue;
 
-                double random = Math.random() * 100;
-                int owner = random < 20 ? -2 : -1;
-                this.map[x][y].setOwner(owner);
-                this.getSymmetricCell(x, y).setOwner(owner);
+    /*********************************
+
+     MAP GENERATOR STARTS HERE
+
+     /*******************************/
+
+    // returns the cell (x,y) considering border cases : out of bounds = NEUTRAL
+    public int getValue(int x, int y) {
+        if (x < 0 || x >= MAP_WIDTH || y < 0 || y >= MAP_HEIGHT)
+            return NEUTRAL;
+        else
+            return this.map[x][y].getOwner();
+    }
+
+    //returns the neighbourhood (list of values) of a cell located in (x,y)
+    //we only care about how much NEUTRAL and how much VOID tiles
+    public List<Integer> getNeighbourhood(int x, int y) {
+        List<Integer> neighbourhood = new ArrayList<>();
+
+        for (int ix = -1; ix < 2; ++ix) {
+            for (int iy = -1; iy < 2; ++iy) {
+                neighbourhood.add(getValue(x+ix,y+iy));
             }
         }
+        return neighbourhood;
+    }
+
+
+    // Cellular automata
+    public void updateMap() {
+        // copy current map
+        Cell [][] currentMap = new Cell[MAP_WIDTH][MAP_HEIGHT];
+
+        for(int x = 0; x < MAP_WIDTH; x++) {
+            for(int y=0; y< MAP_HEIGHT; y++) {
+                currentMap[x][y] = new Cell(x, y);
+                currentMap[x][y].setOwner(this.map[x][y].getOwner());
+            }
+        }
+
+
+
+        // Then we apply the automata to the copied map 'currentMap'
+        // before copying back to this.map
+        for (int x = 0; x < MAP_WIDTH; ++x) {
+            for (int y = 0; y < MAP_HEIGHT; ++y) {
+                List<Integer> neighbourhood = getNeighbourhood(x,y);
+
+                if(Collections.frequency(neighbourhood, NEUTRAL) >= MAPGENERATOR_T)
+                    currentMap[x][y].setOwner(NEUTRAL);
+                else
+                    currentMap[x][y].setOwner(VOID);
+            }
+        }
+
+        for(int x = 0; x < MAP_WIDTH; x++) {
+            for(int y=0; y< MAP_HEIGHT; y++) {
+                this.map[x][y].setOwner(currentMap[x][y].getOwner());
+            }
+        }
+    }
+
+    // we define here functions used in FindConnectedComponents()
+    public boolean not_visited(int x, int y, Cell [][] visited) {
+        //if coordinate is invalid, we don't want to visit it
+        if (!isInside(x, y))
+            return false;
+
+        return visited[x][y].getOwner() == NEUTRAL;
+    }
+
+    public void dfs(int x, int y, List<Vector2> currentConnectedComponent, Cell [][] visited) {
+        Vector2 currentPair = new Vector2(x,y);
+        currentConnectedComponent.add(currentPair);
+
+        visited[x][y].setOwner(2);
+
+        if (not_visited(x-1, y, visited))
+            dfs(x-1, y, currentConnectedComponent, visited);
+        if (not_visited(x+1, y, visited))
+            dfs(x+1, y, currentConnectedComponent, visited);
+        if (not_visited(x, y-1, visited))
+            dfs(x, y-1, currentConnectedComponent, visited);
+        if (not_visited(x, y+1, visited))
+            dfs(x, y+1, currentConnectedComponent, visited);
+    }
+
+    public List<List<Vector2>> findConnectedComponents() {
+        // A connected component is a list of coordinates
+        // And we store them in a list
+        List<List<Vector2>> connectedComponents = new ArrayList<>();
+
+        // We find the connected components with a depth first search
+        // We copy the current map in a 'visited' variable
+        // "seen" tiles will be marked as owner = 2, to differentiate between VOID and NEUTRAL
+        Cell [][] visited = new Cell[MAP_WIDTH][MAP_HEIGHT];
+
+        for(int x = 0; x < MAP_WIDTH; x++) {
+            for(int y=0; y< MAP_HEIGHT; y++) {
+                visited[x][y] = new Cell(x, y);
+                visited[x][y].setOwner(this.map[x][y].getOwner());
+            }
+        }
+
+        for (int x = 0; x < MAP_WIDTH; ++x) {
+            for (int y = 0; y < MAP_HEIGHT; ++y) {
+                if (visited[x][y].getOwner() == NEUTRAL)
+                {
+                    List<Vector2> currentConnectedComponent = new ArrayList<>();
+                    dfs(x, y, currentConnectedComponent, visited);
+                    connectedComponents.add(currentConnectedComponent);
+                }
+            }
+        }
+
+
+        return connectedComponents;
+
+    }
+
+
+    private void linkComponents(Random generator) {
+        List<List<Vector2>> connectedComponents = findConnectedComponents();
+
+        if (connectedComponents.size() == 1) {
+            return;
+        }
+
+        System.err.println("We have " + connectedComponents.size() + " components");
+        // we find the barycenter of each connected components
+        List<Vector2> randomPoints = new ArrayList<>();
+
+        for (int n = 0; n < connectedComponents.size(); n++) {
+            // get random element from component
+            int componentSize = connectedComponents.get(n).size();
+            randomPoints.add(connectedComponents.get(n).get(generator.nextInt(componentSize)));
+        }
+
+        // To connect, we take a random pair of selected points and link them (with symmetry)
+        for (int i = 0; i < randomPoints.size(); ++i) {
+            for (int j = i+1; j < randomPoints.size(); ++j) {
+                Vector2 node1 = randomPoints.get(i);
+                Vector2 node2 = randomPoints.get(j);
+
+                // Link on X axis first then Y axis
+                int startX = Math.min(node1.getX(), node2.getX());
+                int endX = Math.max(node1.getX(), node2.getX());
+
+                int startY = Math.min(node1.getY(), node2.getY());
+                int endY = Math.max(node1.getY(), node2.getY());
+
+
+                for (int x = startX; x <= endX; ++x) {
+                    this.map[x][node2.getY()].setOwner(NEUTRAL);
+                    this.getSymmetricCell(x, node2.getY()).setOwner(NEUTRAL);
+                }
+
+                for (int y = startY; y <= endY; ++y) {
+                    this.map[node1.getX()][y].setOwner(NEUTRAL);
+                    this.getSymmetricCell(node1.getX(), y).setOwner(NEUTRAL);
+                }
+            }
+        }
+
+
+
+    }
+
+
+    public void generateMap() {
+        Random generator = new Random(this.seed);
+
+        for (int x = 0; x < MAP_WIDTH; ++x) {
+            for (int y = 0; y < MAP_HEIGHT; ++y) {
+                if (generator.nextFloat() > MAPGENERATOR_R)
+                    this.map[x][y].setOwner(NEUTRAL);
+                else
+                    this.map[x][y].setOwner(VOID);
+            }
+        }
+
+        this.map[0][0].setOwner(NEUTRAL);
+        this.map[1][0].setOwner(NEUTRAL);
+        this.map[0][1].setOwner(NEUTRAL);
+        this.map[1][1].setOwner(NEUTRAL);
+
+        //apply automata
+        for (int i=0; i < MAPGENERATOR_ITERATIONSAUTOMATA; ++i) {
+            updateMap();
+        }
+
+
+        // invert VOID and TILE as the cellular automata generates more caves like maps
+        for (int x = 0; x < MAP_WIDTH; ++x) {
+            for (int y = 0; y < MAP_HEIGHT; ++y) {
+                // + 2 to be 0 or 1
+                // +1 then %2 to invert 0 and 1
+                // -2 to get back to -2 or -1
+                int inverted = ((this.map[x][y].getOwner()+2 +1)%2) - 2;
+                this.map[x][y].setOwner(inverted);
+            }
+        }
+
+
+        // Now, the map is generated, we then have to correct the symmetry.
+        for (int x = 0; x < MAP_WIDTH; x++) {
+            for (int y = 0; y < x+1; y++) {
+                this.map[MAP_WIDTH-1-x][MAP_HEIGHT-1-y].setOwner(this.map[x][y].getOwner());
+            }
+        }
+
+        // grid 3x3 around base can never be VOID
+        for(int i = 0; i < 3; ++i) {
+            for(int j = 0; j < 3; ++j) {
+                this.map[i][j].setOwner(NEUTRAL);
+                this.getSymmetricCell(i, j).setOwner(NEUTRAL);
+            }
+        }
+
+        // Connect everything to have a playable map (only 1 connected component)
+        linkComponents(generator);
+
+
         // Restore HQs cells
         this.computeNeighbours();
     }
+
+
+    /*********************************
+
+        MAP GENERATOR ENDS HERE
+
+    /*******************************/
 
     public void createHQs(int playersCount) throws Exception {
         if (playersCount != 2) {
@@ -246,12 +464,27 @@ public class GameState {
             StringBuilder line = new StringBuilder();
             for (int x = 0; x < MAP_WIDTH; ++x) {
                 int owner = this.map[x][y].getOwner();
-                if (owner >= 0)
-                    owner = (owner  - player.getIndex() + PLAYER_COUNT) % PLAYER_COUNT; // own unit = owner 0
-                line.append(owner);
-                if (x != MAP_WIDTH - 1) {
-                    line.append(" ");
+                char data;
+                switch (owner) {
+                    case VOID:
+                        data = '#';
+                        break;
+                    case NEUTRAL:
+                        data = '.';
+                        break;
+                    default:
+                        // o for own player, x for opponent
+                        if (owner == player.getIndex()) {
+                            data = 'o';
+                        } else {
+                            data = 'x';
+                        }
+                        // capital letter iif active cell
+                        if (this.map[x][y].isActive()) {
+                            data = Character.toUpperCase(data);
+                        }
                 }
+                line.append(data);
             }
             player.sendInputLine(line.toString());
         }
@@ -317,7 +550,7 @@ public class GameState {
     }
 
     public void debugViews() {
-        System.err.println(buildings.size() + " buildings, " + units.size() + " units");
+        // System.err.println(buildings.size() + " buildings, " + units.size() + " units");
         // units.forEach((id, unit) -> {System.err.println(unit.getId() + ": " +unit.getX() + " " + unit.getY());});
     }
 

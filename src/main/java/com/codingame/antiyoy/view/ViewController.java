@@ -14,31 +14,35 @@ import com.codingame.antiyoy.Cell;
 import com.codingame.antiyoy.Building;
 import com.codingame.antiyoy.Unit;
 import com.codingame.antiyoy.GameState;
+import com.codingame.gameengine.module.tooltip.TooltipModule;
+
+import javax.tools.Tool;
 
 
 public class ViewController {
     private List<AbstractView> views = new ArrayList<>();
     private GraphicEntityModule entityModule;
+    private TooltipModule tooltipModule;
 
     private GameStateView gameStateView;
 
     private List<PlayerView> playerViews;
 
-    public ViewController(GraphicEntityModule entityModule, List<Player> players, GameState gameState) {
+    public ViewController(GraphicEntityModule entityModule, TooltipModule tooltipModule, List<Player> players, GameState gameState) {
         this.entityModule = entityModule;
+        this.tooltipModule = tooltipModule;
 
-        this.gameStateView = new GameStateView(entityModule, gameState);
+        this.gameStateView = new GameStateView(entityModule, tooltipModule, gameState);
 
         this.playerViews= new ArrayList<>();
         for (Player player : players)
-            this.playerViews.add(new PlayerView(this.entityModule, player, gameState));
+            this.playerViews.add(new PlayerView(this.entityModule, this.tooltipModule, player, gameState));
 
         initView();
     }
 
     private void initView() {
-        for (PlayerView playerView : playerViews)
-            this.views.add(playerView);
+        this.views.addAll(playerViews);
     }
 
     public void update() {
@@ -63,11 +67,13 @@ public class ViewController {
     public void createCellView(Cell cell) {
         this.views.add(this.gameStateView.createCellView(cell));
     }
+
     public void createUnitView(Unit unit) {
         UnitView view = this.gameStateView.createUnitView(unit);
         unit.setViewer(view);
         this.views.add(view);
     }
+
     public void createBuildingView(Building building) {
         BuildingView view = this.gameStateView.createBuildingView(building);
         building.setViewer(view);

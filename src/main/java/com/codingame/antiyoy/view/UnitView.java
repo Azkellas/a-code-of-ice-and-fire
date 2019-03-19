@@ -7,6 +7,8 @@ import com.codingame.gameengine.module.entities.Circle;
 import com.codingame.gameengine.module.entities.Text;
 
 import com.codingame.antiyoy.Unit;
+import com.codingame.gameengine.module.tooltip.TooltipModule;
+
 import static com.codingame.antiyoy.view.Constants.*;
 
 import java.util.Observable;
@@ -18,8 +20,8 @@ public class UnitView extends AbstractView {
     private Text level;
     private Unit model;
 
-    public UnitView(GraphicEntityModule entityModule, Unit unit) {
-        super(entityModule);
+    public UnitView(GraphicEntityModule entityModule, TooltipModule tooltipModule, Unit unit) {
+        super(entityModule, tooltipModule);
         this.model = unit;
 
         createUnitView();
@@ -43,6 +45,9 @@ public class UnitView extends AbstractView {
         group = entityModule.createGroup()
                 .setScale(1);
         group.add(decors, level);
+
+        tooltipModule.setTooltipText(group,  "level: " + model.getLevel() + "\nx: " + model.getX() + "\ny: " + model.getY());
+
     }
 //
 
