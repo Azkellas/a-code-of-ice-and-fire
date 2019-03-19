@@ -30,7 +30,6 @@ public class GameState {
             this.playerGolds.add(new AtomicInteger(2 * UNIT_COST[1]));
 
         this.seed = seed;
-
     }
 
     // getters
@@ -132,7 +131,7 @@ public class GameState {
     // we define here functions used in FindConnectedComponents()
     public boolean not_visited(int x, int y, Cell [][] visited) {
         //if coordinate is invalid, we don't want to visit it
-        if(!(x >=0 && x < MAP_WIDTH && y >=0 && y < MAP_HEIGHT))
+        if (!isInside(x, y))
             return false;
 
         return visited[x][y].getOwner() == NEUTRAL;
@@ -150,7 +149,7 @@ public class GameState {
             dfs(x+1, y, currentConnectedComponent, visited);
         if (not_visited(x, y-1, visited))
             dfs(x, y-1, currentConnectedComponent, visited);
-        if (not_visited(x-1, y+1, visited))
+        if (not_visited(x, y+1, visited))
             dfs(x, y+1, currentConnectedComponent, visited);
     }
 
@@ -171,13 +170,11 @@ public class GameState {
             }
         }
 
-        List<Vector2> currentConnectedComponent = new ArrayList<>();
-
         for (int x = 0; x < MAP_WIDTH; ++x) {
             for (int y = 0; y < MAP_HEIGHT; ++y) {
-                if(visited[x][y].getOwner() == NEUTRAL)
+                if (visited[x][y].getOwner() == NEUTRAL)
                 {
-                    currentConnectedComponent = new ArrayList<>();
+                    List<Vector2> currentConnectedComponent = new ArrayList<>();
                     dfs(x, y, currentConnectedComponent, visited);
                     connectedComponents.add(currentConnectedComponent);
                 }
@@ -190,78 +187,51 @@ public class GameState {
     }
 
 
-    void linkComponents(List<List<Vector2>> connectedComponents, Random generator) {
+    private void linkComponents(Random generator) {
+        List<List<Vector2>> connectedComponents = findConnectedComponents();
+
+        if (connectedComponents.size() == 1) {
+            return;
+        }
+
+        System.err.println("We have " + connectedComponents.size() + " components");
         // we find the barycenter of each connected components
-        List<Vector2> barrycenter = new ArrayList<>();
+        List<Vector2> randomPoints = new ArrayList<>();
 
-        for(int n=0; n < connectedComponents.size(); n++)
-        {
-            Vector2 barry = new Vector2(0,0);
-            List<Vector2> currentComponent = connectedComponents.get(n);
-
-            for(int i=0; i< currentComponent.size(); i++)
-            {
-                barry.add(currentComponent.get(i).getX(), currentComponent.get(i).getY());
-            }
-
-            barry.setX(barry.getX() / currentComponent.size());
-            barry.setY(barry.getY() / currentComponent.size());
-
-            barrycenter.add(barry);
+        for (int n = 0; n < connectedComponents.size(); n++) {
+            // get random element from component
+            int componentSize = connectedComponents.get(n).size();
+            randomPoints.add(connectedComponents.get(n).get(generator.nextInt(componentSize)));
         }
 
-        //now that we have all the barrycenters, we link some of them
+        // To connect, we take a random pair of selected points and link them (with symmetry)
+        for (int i = 0; i < randomPoints.size(); ++i) {
+            for (int j = i+1; j < randomPoints.size(); ++j) {
+                Vector2 node1 = randomPoints.get(i);
+                Vector2 node2 = randomPoints.get(j);
 
-        // we need at least n-1 links to make n nodes a connected component
-        int minimumLinks = barrycenter.size()-1;
-        int maximumLinks = (barrycenter.size() * (barrycenter.size()-1)) / 2;
+                // Link on X axis first then Y axis
+                int startX = Math.min(node1.getX(), node2.getX());
+                int endX = Math.max(node1.getX(), node2.getX());
 
-        // we define how much connexions we will do
-        int linksToCreate = generator.ints(minimumLinks, maximumLinks+1).findFirst().getAsInt();
-
-        // To connect, we take pairs of barrycenters and directly link them
-        // Keep list of generated pairs to not have (useless) duplications
-        Map<Integer, Integer> generated = new HashMap<Integer, Integer>();
-        for (int i=0; i<linksToCreate; i++)
-        {
-            int node1Id = -1;
-            int node2Id = -1;
-
-            //generate pair until they are different and not already generated
-            do {
-                node1Id = generator.ints(0, barrycenter.size()).findFirst().getAsInt();
-                node2Id = generator.ints(0, barrycenter.size()).findFirst().getAsInt();
-
-                int maxi = Math.max(node1Id, node2Id);
-
-                node1Id = Math.min(node1Id, node2Id);
-                node2Id = maxi;
-            }
-            while(node1Id == node2Id && (generated.containsKey(node1Id) && generated.get(node1Id) == node2Id));
-
-            generated.put(node1Id, node2Id);
-
-            Vector2 node1 = barrycenter.get(node1Id);
-            Vector2 node2 = barrycenter.get(node2Id);
+                int startY = Math.min(node1.getY(), node2.getY());
+                int endY = Math.max(node1.getY(), node2.getY());
 
 
-            // Link on X axis first then Y axis
-            int startX = Math.min(node1.getX(), node2.getX());
-            int endX = Math.max(node1.getX(), node2.getX());
+                for (int x = startX; x <= endX; ++x) {
+                    this.map[x][node2.getY()].setOwner(NEUTRAL);
+                    this.getSymmetricCell(x, node2.getY()).setOwner(NEUTRAL);
+                }
 
-            int startY = Math.min(node1.getY(), node2.getY());
-            int endY = Math.max(node1.getY(), node2.getY());
-
-            for (int x=startX; x<=endX; x++) {
-                this.map[x][node2.getY()].setOwner(NEUTRAL);
-//                    this.map[x][node2.getY()+1].setOwner(NEUTRAL);
-            }
-
-            for (int y=startY; y<=endY; y++) {
-                this.map[node1.getX()][y].setOwner(NEUTRAL);
-//                    this.map[node1.getX()+1][y].setOwner(NEUTRAL);
+                for (int y = startY; y <= endY; ++y) {
+                    this.map[node1.getX()][y].setOwner(NEUTRAL);
+                    this.getSymmetricCell(node1.getX(), y).setOwner(NEUTRAL);
+                }
             }
         }
+
+
+
     }
 
 
@@ -270,7 +240,7 @@ public class GameState {
 
         for (int x = 0; x < MAP_WIDTH; ++x) {
             for (int y = 0; y < MAP_HEIGHT; ++y) {
-                if(generator.nextFloat() > MAPGENERATOR_R)
+                if (generator.nextFloat() > MAPGENERATOR_R)
                     this.map[x][y].setOwner(NEUTRAL);
                 else
                     this.map[x][y].setOwner(VOID);
@@ -283,8 +253,7 @@ public class GameState {
         this.map[1][1].setOwner(NEUTRAL);
 
         //apply automata
-        for (int i=0; i < MAPGENERATOR_ITERATIONSAUTOMATA; ++i)
-        {
+        for (int i=0; i < MAPGENERATOR_ITERATIONSAUTOMATA; ++i) {
             updateMap();
         }
 
@@ -302,195 +271,22 @@ public class GameState {
 
 
         // Now, the map is generated, we then have to correct the symmetry.
-
-        // Remove half for symmetry
-        for(int x=0; x < MAP_WIDTH; x++)
-        {
-            for(int y=0; y < x+1; y++)
-            {
-                this.map[MAP_WIDTH-1-x][MAP_HEIGHT-1-y].setOwner(VOID);
-            }
-        }
-
-        this.map[0][0].setOwner(NEUTRAL);
-        this.map[1][0].setOwner(NEUTRAL);
-        this.map[0][1].setOwner(NEUTRAL);
-        this.map[1][1].setOwner(NEUTRAL);
-
-
-        // Now we need 1 connected component, to ensure the map is playable
-        // If we have k > 1 connected components, we link them
-        List<List<Vector2>> connectedComponents = findConnectedComponents();
-
-        if (connectedComponents.size() > 1) {
-            // we find the barycenter of each connected components
-            List<Vector2> barrycenter = new ArrayList<>();
-
-            for(int n=0; n < connectedComponents.size(); n++)
-            {
-                Vector2 barry = new Vector2(0,0);
-                List<Vector2> currentComponent = connectedComponents.get(n);
-
-                for(int i=0; i< currentComponent.size(); i++)
-                {
-                    barry.add(currentComponent.get(i).getX(), currentComponent.get(i).getY());
-                }
-
-                barry.setX(barry.getX() / currentComponent.size());
-                barry.setY(barry.getY() / currentComponent.size());
-
-                barrycenter.add(barry);
-            }
-
-            //now that we have all the barrycenters, we link some of them
-
-            // we need at least n-1 links to make n nodes a connected component
-            int minimumLinks = barrycenter.size()-1;
-            int maximumLinks = (barrycenter.size() * (barrycenter.size()-1)) / 2;
-
-            // we define how much connexions we will do
-            int linksToCreate = generator.ints(minimumLinks, maximumLinks+1).findFirst().getAsInt();
-
-            // To connect, we take pairs of barrycenters and directly link them
-            // Keep list of generated pairs to not have (useless) duplications
-            Map<Integer, Integer> generated = new HashMap<Integer, Integer>();
-            for (int i=0; i<linksToCreate; i++)
-            {
-                int node1Id = -1;
-                int node2Id = -1;
-
-                //generate pair until they are different and not already generated
-                do {
-                    node1Id = generator.ints(0, barrycenter.size()).findFirst().getAsInt();
-                    node2Id = generator.ints(0, barrycenter.size()).findFirst().getAsInt();
-
-                    int maxi = Math.max(node1Id, node2Id);
-
-                    node1Id = Math.min(node1Id, node2Id);
-                    node2Id = maxi;
-                }
-                while(node1Id == node2Id && (generated.containsKey(node1Id) && generated.get(node1Id) == node2Id));
-
-                generated.put(node1Id, node2Id);
-
-                Vector2 node1 = barrycenter.get(node1Id);
-                Vector2 node2 = barrycenter.get(node2Id);
-
-
-                // Link on X axis first then Y axis
-                int startX = Math.min(node1.getX(), node2.getX());
-                int endX = Math.max(node1.getX(), node2.getX());
-
-                int startY = Math.min(node1.getY(), node2.getY());
-                int endY = Math.max(node1.getY(), node2.getY());
-
-                for (int x=startX; x<=endX; x++) {
-                    this.map[x][node2.getY()].setOwner(NEUTRAL);
-//                    this.map[x][node2.getY()+1].setOwner(NEUTRAL);
-                }
-
-                for (int y=startY; y<=endY; y++) {
-                    this.map[node1.getX()][y].setOwner(NEUTRAL);
-//                    this.map[node1.getX()+1][y].setOwner(NEUTRAL);
-                }
-            }
-        }
-
-        // final symmetry
-        for(int x=0; x < MAP_WIDTH; x++)
-        {
-            for(int y=0; y < x+1; y++)
-            {
+        for (int x = 0; x < MAP_WIDTH; x++) {
+            for (int y = 0; y < x+1; y++) {
                 this.map[MAP_WIDTH-1-x][MAP_HEIGHT-1-y].setOwner(this.map[x][y].getOwner());
             }
         }
 
-        // Connect everything again, directly with symmetry
-        connectedComponents = findConnectedComponents();
-
-        if (connectedComponents.size() > 1) {
-            // we find the barycenter of each connected components
-            List<Vector2> barrycenter = new ArrayList<>();
-
-            for(int n=0; n < connectedComponents.size(); n++)
-            {
-                Vector2 barry = new Vector2(0,0);
-                List<Vector2> currentComponent = connectedComponents.get(n);
-
-                for(int i=0; i< currentComponent.size(); i++)
-                {
-                    barry.add(currentComponent.get(i).getX(), currentComponent.get(i).getY());
-                }
-
-                barry.setX(barry.getX() / currentComponent.size());
-                barry.setY(barry.getY() / currentComponent.size());
-
-                barrycenter.add(barry);
-            }
-
-            //now that we have all the barrycenters, we link some of them
-
-            // we need at least n-1 links to make n nodes a connected component
-            int minimumLinks = barrycenter.size()-1;
-            int maximumLinks = (barrycenter.size() * (barrycenter.size()-1)) / 2;
-
-            // we define how much connexions we will do
-            int linksToCreate = generator.ints(minimumLinks, maximumLinks+1).findFirst().getAsInt();
-
-            // To connect, we take pairs of barrycenters and directly link them
-            // Keep list of generated pairs to not have (useless) duplications
-            Map<Integer, Integer> generated = new HashMap<Integer, Integer>();
-            for (int i=0; i<linksToCreate; i++)
-            {
-                int node1Id = -1;
-                int node2Id = -1;
-
-                //generate pair until they are different and not already generated
-                do {
-                    node1Id = generator.ints(0, barrycenter.size()).findFirst().getAsInt();
-                    node2Id = generator.ints(0, barrycenter.size()).findFirst().getAsInt();
-
-                    int maxi = Math.max(node1Id, node2Id);
-
-                    node1Id = Math.min(node1Id, node2Id);
-                    node2Id = maxi;
-                }
-                while(node1Id == node2Id && (generated.containsKey(node1Id) && generated.get(node1Id) == node2Id));
-
-                generated.put(node1Id, node2Id);
-
-                Vector2 node1 = barrycenter.get(node1Id);
-                Vector2 node2 = barrycenter.get(node2Id);
-
-
-                // Link on X axis first then Y axis
-                int startX = Math.min(node1.getX(), node2.getX());
-                int endX = Math.max(node1.getX(), node2.getX());
-
-                int startY = Math.min(node1.getY(), node2.getY());
-                int endY = Math.max(node1.getY(), node2.getY());
-
-                for (int x=startX; x<=endX; x++) {
-                    this.map[x][node2.getY()].setOwner(NEUTRAL);
-                    this.getSymmetricCell(x, node2.getY()).setOwner(NEUTRAL);
-                }
-
-                for (int y=startY; y<=endY; y++) {
-                    this.map[node1.getX()][y].setOwner(NEUTRAL);
-                    this.getSymmetricCell(node1.getX(), y).setOwner(NEUTRAL);
-                }
-            }
-        }
-
-        // grid 3x3 around base never VOID
-        for(int i=0; i<3; i++) {
-            for(int j=0; j<3; j++) {
+        // grid 3x3 around base can never be VOID
+        for(int i = 0; i < 3; ++i) {
+            for(int j = 0; j < 3; ++j) {
                 this.map[i][j].setOwner(NEUTRAL);
                 this.getSymmetricCell(i, j).setOwner(NEUTRAL);
             }
         }
 
-
+        // Connect everything to have a playable map (only 1 connected component)
+        linkComponents(generator);
 
 
         // Restore HQs cells
@@ -754,7 +550,7 @@ public class GameState {
     }
 
     public void debugViews() {
-        System.err.println(buildings.size() + " buildings, " + units.size() + " units");
+        // System.err.println(buildings.size() + " buildings, " + units.size() + " units");
         // units.forEach((id, unit) -> {System.err.println(unit.getId() + ": " +unit.getX() + " " + unit.getY());});
     }
 
