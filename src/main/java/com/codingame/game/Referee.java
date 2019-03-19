@@ -268,10 +268,12 @@ public class Referee extends AbstractReferee {
     private void sendInitialInput() {
         StringBuilder firstLine = new StringBuilder();
         firstLine.append(MAP_WIDTH);
-        firstLine.append(" ");
-        firstLine.append(MAP_HEIGHT);
-        for (Player player : gameManager.getActivePlayers())
+        StringBuilder secondLine = new StringBuilder();
+        secondLine.append(MAP_HEIGHT);
+        for (Player player : gameManager.getActivePlayers()) {
             player.sendInputLine(firstLine.toString());
+            player.sendInputLine(secondLine.toString());
+        }
     }
 
 
