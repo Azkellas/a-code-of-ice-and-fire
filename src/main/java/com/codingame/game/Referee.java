@@ -43,13 +43,13 @@ public class Referee extends AbstractReferee {
         //int[] scores = new int[2];
         //scores[0] = gameManager.getPlayer(0).getScore();
         //scores[1] = gameManager.getPlayer(1).getScore();
-        String[] text = {"", ""};
         if (gameManager.getPlayer(0).getScore() == -1 || gameManager.getPlayer(1).getScore() == -1) {
             // timeout or capture: no need to display scores
-            text[0] = " ";
-            text[1] = " ";
+            String[] text = {};
+            endScreenModule.setScores(gameManager.getPlayers().stream().mapToInt(p -> p.getScore()).toArray(), text);
+        } else {
+            endScreenModule.setScores(gameManager.getPlayers().stream().mapToInt(p -> p.getScore()).toArray());
         }
-        endScreenModule.setScores(gameManager.getPlayers().stream().mapToInt(p -> p.getScore()).toArray(), text);
     }
 
     @Override
