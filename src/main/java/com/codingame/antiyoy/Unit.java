@@ -8,7 +8,7 @@ public class Unit extends Entity {
     private int level;
     private boolean alive;
     private boolean canMove;
-    private static int unitIdCount = 0;
+    private static int unitIdCount = 1;
 
     private Cell cell;
 

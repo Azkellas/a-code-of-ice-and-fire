@@ -37,7 +37,7 @@ public class PlayerView extends AbstractView {
         int playerIndex = this.model.getIndex();
 
         avatar = entityModule.createSprite()
-                .setAnchor(0.5)
+                .setAnchor(0)
                 .setBaseHeight(PLAYER_AVATAR_RADIUS)
                 .setBaseWidth(PLAYER_AVATAR_RADIUS)
                 .setImage(this.model.getAvatarToken())
@@ -50,8 +50,8 @@ public class PlayerView extends AbstractView {
                 .setFontSize(60)
                 .setStrokeColor(0x000000)
                 .setStrokeThickness(4.0)
-                .setX(0)
-                .setY(100);
+                .setX(PLAYER_AVATAR_RADIUS / 2)
+                .setY(PLAYER_AVATAR_RADIUS + 40);
 
         gold = this.entityModule.createText("")
                 .setAnchor(0.5)
@@ -59,13 +59,13 @@ public class PlayerView extends AbstractView {
                 .setFontSize(40)
                 .setStrokeColor(0x000000)
                 .setStrokeThickness(4.0)
-                .setX(0)
-                .setY(200);
+                .setX(PLAYER_AVATAR_RADIUS / 2)
+                .setY(PLAYER_AVATAR_RADIUS + 40 + 50);
 
         group = entityModule.createGroup()
                 .setScale(1)
                 .setX(LEFT_PANEL_WIDTH / 2)
-                .setY(playerIndex * 500 + 200);
+                .setY(playerIndex * (SCREEN_HEIGHT/2) + 100);
         group.add(avatar, pseudo, gold);
     }
     

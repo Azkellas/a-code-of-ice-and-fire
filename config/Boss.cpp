@@ -111,8 +111,8 @@ int main() {
         vector<Unit> units;
         for (int i = 0; i < unitCount; ++i) {
             Unit unit;
-            cin >> unit.id >> unit.owner >> unit.level >> unit.x >> unit.y; cin.ignore();
-            cerr << unit.id << " " << unit.owner << " " << unit.level << " " << unit.x << " " << unit.y << endl;
+            cin >> unit.owner >> unit.id >> unit.level >> unit.x >> unit.y; cin.ignore();
+            cerr << unit.owner << " " << unit.id << " " << unit.level << " " << unit.x << " " << unit.y << endl;
             map[unit.x][unit.y].occupied = true;
             units.push_back(unit);
         }

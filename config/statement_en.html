@@ -232,17 +232,17 @@
         <p><span class="statement-lineno">Next line:</span> <var>buildingCount</var>: the amount of buildings on the map.</p>
         <p><span class="statement-lineno">Next <var>buildingCount</var> lines:</span> 4 ints
             <ul>
-                <li><var>type</var>: the type of building
+                <li><var>owner</var>
+                    <ul>
+                        <li><const>0</const>: Owned</li>
+                        <li><const>1</const>: Enemy</li>
+                    </ul>
+                </li>
+                <li><var>buildingType</var>: the type of building
                   <ul>
                     <li><const>0</const>: HQ</li>
                     <li><const>1</const>: Mine</li>
                     <li><const>2</const>: Tower</li>
-                  </ul>
-                </li>
-                <li><var>owner</var>
-                  <ul>
-                    <li><const>0</const>: Owned</li>
-                    <li><const>1</const>: Enemy</li>
                   </ul>
                 </li>
                 <li><var>x</var> and <var>y</var>: building's cell coordinates.
@@ -251,13 +251,13 @@
         <p><span class="statement-lineno">Next line:</span><var>unitCount</var>: the amount of units on the map.</p>
         <p><span class="statement-lineno">Next <var>unitCount</var> lines:</span> 5 ints
             <ul>
-              <li><var>id</var></li>
               <li><var>owner</var>
                   <ul>
                       <li><const>0</const>: Owned</li>
                       <li><const>1</const>: Enemy</li>
                   </ul>
               </li>
+              <li><var>unitId</var></li>
               <li><var>level</var>: <const>1</const>, <const>2</const> or <const>3</const>.</li>
               <li><var>x</var> and <var>y</var>: unit's cell coordinates.</li>
             </ul>

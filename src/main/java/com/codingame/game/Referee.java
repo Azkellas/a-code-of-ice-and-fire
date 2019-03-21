@@ -34,9 +34,9 @@ public class Referee extends AbstractReferee {
 
     private List<Action> actionList = new ArrayList<>();
 
-    private int currentPlayer = -1;
+    private AtomicInteger currentPlayer;
 
-    private int realTurn = 0;
+    private AtomicInteger realTurn;
 
     @Override
     public void onEnd() {
@@ -60,9 +60,12 @@ public class Referee extends AbstractReferee {
         // Initialize your game here.
         this.gameState = new GameState(this.gameManager.getSeed());
         // this.endScreenModule = new EndScreenModule();
-        this.gameManager.setMaxTurns(2000); // Turns are determined by realTurns, this is actually maxFrames
+        this.gameManager.setMaxTurns(1000000); // Turns are determined by realTurns, this is actually maxFrames
 
         this.gameManager.setFrameDuration(400);
+
+        this.currentPlayer = new AtomicInteger(-1);
+        this.realTurn = new AtomicInteger(0);
 
         // Get league
         switch (this.gameManager.getLeagueLevel()) {
@@ -99,7 +102,7 @@ public class Referee extends AbstractReferee {
 
     private void initializeView() {
         // Init
-        this.viewController = new ViewController(graphicEntityModule, tooltipModule, gameManager.getPlayers(), this.gameState);
+        this.viewController = new ViewController(graphicEntityModule, tooltipModule, gameManager.getPlayers(), this.gameState, this.realTurn, this.currentPlayer);
 
         // Add all cells
         for (int x = 0; x < MAP_WIDTH; ++x)
@@ -121,17 +124,20 @@ public class Referee extends AbstractReferee {
     @Override
     public void gameTurn(int turn) {
         if (hasAction()) {
-            makeAction();
+            boolean madeAnAction = false;
+            while (hasAction() && !madeAnAction) {
+                madeAnAction = makeAction();
+            }
         }
         else {
             // get current player
             if (!computeCurrentPlayer()) {
                 return;
             }
-            Player player = gameManager.getPlayer(this.currentPlayer);
+            Player player = gameManager.getPlayer(this.currentPlayer.intValue());
 
             // compute new golds / zones / killed units
-            gameState.initTurn(this.currentPlayer);
+            gameState.initTurn(this.currentPlayer.intValue());
 
             /// Send input
             sendInput(player);
@@ -141,8 +147,9 @@ public class Referee extends AbstractReferee {
             readInput(player);
 
             // Make the first action to save frames
-            if (hasAction()) {
-                makeAction();
+            boolean madeAnAction = false;
+            while (hasAction() && !madeAnAction) {
+                madeAnAction = makeAction();
             }
         }
         updateView();
@@ -151,11 +158,11 @@ public class Referee extends AbstractReferee {
 
     // return true if there is a next player, false if this is the end of the game
     private boolean computeCurrentPlayer() {
-        this.currentPlayer = (this.currentPlayer + 1) % PLAYER_COUNT;
-        if (this.currentPlayer == 0) {
-            this.realTurn++;
+        this.currentPlayer.set( (this.currentPlayer.intValue() + 1) % PLAYER_COUNT);
+        if (this.currentPlayer.intValue() == 0) {
+            this.realTurn.addAndGet(1);
             System.out.println("Turn: " + this.realTurn);
-            if (this.realTurn > MAX_TURNS) {
+            if (this.realTurn.intValue() > MAX_TURNS) {
                 discriminateEndGame();
                 return false;
             }
@@ -168,12 +175,12 @@ public class Referee extends AbstractReferee {
     }
 
 
-    private void makeMoveAction(Action action) {
+    private boolean makeMoveAction(Action action) {
         Player player = gameManager.getPlayer(action.getPlayer());
 
         if (!gameState.getUnit(action.getUnitId()).canPlay()) {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (unit already moved) " + action);
-            return;
+            return false;
         }
 
         int unitId = action.getUnitId();
@@ -182,26 +189,27 @@ public class Referee extends AbstractReferee {
         // Free cell or killable unit / destroyable building
         if (!action.getCell().isCapturable(action.getPlayer(), unit.getLevel())) {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell occupied) " + action);
-            return;
+            return false;
         }
 
         this.gameState.moveUnit(unit, action.getCell());
         this.gameState.computeAllActiveCells();
         gameManager.addToGameSummary(player.getNicknameToken() + " moved " + unitId + " to (" + action.getCell().getX() + ", " + action.getCell().getY() + ")");
+        return true;
     }
 
-    private void makeTrainAction(Action action) {
+    private boolean makeTrainAction(Action action) {
         Player player = gameManager.getPlayer(action.getPlayer());
 
         if (gameState.getGold(player.getIndex()) < UNIT_COST[action.getLevel()]) {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (not enough gold) " + action);
-            return;
+            return false;
         }
 
         // Free cell or killable unit / destroyable building
         if (!action.getCell().isCapturable(action.getPlayer(), action.getLevel())) {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell occupied) " + action);
-            return;
+            return false;
         }
 
         Unit unit = new Unit(action.getCell(), action.getPlayer(), action.getLevel());
@@ -209,59 +217,61 @@ public class Referee extends AbstractReferee {
         this.gameState.computeAllActiveCells();
         viewController.createUnitView(unit);
         gameManager.addToGameSummary(player.getNicknameToken() + " trained a unit in (" + action.getCell().getX() + ", " + action.getCell().getY() + ")");
+        return true;
     }
 
-    private void makeBuildAction(Action action) {
+    private boolean makeBuildAction(Action action) {
         Player player = gameManager.getPlayer(action.getPlayer());
 
         if (league == LEAGUE.WOOD3 || league == LEAGUE.WOOD2) {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (no building in this league) " + action);
-            return;
+            return false;
         }
 
         if (league == LEAGUE.WOOD1 && action.getBuildType() == BUILDING_TYPE.TOWER) {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (no Tower in this league) " + action);
-            return;
+            return false;
         }
 
         if (!action.getCell().isFree()) {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell occupied) " + action);
-            return;
+            return false;
         }
 
         if (action.getCell().getOwner() != action.getPlayer()) {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell not owned) " + action);
-            return;
+            return false;
         }
 
         if (gameState.getGold(player.getIndex()) < BUILDING_COST(action.getBuildType())) {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (not enough gold) " + action);
-            return;
+            return false;
         }
 
         Building building = new Building(action.getCell(), action.getPlayer(), action.getBuildType());
         this.gameState.addBuilding(building);
         viewController.createBuildingView(building);
+        return true;
     }
 
-    private void makeAction() {
+    private boolean makeAction() {
         Action action = this.actionList.get(0);
         this.actionList.remove(0);
 
         Player player = gameManager.getPlayer(action.getPlayer());
 
         if (!action.getCell().isPlayable(player.getIndex())) {
-            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (out of range) " + action);
-            return;
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell not playable) " + action);
+            return false;
         }
 
 
         if (action.getType() == ACTIONTYPE.MOVE) {
-            makeMoveAction(action);
+            return makeMoveAction(action);
         } else if (action.getType() == ACTIONTYPE.TRAIN) {
-            makeTrainAction(action);
+            return makeTrainAction(action);
         } else { // ACTIONTYPE.BUILD
-            makeBuildAction(action);
+            return makeBuildAction(action);
         }
     }
 
@@ -303,7 +313,7 @@ public class Referee extends AbstractReferee {
                     gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (unknown pattern) " + actionStr);
                     // clear actions
                     actionList.clear();
-                    player.deactivate();
+                    player.deactivate(String.format("$%d timeout!", player.getIndex()));
                     checkForEndGame();
                 }
             }

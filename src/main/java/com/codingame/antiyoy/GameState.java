@@ -312,6 +312,8 @@ public class GameState {
         this.HQs.add(HQ1);
         HQ0.getCell().setOwner(0);
         HQ1.getCell().setOwner(1);
+        this.addBuilding(HQ0);
+        this.addBuilding(HQ1);
     }
 
 
@@ -330,7 +332,7 @@ public class GameState {
             killUnit(cell.getUnit());
             cell.setUnit(null);
         }
-        if (cell.getBuilding() != null) {
+        if (cell.getBuilding() != null && cell.getBuilding().getType() != BUILDING_TYPE.HQ) {
             Building building = cell.getBuilding();
             building.doDispose();
             this.buildings.removeIf(building1 -> building1.getX() == building.getX() && building1.getY() == building.getY());
@@ -494,48 +496,73 @@ public class GameState {
         // send unit count
         player.sendInputLine(String.valueOf(this.units.size()));
 
+        List<Unit> unitList = new ArrayList<>(this.units.values());
+
+        Collections.sort(unitList, new Comparator<Unit>() {
+            @Override
+            public int compare(Unit unit1, Unit unit2) {
+                int currentOwner1 = (unit1.getOwner() - player.getIndex() + PLAYER_COUNT) % PLAYER_COUNT;
+                int currentOwner2 = (unit2.getOwner() - player.getIndex() + PLAYER_COUNT) % PLAYER_COUNT;
+                // not the same owner, building owned by 0 is sent first
+                if (currentOwner1 != currentOwner2) {
+                    return currentOwner1 - currentOwner2; // if o1 = 0, o1-o2 = -1, ie b1 < b2, else o1-o2 = 1, ie b2 < b1
+                }
+
+                return unit1.getId() - unit2.getId();
+            }
+        });
+
         // send units
-        this.units.forEach((id, unit) -> {
+        unitList.forEach(unit -> {
             StringBuilder line = new StringBuilder();
-            line.append(unit.getId())
-                    .append(" ")
-                    .append( (unit.getOwner() - player.getIndex() + PLAYER_COUNT) % PLAYER_COUNT) // always 0 for the player
-                    .append(" ")
-                    .append(unit.getLevel())
-                    .append(" ")
-                    .append(unit.getX())
-                    .append(" ")
-                    .append(unit.getY());
+            line
+                .append( (unit.getOwner() - player.getIndex() + PLAYER_COUNT) % PLAYER_COUNT) // always 0 for the player
+                .append(" ")
+                .append(unit.getId())
+                .append(" ")
+                .append(unit.getLevel())
+                .append(" ")
+                .append(unit.getX())
+                .append(" ")
+                .append(unit.getY());
             player.sendInputLine(line.toString());
         });
     }
 
     private void sendBuildings(Player player) {
         // send building count
-        player.sendInputLine(String.valueOf(this.HQs.size() + this.buildings.size()));
+        player.sendInputLine(String.valueOf(this.buildings.size()));
+        
+        Collections.sort(this.buildings, new Comparator<Building>() {
+            @Override
+            public int compare(Building building1, Building building2) {
+                int currentOwner1 = (building1.getOwner() - player.getIndex() + PLAYER_COUNT) % PLAYER_COUNT;
+                int currentOwner2 = (building2.getOwner() - player.getIndex() + PLAYER_COUNT) % PLAYER_COUNT;
+                // not the same owner, building owned by 0 is sent first
+                if (currentOwner1 != currentOwner2) {
+                    return currentOwner1 - currentOwner2; // if o1 = 0, o1-o2 = -1, ie b1 < b2, else o1-o2 = 1, ie b2 < b1
+                }
 
-        // send HQ
-        this.HQs.forEach(building -> {
-            StringBuilder line = new StringBuilder();
-            line.append(building.getIntType())
-                    .append(" ")
-                    .append( (building.getOwner() - player.getIndex() + PLAYER_COUNT) % PLAYER_COUNT) // always 0 for the player
-                    .append(" ")
-                    .append(building.getX())
-                    .append(" ")
-                    .append(building.getY());
-            player.sendInputLine(line.toString());
+                // different type
+                if (building1.getIntType() != building2.getIntType()) {
+                    return building1.getIntType() - building2.getIntType();
+                }
+
+                // last case: order by x then y
+                return (building1.getX() - building2.getX()) * MAP_HEIGHT + (building1.getY() - building2.getY());
+            }
         });
 
         this.buildings.forEach(building -> {
             StringBuilder line = new StringBuilder();
-            line.append( (building.getOwner() - player.getIndex() + PLAYER_COUNT) % PLAYER_COUNT) // always 0 for the player
-                    .append(" ")
-                    .append(building.getIntType())
-                    .append(" ")
-                    .append(building.getX())
-                    .append(" ")
-                    .append(building.getY());
+            line
+                .append( (building.getOwner() - player.getIndex() + PLAYER_COUNT) % PLAYER_COUNT ) // always 0 for the player
+                .append(" ")
+                .append(building.getIntType())
+                .append(" ")
+                .append(building.getX())
+                .append(" ")
+                .append(building.getY());
             player.sendInputLine(line.toString());
         });
     }

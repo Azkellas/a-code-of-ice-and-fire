@@ -9,6 +9,7 @@ import com.codingame.gameengine.module.entities.GraphicEntityModule;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.codingame.antiyoy.Cell;
 import com.codingame.antiyoy.Building;
@@ -26,9 +27,11 @@ public class ViewController {
 
     private GameStateView gameStateView;
 
+    private GameTurnView gameTurnView;
+
     private List<PlayerView> playerViews;
 
-    public ViewController(GraphicEntityModule entityModule, TooltipModule tooltipModule, List<Player> players, GameState gameState) {
+    public ViewController(GraphicEntityModule entityModule, TooltipModule tooltipModule, List<Player> players, GameState gameState, AtomicInteger realTurn, AtomicInteger playerTurn) {
         this.entityModule = entityModule;
         this.tooltipModule = tooltipModule;
 
@@ -37,6 +40,8 @@ public class ViewController {
         this.playerViews= new ArrayList<>();
         for (Player player : players)
             this.playerViews.add(new PlayerView(this.entityModule, this.tooltipModule, player, gameState));
+
+        this.gameTurnView = new GameTurnView(entityModule, tooltipModule, realTurn, playerTurn);
 
         initView();
     }
@@ -47,7 +52,7 @@ public class ViewController {
 
     public void update() {
         gameStateView.updateView();
-
+        gameTurnView.updateView();
         for (AbstractView view : views) {
             view.updateView();
         }

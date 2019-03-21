@@ -21,9 +21,9 @@ public class Building extends Entity {
     public int getIntType() {
         if (this.type == BUILDING_TYPE.HQ)
             return 0;
-        if (this.type == BUILDING_TYPE.TOWER)
-            return 1;
         if (this.type == BUILDING_TYPE.MINE)
+            return 1;
+        if (this.type == BUILDING_TYPE.TOWER)
             return 2;
         return -1;  // impossible case
     }
