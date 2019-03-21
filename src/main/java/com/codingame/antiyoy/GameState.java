@@ -496,18 +496,35 @@ public class GameState {
         // send unit count
         player.sendInputLine(String.valueOf(this.units.size()));
 
+        List<Unit> unitList = new ArrayList<>(this.units.values());
+
+        Collections.sort(unitList, new Comparator<Unit>() {
+            @Override
+            public int compare(Unit unit1, Unit unit2) {
+                int currentOwner1 = (unit1.getOwner() - player.getIndex() + PLAYER_COUNT) % PLAYER_COUNT;
+                int currentOwner2 = (unit2.getOwner() - player.getIndex() + PLAYER_COUNT) % PLAYER_COUNT;
+                // not the same owner, building owned by 0 is sent first
+                if (currentOwner1 != currentOwner2) {
+                    return currentOwner1 - currentOwner2; // if o1 = 0, o1-o2 = -1, ie b1 < b2, else o1-o2 = 1, ie b2 < b1
+                }
+
+                return unit1.getId() - unit2.getId();
+            }
+        });
+
         // send units
-        this.units.forEach((id, unit) -> {
+        unitList.forEach(unit -> {
             StringBuilder line = new StringBuilder();
-            line.append(unit.getId())
-                    .append(" ")
-                    .append( (unit.getOwner() - player.getIndex() + PLAYER_COUNT) % PLAYER_COUNT) // always 0 for the player
-                    .append(" ")
-                    .append(unit.getLevel())
-                    .append(" ")
-                    .append(unit.getX())
-                    .append(" ")
-                    .append(unit.getY());
+            line
+                .append( (unit.getOwner() - player.getIndex() + PLAYER_COUNT) % PLAYER_COUNT) // always 0 for the player
+                .append(" ")
+                .append(unit.getId())
+                .append(" ")
+                .append(unit.getLevel())
+                .append(" ")
+                .append(unit.getX())
+                .append(" ")
+                .append(unit.getY());
             player.sendInputLine(line.toString());
         });
     }
@@ -539,9 +556,9 @@ public class GameState {
         this.buildings.forEach(building -> {
             StringBuilder line = new StringBuilder();
             line
-                .append(building.getIntType())
-                .append(" ")
                 .append( (building.getOwner() - player.getIndex() + PLAYER_COUNT) % PLAYER_COUNT ) // always 0 for the player
+                .append(" ")
+                .append(building.getIntType())
                 .append(" ")
                 .append(building.getX())
                 .append(" ")
