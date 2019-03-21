@@ -517,25 +517,27 @@ public class GameState {
         // send HQ
         this.HQs.forEach(building -> {
             StringBuilder line = new StringBuilder();
-            line.append(building.getIntType())
-                    .append(" ")
-                    .append( (building.getOwner() - player.getIndex() + PLAYER_COUNT) % PLAYER_COUNT) // always 0 for the player
-                    .append(" ")
-                    .append(building.getX())
-                    .append(" ")
-                    .append(building.getY());
+            line
+                .append(building.getIntType())
+                .append(" ")
+                .append( (building.getOwner() - player.getIndex() + PLAYER_COUNT) % PLAYER_COUNT) // always 0 for the player
+                .append(" ")
+                .append(building.getX())
+                .append(" ")
+                .append(building.getY());
             player.sendInputLine(line.toString());
         });
 
         this.buildings.forEach(building -> {
             StringBuilder line = new StringBuilder();
-            line.append( (building.getOwner() - player.getIndex() + PLAYER_COUNT) % PLAYER_COUNT) // always 0 for the player
-                    .append(" ")
-                    .append(building.getIntType())
-                    .append(" ")
-                    .append(building.getX())
-                    .append(" ")
-                    .append(building.getY());
+            line
+                .append(building.getIntType())
+                .append(" ")
+                .append( (building.getOwner() - player.getIndex() + PLAYER_COUNT) % PLAYER_COUNT ) // always 0 for the player
+                .append(" ")
+                .append(building.getX())
+                .append(" ")
+                .append(building.getY());
             player.sendInputLine(line.toString());
         });
     }
