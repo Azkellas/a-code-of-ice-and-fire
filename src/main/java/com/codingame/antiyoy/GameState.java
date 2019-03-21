@@ -312,8 +312,8 @@ public class GameState {
         this.HQs.add(HQ1);
         HQ0.getCell().setOwner(0);
         HQ1.getCell().setOwner(1);
-        this.buildings.add(HQ0);
-        this.buildings.add(HQ1);
+        this.addBuilding(HQ0);
+        this.addBuilding(HQ1);
     }
 
 
@@ -332,7 +332,7 @@ public class GameState {
             killUnit(cell.getUnit());
             cell.setUnit(null);
         }
-        if (cell.getBuilding() != null) {
+        if (cell.getBuilding() != null && cell.getBuilding().getType() != BUILDING_TYPE.HQ) {
             Building building = cell.getBuilding();
             building.doDispose();
             this.buildings.removeIf(building1 -> building1.getX() == building.getX() && building1.getY() == building.getY());

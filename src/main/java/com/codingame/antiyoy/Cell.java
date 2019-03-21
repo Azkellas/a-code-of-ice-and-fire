@@ -73,6 +73,10 @@ public class Cell extends Entity {
     }
 
     public boolean isPlayable(int playerId) {
+        // return true iif owned and active or next to an owned and active cell
+        if (this.getOwner() == playerId && this.isActive()) {
+            return true;
+        }
         for (Cell neighbour : this.neighbours) {
             if (neighbour != null && neighbour.getOwner() == playerId && neighbour.isActive())
                 return true;

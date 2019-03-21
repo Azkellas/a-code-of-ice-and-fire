@@ -303,7 +303,7 @@ public class Referee extends AbstractReferee {
                     gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (unknown pattern) " + actionStr);
                     // clear actions
                     actionList.clear();
-                    player.deactivate();
+                    player.deactivate(String.format("$%d timeout!", player.getIndex()));
                     checkForEndGame();
                 }
             }

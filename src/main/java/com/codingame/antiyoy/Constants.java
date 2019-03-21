@@ -37,10 +37,14 @@ public final class Constants {
     public  static final Pattern BUILD_PATTERN = Pattern.compile("^BUILD ([A-Z]*) ([0-9]*) ([0-9]*)$");
 
     public static final int BUILDING_COST(BUILDING_TYPE type) {
-        if (type == BUILDING_TYPE.MINE)
-            return 20;
-        else
-            return 15;
+        switch (type) {
+            case MINE:
+                return 20;
+            case TOWER:
+                return 15;
+            default:  // case HQ
+                return 0;
+        }
     }
 
     public static final String TYPE_TO_STRING(BUILDING_TYPE type) {
