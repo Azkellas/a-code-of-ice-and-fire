@@ -35,9 +35,9 @@ public class UnitView extends AbstractView {
         level = this.entityModule.createText(String.valueOf(model.getLevel()))
                 .setAnchor(0.5)
                 .setFillColor(0xffffff)
-                .setFontSize(20)
+                .setFontSize(30)
                 .setStrokeColor(0xffffff)
-                .setStrokeThickness(4.0)
+                .setStrokeThickness(2.0)
                 .setX(0)
                 .setY(0)
                 .setZIndex(3);
@@ -46,7 +46,7 @@ public class UnitView extends AbstractView {
                 .setScale(1);
         group.add(decors, level);
 
-        tooltipModule.setTooltipText(group,  "level: " + model.getLevel() + "\nx: " + model.getX() + "\ny: " + model.getY());
+        tooltipModule.setTooltipText(group,  "id: " + model.getId() + "\nlevel: " + model.getLevel() + "\nx: " + model.getX() + "\ny: " + model.getY());
 
     }
 //
