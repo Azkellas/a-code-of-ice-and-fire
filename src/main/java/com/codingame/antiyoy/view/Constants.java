@@ -16,6 +16,7 @@ public final class Constants {
     static public final int GRID_X = LEFT_PANEL_WIDTH + (BOARD_WIDTH  - CELL_SIZE * MAP_WIDTH)  / 2;
     static public final int GRID_Y = (BOARD_HEIGHT - CELL_SIZE * MAP_HEIGHT) / 2;
 
+    static private final int PLAYER_TEXT_COLOR[] = {0xcc0000, 0x0000cc};
     static private final int PLAYER_UNIT_COLOR[] = {0xcc0000, 0x0000cc};
     static private final int PLAYER_ACTIVE_CELL_COLOR[] = {0x880000, 0x000088};
     static private final int PLAYER_INACTIVE_CELL_COLOR[] = {0x440000, 0x000044};
@@ -26,6 +27,10 @@ public final class Constants {
 
     static public int getPlayerUnitColor(int playerId) {
         return PLAYER_UNIT_COLOR[playerId];
+    }
+
+    static public int getTurnColor(int playerId) {
+        return PLAYER_UNIT_COLOR[Math.max(0, playerId)];
     }
 
     static public int getPlayerCellColor(int playerId, boolean isActive) {

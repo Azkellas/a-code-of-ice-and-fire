@@ -34,9 +34,9 @@ public class Referee extends AbstractReferee {
 
     private List<Action> actionList = new ArrayList<>();
 
-    private int currentPlayer = -1;
+    private AtomicInteger currentPlayer;
 
-    private int realTurn = 0;
+    private AtomicInteger realTurn;
 
     @Override
     public void onEnd() {
@@ -63,6 +63,9 @@ public class Referee extends AbstractReferee {
         this.gameManager.setMaxTurns(1000000); // Turns are determined by realTurns, this is actually maxFrames
 
         this.gameManager.setFrameDuration(400);
+
+        this.currentPlayer = new AtomicInteger(-1);
+        this.realTurn = new AtomicInteger(0);
 
         // Get league
         switch (this.gameManager.getLeagueLevel()) {
@@ -99,7 +102,7 @@ public class Referee extends AbstractReferee {
 
     private void initializeView() {
         // Init
-        this.viewController = new ViewController(graphicEntityModule, tooltipModule, gameManager.getPlayers(), this.gameState);
+        this.viewController = new ViewController(graphicEntityModule, tooltipModule, gameManager.getPlayers(), this.gameState, this.realTurn, this.currentPlayer);
 
         // Add all cells
         for (int x = 0; x < MAP_WIDTH; ++x)
@@ -128,10 +131,10 @@ public class Referee extends AbstractReferee {
             if (!computeCurrentPlayer()) {
                 return;
             }
-            Player player = gameManager.getPlayer(this.currentPlayer);
+            Player player = gameManager.getPlayer(this.currentPlayer.intValue());
 
             // compute new golds / zones / killed units
-            gameState.initTurn(this.currentPlayer);
+            gameState.initTurn(this.currentPlayer.intValue());
 
             /// Send input
             sendInput(player);
@@ -151,11 +154,11 @@ public class Referee extends AbstractReferee {
 
     // return true if there is a next player, false if this is the end of the game
     private boolean computeCurrentPlayer() {
-        this.currentPlayer = (this.currentPlayer + 1) % PLAYER_COUNT;
-        if (this.currentPlayer == 0) {
-            this.realTurn++;
+        this.currentPlayer.set( (this.currentPlayer.intValue() + 1) % PLAYER_COUNT);
+        if (this.currentPlayer.intValue() == 0) {
+            this.realTurn.addAndGet(1);
             System.out.println("Turn: " + this.realTurn);
-            if (this.realTurn > MAX_TURNS) {
+            if (this.realTurn.intValue() > MAX_TURNS) {
                 discriminateEndGame();
                 return false;
             }
