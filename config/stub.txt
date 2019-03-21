@@ -4,7 +4,7 @@ gameloop
 read gold:int
 loop height read line:string(width)
 read buildingCount:int
-loop buildingCount read owner:int type:int x:int y:int
+loop buildingCount read owner:int buildingType:int x:int y:int
 read unitCount:int
-loop unitCount read id:int owner:int level:int x:int y:int
+loop unitCount read unitId:int owner:int level:int x:int y:int
 write WAIT
