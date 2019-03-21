@@ -56,8 +56,11 @@ public class UnitView extends AbstractView {
             group.setVisible(false);
         int x = model.getX() * CELL_SIZE + (CELL_SIZE-2)/2;
         int y = model.getY() * CELL_SIZE + (CELL_SIZE-2)/2;
-        if (x != group.getX() || y != group.getY())
+        if (x != group.getX() || y != group.getY()) {
+            tooltipModule.setTooltipText(group,  "id: " + model.getId() + "\nlevel: " + model.getLevel() + "\nx: " + model.getX() + "\ny: " + model.getY());
             group.setX(x).setY(y);
+        }
+
     }
 
     public Entity getEntity() {
