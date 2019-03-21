@@ -312,6 +312,8 @@ public class GameState {
         this.HQs.add(HQ1);
         HQ0.getCell().setOwner(0);
         HQ1.getCell().setOwner(1);
+        this.buildings.add(HQ0);
+        this.buildings.add(HQ1);
     }
 
 
@@ -512,20 +514,26 @@ public class GameState {
 
     private void sendBuildings(Player player) {
         // send building count
-        player.sendInputLine(String.valueOf(this.HQs.size() + this.buildings.size()));
+        player.sendInputLine(String.valueOf(this.buildings.size()));
+        
+        Collections.sort(this.buildings, new Comparator<Building>() {
+            @Override
+            public int compare(Building building1, Building building2) {
+                int currentOwner1 = (building1.getOwner() - player.getIndex() + PLAYER_COUNT) % PLAYER_COUNT;
+                int currentOwner2 = (building2.getOwner() - player.getIndex() + PLAYER_COUNT) % PLAYER_COUNT;
+                // not the same owner, building owned by 0 is sent first
+                if (currentOwner1 != currentOwner2) {
+                    return currentOwner1 - currentOwner2; // if o1 = 0, o1-o2 = -1, ie b1 < b2, else o1-o2 = 1, ie b2 < b1
+                }
 
-        // send HQ
-        this.HQs.forEach(building -> {
-            StringBuilder line = new StringBuilder();
-            line
-                .append(building.getIntType())
-                .append(" ")
-                .append( (building.getOwner() - player.getIndex() + PLAYER_COUNT) % PLAYER_COUNT) // always 0 for the player
-                .append(" ")
-                .append(building.getX())
-                .append(" ")
-                .append(building.getY());
-            player.sendInputLine(line.toString());
+                // different type
+                if (building1.getIntType() != building2.getIntType()) {
+                    return building1.getIntType() - building2.getIntType();
+                }
+
+                // last case: order by x then y
+                return (building1.getX() - building2.getX()) * MAP_HEIGHT + (building1.getY() - building2.getY());
+            }
         });
 
         this.buildings.forEach(building -> {
