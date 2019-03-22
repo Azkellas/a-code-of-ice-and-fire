@@ -65,7 +65,18 @@
               There are 2 differents buildings that can be built:
               <ul>
                 <li><action>MINE</action>: mines product gold each turn and are the main source of income. A mine costs (10 + 2*<var>nbMines</var>) to build. So the first costs 10, the second one 12, and so on and so forth. Mines income is always <const>+4</const>.</li>
-                <li><action>TOWER</action>: towers protect nearby owned cells (up, down, left and right). Cells protected by a tower can only be reached by units of level <const>3</const>. Likewise, the tower can only be destroyed by a level <const>3</const> unit. A tower costs 15 gold to build.</li>
+                <li>
+                    <action>TOWER</action>: towers protect nearby owned cells (up, down, left and right, but not diagonals). Cells protected by a tower can only be reached by units of level <const>3</const>. Likewise, the tower can only be destroyed by a level <const>3</const> unit. A tower costs 15 gold to build.
+                    Here is a figure of a tower protection range:
+                    <figure style="margin-left:auto; margin-right:auto; width:350px;">
+                        <img src="https://i.imgur.com/DzcGk2J.png" alt="tower-protection" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
+                        <figcaption>
+                            The tower owned by red protect the nearby cells marked by a grey square. Cells in the diagonal (marked by a black cross) are <strong>not</strong> protected.
+                            Moreover, the blue cell on the right of the tower is not protected as it is not a red cell. Finally, even though the cell on the bottom of the tower is protected, the level <const>2</const> unit
+                            can capture it.
+                        </figcaption>
+                    </figure>
+                </li>
               </ul>
               Another building is the <strong>headquarters</strong>. A player has to protect their own headquarters while trying to destroy opponent's one. Losing their headquarters results to a lost game.<br/>
 
@@ -94,8 +105,8 @@
 
               There are <const>3</const> levels of units and the higher the level, the stronger the unit is. When a player unit walks on a cell not owned by this player, the cell is <strong>captured</strong>. Also, when a player unit walks on a cell where another enemy unit is, the enemy unit is instantly killed (without harm to the player unit).
               <ul>
-                <li>Level <const>1</const> units can only move on empty cells, mines or headquarters.</li>
-                <li>Level <const>2</const> units, in addition, can kill level <const>1</const> units.</li>
+                <li>Level <const>1</const> units can only move on empty cells, mines or headquarters, and kill level <const>1</const> units.</li>
+                <li>Level <const>2</const> units, in addition, can kill level <const>2</const> units and towers.</li>
                 <li>Level <const>3</const> units, besides, can kill any units or buildings.</li>
             </ul>
 
@@ -124,14 +135,14 @@
                 </tr>
                 <tr>
                     <th>Can kill units level</th>
-                    <td>-</td>
                     <td>1</td>
+                    <td>1, 2</td>
                     <td>1, 2, 3</td>
                 </tr>
                 <tr>
                     <th>Can destroy</th>
                     <td>Mines<br/>Headquarters</td>
-                    <td>Mines<br/>Headquarters</td>
+                    <td>Towers<br/>Mines<br/>Headquarters</td>
                     <td>Towers<br/>Mines<br/>Headquarters</td>
                 </tr>
             </table>
@@ -145,7 +156,7 @@
                 <figure style="margin-left:auto; margin-right:auto; width:500px;">
                   <img src="https://i.imgur.com/lVTVhp9.png" alt="action-sequence-diagram" style="margin-left:auto; margin-right:auto; width:500px;" /><br/>
               </figure>
-    
+
             </ul>
             <br/>
           </p>
@@ -214,7 +225,9 @@
       <div class="title">Game turn input</div>
       <div class="text">
         <p><span class="statement-lineno">Line 1:</span><var>gold</var>: an int being the amount of gold the player has.</p>
-        <i>(note: need to add income and opponent gold/income)</i>
+        <p><span class="statement-lineno">Line 2:</span><var>income</var>: an int being the income the player has.</p>
+        <p><span class="statement-lineno">Line 3:</span><var>opponentGold</var>: an int being the amount of gold the opponent player has.</p>
+        <p><span class="statement-lineno">Line 4:</span><var>opponentIncome</var>: an int being the amount of gold the player has.</p>
 
         <p><span class="statement-lineno">Next <var>height</var> lines:</span>
             <ul>

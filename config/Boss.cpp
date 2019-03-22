@@ -53,7 +53,14 @@ int main() {
     vector<vector<Cell>> map (MAP_WIDTH, vector<Cell> (MAP_HEIGHT));
     while (1) {
         int gold;
-        cin >> gold; cin.ignore();
+        int income;
+        int opponentGold;
+        int opponentIncome;
+        cin >> gold;
+        cin >> income;
+        cin >> opponentGold;
+        cin >> opponentIncome;
+        cin.ignore();
         cerr << "gold: " << gold << endl;
     
         for (int y = 0; y < MAP_HEIGHT; ++y) {

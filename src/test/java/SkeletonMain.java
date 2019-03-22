@@ -13,6 +13,10 @@ public class SkeletonMain {
         gameRunner.addAgent("./src/test/Agent");
         gameRunner.addAgent("./src/test/Agent");
 
+        // gameRunner.addAgent("python3 ./src/test/Agent2.py");
+        // gameRunner.addAgent("python3 ./src/test/Agent2.py");
+
+        // gameRunner.setSeed(5685912415515854218L);
         gameRunner.start();
     }
 }

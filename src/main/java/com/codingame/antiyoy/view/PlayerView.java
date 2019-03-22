@@ -23,13 +23,16 @@ public class PlayerView extends AbstractView {
     public Player model;
     private Sprite avatar;
     private Text gold;
+    private Text income;
     private Text pseudo;
     AtomicInteger goldModel;
+    AtomicInteger incomeModel;
 
     public PlayerView(GraphicEntityModule entityModule, TooltipModule tooltipModule, Player player, GameState gameState) {
         super(entityModule, tooltipModule);
         this.model = player;
         this.goldModel = gameState.getAtomicGold(player.getIndex());
+        this.incomeModel = gameState.getAtomicIncome(player.getIndex());
         createPlayerView();
     }
 
@@ -62,15 +65,28 @@ public class PlayerView extends AbstractView {
                 .setX(PLAYER_AVATAR_RADIUS / 2)
                 .setY(PLAYER_AVATAR_RADIUS + 40 + 50);
 
+        income = this.entityModule.createText("")
+                .setAnchor(0.5)
+                .setFillColor(0xffffff)
+                .setFontSize(40)
+                .setStrokeColor(0x000000)
+                .setStrokeThickness(4.0)
+                .setX(PLAYER_AVATAR_RADIUS / 2)
+                .setY(PLAYER_AVATAR_RADIUS + 40 + 50 + 50);
+
         group = entityModule.createGroup()
                 .setScale(1)
                 .setX(LEFT_PANEL_WIDTH / 2)
                 .setY(playerIndex * (SCREEN_HEIGHT/2) + 100);
-        group.add(avatar, pseudo, gold);
+        group.add(avatar, pseudo, gold, income);
     }
     
     public void updateView() {
         this.gold.setText(goldModel.toString());
+        if(incomeModel.intValue() > 0)
+            this.income.setText("+" + incomeModel.toString());
+        else
+            this.income.setText(incomeModel.toString());
     }
 
     public Entity getEntity() {

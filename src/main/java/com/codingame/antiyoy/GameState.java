@@ -18,6 +18,7 @@ public class GameState {
     private Map<Integer, Unit> units = new HashMap<>();
 
     private ArrayList<AtomicInteger> playerGolds = new ArrayList<>();
+    private ArrayList<AtomicInteger> playerIncome = new ArrayList<>();
 
     public GameState(long seed) {
         // create full map
@@ -26,9 +27,10 @@ public class GameState {
             for (int y = 0; y < MAP_HEIGHT; ++y)
                 this.map[x][y] = new Cell(x, y);
 
-        for (int i = 0; i < PLAYER_COUNT; ++i)
+        for (int i = 0; i < PLAYER_COUNT; ++i) {
             this.playerGolds.add(new AtomicInteger(2 * UNIT_COST[1]));
-
+            this.playerIncome.add(new AtomicInteger(1));
+        }
         this.seed = seed;
     }
 
@@ -36,6 +38,9 @@ public class GameState {
     public Cell getCell(int x, int y) { return this.map[x][y]; }
 
     public Unit getUnit(int id) { return this.units.get(id); }
+
+    public int getIncome(int idx) { return playerIncome.get(idx).intValue(); }
+    public AtomicInteger getAtomicIncome(int idx) { return playerIncome.get(idx); }
 
     public int getGold(int idx) { return playerGolds.get(idx).intValue(); }
     public AtomicInteger getAtomicGold(int idx) { return playerGolds.get(idx); }
@@ -348,6 +353,7 @@ public class GameState {
     public void initTurn(int playerId) {
         this.computeActiveCells(playerId);
         this.killSeparatedUnits(playerId);
+        this.computeIncome(playerId);
         this.computeGold(playerId);
         if (this.playerGolds.get(playerId).intValue() < 0) {
             negativeGoldWipeout(playerId);
@@ -394,26 +400,51 @@ public class GameState {
         killUnits(toKill);
     }
 
-    private void computeGold(int playerId) {
+
+    public int getBuildingCost(BUILDING_TYPE type, int playerId) {
+        int cost = BUILDING_COST(type);
+        if (type == BUILDING_TYPE.TOWER) {
+            return cost;
+        } else { // == MINE
+            for (Building building : this.buildings) {
+                if (building.getType() == BUILDING_TYPE.MINE && building.getOwner() == playerId) {
+                    cost += MINE_INCREMENT;
+                }
+            }
+            return cost;
+        }
+    }
+
+    private void computeIncome(int playerId) {
+        int updatedIncome = 0;
+
         // increments golds of player
         for (int x = 0; x < MAP_WIDTH; ++x) {
             for (int y = 0; y < MAP_HEIGHT; ++y) {
                 if (map[x][y].getOwner() == playerId && map[x][y].isActive())
-                    this.playerGolds.get(playerId).addAndGet(CELL_INCOME);
+                    updatedIncome += CELL_INCOME;
             }
         }
 
         // increments golds for active mines
         for (Building building : this.buildings) {
             if (building.getOwner() == playerId && building.getType() == BUILDING_TYPE.MINE && building.getCell().isActive())
-                this.playerGolds.get(playerId).addAndGet(MINE_INCOME);
+                updatedIncome += MINE_INCOME;
         }
 
         // decrement for units
         for (Unit unit : this.units.values()) {
             if (unit.getOwner() == playerId && unit.isAlive())
-                this.playerGolds.get(playerId).addAndGet(- UNIT_UPKEEP[unit.getLevel()]);
+                updatedIncome -= UNIT_UPKEEP[unit.getLevel()];
         }
+
+        //update player income
+        this.playerIncome.get(playerId).set(updatedIncome);
+    }
+
+    private void computeGold(int playerId) {
+        // add player income to their gold (can be negative).
+        this.playerGolds.get(playerId).addAndGet(this.playerIncome.get(playerId).intValue());
     }
 
     private void negativeGoldWipeout(int playerId) {
@@ -435,6 +466,8 @@ public class GameState {
         unit.getCell().setOwner(unit.getOwner());
         unit.getCell().setUnit(unit);
         this.playerGolds.get(unit.getOwner()).addAndGet(-UNIT_COST[unit.getLevel()]);
+        for (int i = 0; i < PLAYER_COUNT; ++i)
+            this.computeIncome(i);
     }
 
     public void moveUnit(Unit unit, Cell newPosition) {
@@ -451,12 +484,21 @@ public class GameState {
         newPosition.setOwner(unit.getOwner());
         // occupy new cell
         newPosition.setUnit(unit);
+
+        for (int i = 0; i < PLAYER_COUNT; ++i)
+            this.computeIncome(i);
     }
 
     public void addBuilding(Building building) {
         this.buildings.add(building);
         building.getCell().setBuilding(building);
-        this.playerGolds.get(building.getOwner()).addAndGet(-BUILDING_COST(building.getType()));
+        int cost = getBuildingCost(building.getType(), building.getOwner());
+
+        // since the mine was already created, getBuildingCost returns MINE_INCREMENT too many
+        if (building.getType() == BUILDING_TYPE.MINE) {
+            cost -= MINE_INCREMENT;
+        }
+        this.playerGolds.get(building.getOwner()).addAndGet(-cost);
     }
 
 
@@ -568,8 +610,14 @@ public class GameState {
     }
 
     public void sendState(Player player) {
-        // send gold
+        // send gold and income for current player
         player.sendInputLine(String.valueOf(this.playerGolds.get(player.getIndex())));
+        player.sendInputLine(String.valueOf(this.playerIncome.get(player.getIndex())));
+
+        // send gold and income for opponent player
+        int opponentPlayerIndex = (player.getIndex() + 1) %PLAYER_COUNT;
+        player.sendInputLine(String.valueOf(this.playerGolds.get(opponentPlayerIndex)));
+        player.sendInputLine(String.valueOf(this.playerIncome.get(opponentPlayerIndex)));
 
         sendMap(player);
         sendBuildings(player);

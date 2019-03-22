@@ -37,22 +37,25 @@ public class Cell extends Entity {
     public boolean isFree() { return this.unit == null && this.building == null; }
     public boolean isCapturable(int playerId, int level) {
         // not on enemy cells protected by towers
-        if (this.getOwner() != playerId && this.isProtected() && level < CAPTURE_LEVEL)
+        if (this.getOwner() != playerId && this.isProtected() && level < CAPTURE_LEVEL) {
             return false;
+        }
 
         // not protected and free
-        if (this.isFree())
+        if (this.isFree()) {
             return true;
+        }
 
         // On own cell: not (since not free)
-        if (this.getOwner() == playerId)
+        if (this.getOwner() == playerId) {
             return false;
-
+        }
 
         // cannot kill enemy unit if level too small
         if (this.unit != null) {
-            if (level != MAX_LEVEL && level < this.unit.getLevel())
+            if (level != MAX_LEVEL && level <= this.unit.getLevel()) {
                 return false;
+            }
         }
 
         return true;
@@ -83,4 +86,15 @@ public class Cell extends Entity {
         }
         return false;
     }
+
+    public boolean isNeighbour(Cell cell) {
+        for (Cell neighbour : this.neighbours) {
+            if (neighbour != null && neighbour.getX() == cell.getX() && neighbour.getY() == cell.getY()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }

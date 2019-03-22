@@ -43,13 +43,13 @@ public class Referee extends AbstractReferee {
         //int[] scores = new int[2];
         //scores[0] = gameManager.getPlayer(0).getScore();
         //scores[1] = gameManager.getPlayer(1).getScore();
-        String[] text = {"", ""};
         if (gameManager.getPlayer(0).getScore() == -1 || gameManager.getPlayer(1).getScore() == -1) {
             // timeout or capture: no need to display scores
-            text[0] = " ";
-            text[1] = " ";
+            String[] text = {};
+            endScreenModule.setScores(gameManager.getPlayers().stream().mapToInt(p -> p.getScore()).toArray(), text);
+        } else {
+            endScreenModule.setScores(gameManager.getPlayers().stream().mapToInt(p -> p.getScore()).toArray());
         }
-        endScreenModule.setScores(gameManager.getPlayers().stream().mapToInt(p -> p.getScore()).toArray(), text);
     }
 
     @Override
@@ -192,6 +192,11 @@ public class Referee extends AbstractReferee {
             return false;
         }
 
+        //
+        if (!action.getCell().isNeighbour(unit.getCell())) {
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (not a neighbour) " + action);
+            return false;
+        }
         this.gameState.moveUnit(unit, action.getCell());
         this.gameState.computeAllActiveCells();
         gameManager.addToGameSummary(player.getNicknameToken() + " moved " + unitId + " to (" + action.getCell().getX() + ", " + action.getCell().getY() + ")");
@@ -243,7 +248,7 @@ public class Referee extends AbstractReferee {
             return false;
         }
 
-        if (gameState.getGold(player.getIndex()) < BUILDING_COST(action.getBuildType())) {
+        if (gameState.getGold(player.getIndex()) < this.gameState.getBuildingCost(action.getBuildType(), action.getPlayer())) {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (not enough gold) " + action);
             return false;
         }
