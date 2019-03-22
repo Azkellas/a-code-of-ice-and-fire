@@ -394,6 +394,21 @@ public class GameState {
         killUnits(toKill);
     }
 
+
+    public int getBuildingCost(BUILDING_TYPE type, int playerId) {
+        int cost = BUILDING_COST(type);
+        if (type == BUILDING_TYPE.TOWER) {
+            return cost;
+        } else { // == MINE
+            for (Building building : this.buildings) {
+                if (building.getType() == BUILDING_TYPE.MINE && building.getOwner() == playerId) {
+                    cost += MINE_INCREMENT;
+                }
+            }
+            return cost;
+        }
+    }
+
     private void computeGold(int playerId) {
         // increments golds of player
         for (int x = 0; x < MAP_WIDTH; ++x) {
@@ -456,7 +471,13 @@ public class GameState {
     public void addBuilding(Building building) {
         this.buildings.add(building);
         building.getCell().setBuilding(building);
-        this.playerGolds.get(building.getOwner()).addAndGet(-BUILDING_COST(building.getType()));
+        int cost = getBuildingCost(building.getType(), building.getOwner());
+
+        // since the mine was already created, getBuildingCost returns MINE_INCREMENT too many
+        if (building.getType() == BUILDING_TYPE.MINE) {
+            cost -= MINE_INCREMENT;
+        }
+        this.playerGolds.get(building.getOwner()).addAndGet(-cost);
     }
 
 

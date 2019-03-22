@@ -248,7 +248,7 @@ public class Referee extends AbstractReferee {
             return false;
         }
 
-        if (gameState.getGold(player.getIndex()) < BUILDING_COST(action.getBuildType())) {
+        if (gameState.getGold(player.getIndex()) < this.gameState.getBuildingCost(action.getBuildType(), action.getPlayer())) {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (not enough gold) " + action);
             return false;
         }
