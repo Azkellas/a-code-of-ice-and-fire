@@ -86,4 +86,15 @@ public class Cell extends Entity {
         }
         return false;
     }
+
+    public boolean isNeighbour(Cell cell) {
+        for (Cell neighbour : this.neighbours) {
+            if (neighbour != null && neighbour.getX() == cell.getX() && neighbour.getY() == cell.getY()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }

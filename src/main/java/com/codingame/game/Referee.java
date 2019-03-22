@@ -192,6 +192,11 @@ public class Referee extends AbstractReferee {
             return false;
         }
 
+        //
+        if (!action.getCell().isNeighbour(unit.getCell())) {
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (not a neighbour) " + action);
+            return false;
+        }
         this.gameState.moveUnit(unit, action.getCell());
         this.gameState.computeAllActiveCells();
         gameManager.addToGameSummary(player.getNicknameToken() + " moved " + unitId + " to (" + action.getCell().getX() + ", " + action.getCell().getY() + ")");
