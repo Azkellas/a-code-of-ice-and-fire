@@ -122,6 +122,10 @@ height = int(input())
 while True:
     gold = int(input())
     debug(gold)
+    income = int(input())
+
+    opponent_gold = int(input())
+    opponent_income = int(input())
 
     my_hq_pos = None
 

@@ -2,6 +2,9 @@ read width:int
 read height:int
 gameloop
 read gold:int
+read income:int
+read opponentGold:int
+read opponentIncome:int
 loop height read line:string(width)
 read buildingCount:int
 loop buildingCount read owner:int buildingType:int x:int y:int
