@@ -11,12 +11,12 @@ public class SkeletonMain {
         // Another way to add a player
         gameRunner.setLeagueLevel(4);
         gameRunner.addAgent("./src/test/Agent");
-        gameRunner.addAgent("./src/test/Agent");
+        // gameRunner.addAgent("./src/test/Agent");
 
-        // gameRunner.addAgent("python3 ./src/test/Agent2.py");
+        gameRunner.addAgent("python3 ./src/test/Agent2.py");
         // gameRunner.addAgent("python3 ./src/test/Agent2.py");
 
-        // gameRunner.setSeed(5685912415515854218L);
+        gameRunner.setSeed(-7095413993656790854L);
         gameRunner.start();
     }
 }

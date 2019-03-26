@@ -128,6 +128,7 @@ while True:
     opponent_income = int(input())
 
     my_hq_pos = None
+    en_hq_pos = None
 
     carte = []
     for i in range(height):
@@ -143,6 +144,8 @@ while True:
 
         if buildingType == HQ and owner == ME:
             my_hq_pos = (x,y)
+        if buildingType == HQ and owner != ME:
+            en_hq_pos = (x,y)
 
 
 
@@ -179,6 +182,7 @@ while True:
 
         actions.append("MOVE {} {} {}".format(unit.id, voisin[0], voisin[1]))
         carte[voisin[1]][voisin[0]] = OWN_ACTIVE_CELL
+        #actions.append("MOVE {} {} {}".format(unit.id, en_hq_pos[0], en_hq_pos[1]))
 
     border = find_border(carte, my_hq_pos)
 

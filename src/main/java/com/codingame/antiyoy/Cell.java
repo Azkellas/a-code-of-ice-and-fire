@@ -28,6 +28,14 @@ public class Cell extends Entity {
     public void setBuilding(Building building) { this.building = building; }
 
     public Cell[] getNeighbours() { return this.neighbours; }
+
+    public Cell getNeighbour(int direction) {
+        if (direction < 0 || direction >= 4) {
+            return null;
+        }
+        return this.neighbours[direction];
+    }
+
     public void setNeighbour(int idx, Cell cell) { this.neighbours[idx] = cell; }
 
     public boolean isActive() { return this.active; }

@@ -70,20 +70,24 @@ public class Referee extends AbstractReferee {
         // Get league
         switch (this.gameManager.getLeagueLevel()) {
             case 1:
-                this.league = LEAGUE.WOOD3;
                 // Only T1 units, no building
+                MAX_MOVE_LENGTH = 1;
+                MAX_LEVEL = 1;
+                this.league = LEAGUE.WOOD3;
                 break;
             case 2:
-                this.league = LEAGUE.WOOD2;
                 // Now T2/T3 units, kill mechanism
+                MAX_MOVE_LENGTH = 1;
+                this.league = LEAGUE.WOOD2;
                 break;
             case 3:
+                // Now Mines and Towers
+                MAX_MOVE_LENGTH = 1;
                 this.league = LEAGUE.WOOD1;
-                // Now Mines
                 break;
             default:
+                // Now pathfinding
                 this.league = LEAGUE.BRONZE;
-                // Now Towers
         }
 
         // Random generation
@@ -192,14 +196,16 @@ public class Referee extends AbstractReferee {
             return false;
         }
 
-        //
-        if (!action.getCell().isNeighbour(unit.getCell())) {
-            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (not a neighbour) " + action);
+        Cell nextCell = this.gameState.getNextCell(unit, action.getCell());
+
+        if (nextCell.getX() == unit.getCell().getX() && nextCell.getY() == unit.getCell().getY()) {
+            // no MOVE to do
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Unit " + unitId + " stayed still (no nearest cell in range) " + action);
             return false;
         }
-        this.gameState.moveUnit(unit, action.getCell());
+        this.gameState.moveUnit(unit, nextCell);
         this.gameState.computeAllActiveCells();
-        gameManager.addToGameSummary(player.getNicknameToken() + " moved " + unitId + " to (" + action.getCell().getX() + ", " + action.getCell().getY() + ")");
+        gameManager.addToGameSummary(player.getNicknameToken() + " moved " + unitId + " to (" + nextCell.getX() + ", " + nextCell.getY() + ")");
         return true;
     }
 
@@ -233,10 +239,6 @@ public class Referee extends AbstractReferee {
             return false;
         }
 
-        if (league == LEAGUE.WOOD1 && action.getBuildType() == BUILDING_TYPE.TOWER) {
-            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (no Tower in this league) " + action);
-            return false;
-        }
 
         if (!action.getCell().isFree()) {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell occupied) " + action);
@@ -265,7 +267,9 @@ public class Referee extends AbstractReferee {
 
         Player player = gameManager.getPlayer(action.getPlayer());
 
-        if (!action.getCell().isPlayable(player.getIndex())) {
+        // TRAIN & BUILD can only be done on a playable cell
+        // MOVE on the contrary can target any cell
+        if (action.getType() != ACTIONTYPE.MOVE && !action.getCell().isPlayable(player.getIndex())) {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell not playable) " + action);
             return false;
         }

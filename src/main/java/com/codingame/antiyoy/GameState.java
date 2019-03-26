@@ -4,8 +4,8 @@ package com.codingame.antiyoy;
 import static com.codingame.antiyoy.Constants.*;
 
 import com.codingame.game.Player;
-import org.apache.commons.lang3.tuple.Pair;
 
+import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -20,6 +20,8 @@ public class GameState {
     private ArrayList<AtomicInteger> playerGolds = new ArrayList<>();
     private ArrayList<AtomicInteger> playerIncome = new ArrayList<>();
 
+    private Pathfinding pathfinding;
+
     public GameState(long seed) {
         // create full map
         this.map = new Cell[MAP_WIDTH][MAP_HEIGHT];
@@ -32,6 +34,7 @@ public class GameState {
             this.playerIncome.add(new AtomicInteger(1));
         }
         this.seed = seed;
+        this.pathfinding = new Pathfinding();
     }
 
     // getters
@@ -70,6 +73,9 @@ public class GameState {
         }
     }
 
+    public Cell getNextCell(Unit unit, Cell target) {
+        return pathfinding.getNearestCell(this.map, unit, target);
+    }
 
     /*********************************
 
@@ -296,6 +302,9 @@ public class GameState {
 
         // Restore HQs cells
         this.computeNeighbours();
+
+        // init pathfinding
+        this.pathfinding.init(this.map);
     }
 
 
