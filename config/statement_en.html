@@ -149,7 +149,20 @@
 
 
             <ul>
-                <li>Each unit can be moved once each turn. Units can only move to a neighbour cell (up, down, left, right).</li>
+                <li>Each unit can be moved once each turn. Units can move up to <const>3</const> cells away from their current position (Manhattan distance), using the command <action>MOVE id x y</action>.
+                <ul>
+                    <li>For an unit to move to a target cell, there must exist a path of size at most 3 and of <strong>active owned cells</strong> (except the target cell) from the unit's current cell and the target cell. That is, it is not possible to cross over neutral or opponent controled cells. </li>
+                    <li>An unit can jump over buildings and units, as long as the target cell is free and can be captured.</li>
+                    <li>This is summed up in this figure:
+                        <figure style="margin-left:auto; margin-right:auto; width:350px;">
+                            <img src="https://i.imgur.com/JoShA3E.png" alt="unit-movement" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
+                            <figcaption>
+                                Red player is trying to move the unit in green. This unit can move to any cell with a number in the top-right corner (being the distance from the green unit to the cell). Cells marked with a cross (X) in the top-right corner are cells the green unit can <strong>not</strong> capture.
+                            </figcaption>
+                        </figure>
+                    </li>
+                If the target cell is further away than 3 cells, pathfinding is done to move the unit 3 cells closer to the desired coordinates.
+                </li>
                 <li>Players can train armies using the <action>TRAIN level x y</action> action. They can be only trained on cells in player's territory or its direct neighbourhood (border). Armies training follows the same rules as moving: no training can be done on a cell occupied by a friendly unit/building, and the unit must be powerful enough to be trained on a cell occupied by an enemy.</li>
                 <li>All actions are processed sequentially and the game state is recomputed after each one: an action not possible at the beginning of the turn might be done later in the same turn.</li>
                 <figure style="margin-left:auto; margin-right:auto; width:500px;">
