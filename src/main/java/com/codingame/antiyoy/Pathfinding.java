@@ -3,8 +3,9 @@ package com.codingame.antiyoy;
 
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.lang3.tuple.ImmutablePair;
+// import org.apache.commons.lang3.tuple.ImmutablePair;
 
+import javax.naming.LinkLoopException;
 import java.util.LinkedList;
 
 import static com.codingame.antiyoy.Constants.*;
@@ -77,8 +78,10 @@ public class Pathfinding {
         }
 
         // left = depth, right = cellId
-        LinkedList<Pair<Integer, Integer>> queue = new LinkedList<>();
-        queue.add(new ImmutablePair<> (0, getId(start)));
+        // LinkedList<Pair<Integer, Integer>> queue = new LinkedList<>();
+        LinkedList<Vector2> queue = new LinkedList<>();
+        // queue.add(new ImmutablePair<> (0, getId(start)));
+        queue.add(new Vector2(0, getId(start)));
         visited[startId] = true;
 
 
@@ -86,9 +89,12 @@ public class Pathfinding {
         int bestDistance = distances[startId][targetId];
 
         while (!queue.isEmpty()) {
-            Pair<Integer, Integer> pair = queue.pop();
-            int depth = pair.getLeft();
-            int cellId = pair.getRight();
+            // Pair<Integer, Integer> pair = queue.pop();
+            // int depth = pair.getLeft();
+            // int cellId = pair.getRight();
+            Vector2 pair = queue.pop();
+            int depth = pair.getX();
+            int cellId = pair.getY();
             Cell cell = getCell(map, cellId);
 
             // new best: free and nearer
@@ -97,14 +103,15 @@ public class Pathfinding {
                 bestCell = cell;
             }
 
-            if (depth < MAX_MOVE_LENGTH && cell.getOwner() == start.getOwner()) {
+            if (depth < MAX_MOVE_LENGTH && cell.getOwner() == unit.getOwner()) {
                 // we can move further
                 for (int direction : order) {
                     Cell neighbour = cell.getNeighbour(direction);
                     if (neighbour != null) {
                         int neighbourId = getId(neighbour);
                         visited[neighbourId] = true;
-                        queue.add(new ImmutablePair<>(depth + 1, neighbourId));
+                        // queue.add(new ImmutablePair<>(depth + 1, neighbourId));
+                        queue.add(new Vector2(depth + 1, neighbourId));
                     }
                 }
             }
