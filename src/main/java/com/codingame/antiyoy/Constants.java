@@ -26,6 +26,8 @@ public final class Constants {
     static public final int MAX_LEVEL = 3;
     static public final int CAPTURE_LEVEL = 2;
 
+    static public final int MAX_MOVE_LENGTH = 3;
+
     public enum ACTIONTYPE {MOVE, BUILD, TRAIN}
 
     public enum BUILDING_TYPE {HQ, MINE, TOWER}

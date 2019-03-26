@@ -64,8 +64,11 @@ int main() {
         int gold;
         cin >> gold; cin.ignore();
         cerr << "gold: " << gold << endl;
-    
-
+        int income, opponentGold, opponentIncome;
+        cin >> income; cin.ignore();
+        cin >> opponentGold; cin.ignore();
+        cin >> opponentIncome; cin.ignore();
+        
         for (int y = 0; y < MAP_HEIGHT; ++y) {
             string line;
             getline(cin, line);
@@ -207,62 +210,62 @@ int main() {
 
         // train kill
         bool trainDone = true;
-        while (gold >= 20 && trainDone) {
-            trainDone = false;
-            int bestScore = 0;
-            Cell target;
-            for (int x = 0; x < MAP_WIDTH; ++x) {
-                for (int y = 0; y < MAP_HEIGHT; ++y) {
-                    if (map[x][y].owner == VOID || map[x][y].owner == 0)
-                        continue;
-                    bool can = false;
-                    for (int dir = 0; dir < 4; ++dir)
-                        if (map[x][y].neighbours[dir] != nullptr && map[x][y].neighbours[dir]->owner == 0)
-                            can = true;
-                    if (map[x][y].unit != nullptr) {
-                        int enLevel = map[x][y].unit->level;
-                        if (enLevel >= 2 && gold < 30) {
-                            can = false;
-                        } else if (gold < 20) {
-                            can = false;
-                        }
-                    } else {
-                        can = false;
-                    }
-                    if (map[x][y].building != nullptr && map[x][y].building->type == TOWER && gold < 20) {
-                        can = false;
-                    }
-                    int score = 100 - (std::abs(x - myHQ.x) + std::abs(y - myHQ.y));
-                    if (map[x][y].occupied) {
-                        score += 1000000;
-                    }
-                    if (can && score < bestScore) {
-                        bestScore = score;
-                        target = map[x][y];
-                    }
-                }
-            }
-            if (bestScore != 1e6) {
-                int levelMin = 1;
-                int levelMax = 3;
-                if (gold < 30) {
-                    levelMax = 2;
-                }
-                if (gold < 20) {
-                    levelMax = 1;
-                }
-                if (target.unit != nullptr) {
-                    levelMin = min(target.unit->level, 3);
-                }
-                int level = levelMin;
-                cout << (first ? "" : " ") << "TRAIN " << level << " " << target.x << " " << target.y << ";";
-                actionsMade++;
-                trainDone = true;
-                first = false;
-                map[target.x][target.y].owner = 0;
-                gold -= level * 10;
-            }
-        }
+        // while (gold >= 20 && trainDone) {
+        //     trainDone = false;
+        //     int bestScore = 0;
+        //     Cell target;
+        //     for (int x = 0; x < MAP_WIDTH; ++x) {
+        //         for (int y = 0; y < MAP_HEIGHT; ++y) {
+        //             if (map[x][y].owner == VOID || map[x][y].owner == 0)
+        //                 continue;
+        //             bool can = false;
+        //             for (int dir = 0; dir < 4; ++dir)
+        //                 if (map[x][y].neighbours[dir] != nullptr && map[x][y].neighbours[dir]->owner == 0)
+        //                     can = true;
+        //             if (map[x][y].unit != nullptr) {
+        //                 int enLevel = map[x][y].unit->level;
+        //                 if (enLevel >= 2 && gold < 30) {
+        //                     can = false;
+        //                 } else if (gold < 20) {
+        //                     can = false;
+        //                 }
+        //             } else {
+        //                 can = false;
+        //             }
+        //             if (map[x][y].building != nullptr && map[x][y].building->type == TOWER && gold < 20) {
+        //                 can = false;
+        //             }
+        //             int score = 100 - (std::abs(x - myHQ.x) + std::abs(y - myHQ.y));
+        //             if (map[x][y].occupied) {
+        //                 score += 1000000;
+        //             }
+        //             if (can && score > bestScore) {
+        //                 bestScore = score;
+        //                 target = map[x][y];
+        //             }
+        //         }
+        //     }
+        //     if (bestScore != 0) {
+        //         int levelMin = 1;
+        //         int levelMax = 3;
+        //         if (gold < 30) {
+        //             levelMax = 2;
+        //         }
+        //         if (gold < 20) {
+        //             levelMax = 1;
+        //         }
+        //         if (target.unit != nullptr) {
+        //             levelMin = min(target.unit->level, 3);
+        //         }
+        //         int level = levelMin;
+        //         cout << (first ? "" : " ") << "TRAIN " << level << " " << target.x << " " << target.y << ";";
+        //         actionsMade++;
+        //         trainDone = true;
+        //         first = false;
+        //         map[target.x][target.y].owner = 0;
+        //         gold -= level * 10;
+        //     }
+        // }
 
         // build danger towers
         bool buildDone = true;
@@ -329,13 +332,13 @@ int main() {
                     if (map[x][y].unit != nullptr) {
                         score += 1000000;
                     }
-                    if (can && score < bestScore) {
+                    if (can && score > bestScore) {
                         bestScore = score;
                         target = map[x][y];
                     }
                 }
             }
-            if (bestScore != 1e6) {
+            if (bestScore != 0) {
                 int levelMin = 1;
                 int levelMax = 3;
                 if (gold < 30) {
@@ -345,7 +348,7 @@ int main() {
                     levelMax = 1;
                 }
                 if (target.unit != nullptr) {
-                    levelMin = min(target.unit->level, 3);
+                    levelMin = min(target.unit->level + 1, 3);
                 }
                 int level = levelMin;
                 cout << (first ? "" : " ") << "TRAIN " << level << " " << target.x << " " << target.y << ";";

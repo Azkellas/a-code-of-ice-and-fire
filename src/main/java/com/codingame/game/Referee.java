@@ -192,12 +192,13 @@ public class Referee extends AbstractReferee {
             return false;
         }
 
-        //
-        if (!action.getCell().isNeighbour(unit.getCell())) {
-            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (not a neighbour) " + action);
-            return false;
-        }
-        this.gameState.moveUnit(unit, action.getCell());
+
+        // if (!action.getCell().isNeighbour(unit.getCell())) {
+        //    gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (not a neighbour) " + action);
+        //    return false;
+        //}
+        Cell nextCell = this.gameState.getNextCell(unit, action.getCell());
+        this.gameState.moveUnit(unit, nextCell);
         this.gameState.computeAllActiveCells();
         gameManager.addToGameSummary(player.getNicknameToken() + " moved " + unitId + " to (" + action.getCell().getX() + ", " + action.getCell().getY() + ")");
         return true;
@@ -265,7 +266,9 @@ public class Referee extends AbstractReferee {
 
         Player player = gameManager.getPlayer(action.getPlayer());
 
-        if (!action.getCell().isPlayable(player.getIndex())) {
+
+        // Pathfinding only exists in Bronze and higher
+        if (league != LEAGUE.BRONZE && !action.getCell().isPlayable(player.getIndex())) {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell not playable) " + action);
             return false;
         }
