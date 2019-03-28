@@ -17,3 +17,7 @@ target/
 skeleton\.iml
 
 src/test/Agent
+
+\.classpath
+
+\.project
