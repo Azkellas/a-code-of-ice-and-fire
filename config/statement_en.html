@@ -64,7 +64,7 @@
           <p>
               There are 2 differents buildings that can be built:
               <ul>
-                <li><action>MINE</action>: mines product gold each turn and are the main source of income. A mine costs (10 + 2*<var>nbMines</var>) to build. So the first costs 10, the second one 12, and so on and so forth. Mines income is always <const>+4</const>.</li>
+                <li><action>MINE</action>: mines product gold each turn and are the main source of income. A mine costs (20 + 4*<var>nbMines</var>) to build. So the first costs 20, the second one 24, and so on and so forth. Mines income is always <const>+4</const>. Mines can only be built on mine spots.</li>
                 <li>
                     <action>TOWER</action>: towers protect nearby (up, down, left and right, but not diagonals) and <strong>owned</strong> cells (being active or not). Cells protected by a tower can only be reached by enemy units of level <const>3</const>. Likewise, the tower can only be destroyed by a level <const>3</const> unit. A tower costs 15 gold to build.
                     Here is a figure of a tower protection range:
@@ -79,7 +79,7 @@
               </ul>
               Another building is the <strong>headquarters</strong>. A player has to protect their own headquarters while trying to destroy opponent's one. Losing their headquarters results to a lost game.<br/>
 
-              A player can only build on owned active cells.<br/>
+              A player can only build on owned active and empty cells.<br/>
 
 
               If a building is on an unactive (i.e. not active) it is kept there. A <action>TOWER</action> will still protect surrounding owned cells. However a <action>MINE</action> that is on an unactive cell will not provide income.
@@ -107,7 +107,7 @@
 
               There are <const>3</const> levels of units and the higher the level, the stronger the unit is. When a player unit walks on a cell not owned by this player, the cell is <strong>captured</strong>. Also, when a player unit walks on a cell where another enemy unit is, the enemy unit is instantly killed (without harm to the player unit).
               <ul>
-                <li>Level <const>1</const> units can only move on empty cells, mines or headquarters.</li>
+                <li>Level <const>1</const> units can only move on empty cells, opponent mines or opponent headquarters.</li>
                 <li>Level <const>2</const> units, in addition, can kill level <const>1</const> units</li>
                 <li>Level <const>3</const> units, besides, can kill any units or buildings.</li>
             </ul>
@@ -235,6 +235,11 @@
       <div class="title">Initialization input</div>
       <div class="text">
         <p><span class="statement-lineno">Line 1: </span>Two ints <var>width</var> and <var>height</var>, the dimensions of the map</p>
+        <p><span class="statement-lineno">Line 2: </span>One int <var>numberMineSpots</var>: the number of mine spots on the map.</p>
+        <p><span class="statement-lineno">Next <var>numberMineSpots</var> lines:</span> 2 ints
+            <ul>
+              <li><var>x</var> and <var>y</var>: coordinates of the mine spot.</li>
+            </ul>
       </div>
 
       <div class="title">Game turn input</div>

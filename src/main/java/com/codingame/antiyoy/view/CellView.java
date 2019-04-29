@@ -1,9 +1,6 @@
 package com.codingame.antiyoy.view;
 
-import com.codingame.gameengine.module.entities.Entity;
-import com.codingame.gameengine.module.entities.GraphicEntityModule;
-import com.codingame.gameengine.module.entities.Group;
-import com.codingame.gameengine.module.entities.Rectangle;
+import com.codingame.gameengine.module.entities.*;
 // import org.graalvm.compiler.core.common.type.ArithmeticOpTable;
 
 import com.codingame.antiyoy.Cell;
@@ -19,7 +16,7 @@ public class CellView extends AbstractView {
     private Group group;
     private Rectangle decors;
     private Rectangle protect;
-
+    private Text type;
     private Cell model;
 
     public CellView(GraphicEntityModule entityModule, TooltipModule tooltipModule, Cell cell) {
@@ -45,15 +42,33 @@ public class CellView extends AbstractView {
                 .setZIndex(2)
                 .setAlpha(0);
 
+        type = this.entityModule.createText("X")
+                .setAnchor(0.5)
+                .setFillColor(0xffffff)
+                .setFontSize(20)
+                .setStrokeColor(0xffffff)
+                .setStrokeThickness(4.0)
+                .setX((int)((CELL_SIZE-2)/2.5))
+                .setY((int)((CELL_SIZE-2)/2.5))
+                .setZIndex(3);
+
+
         group = entityModule.createGroup()
                 .setScale(1)
                 .setX(model.getX() * CELL_SIZE)
                 .setY(model.getY() * CELL_SIZE);
 
+
+
         group.add(decors, protect);
 
         if (model.getOwner() != VOID) {
             tooltipModule.setTooltipText(group, "x: " + model.getX() + "\ny: " + model.getY());
+        }
+
+        if(model.isMineSpot()) {
+            tooltipModule.setTooltipText(group, "MINE SPOT\n" + "x: " + model.getX() + "\ny: " + model.getY());
+            group.add(type);
         }
     }
 //

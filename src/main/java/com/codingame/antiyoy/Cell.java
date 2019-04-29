@@ -11,6 +11,8 @@ public class Cell extends Entity {
 
     private Cell neighbours[];
 
+    private boolean mineSpot;
+
     public Cell(int x, int y) {
         super(x, y, -1);
         this.unit = null;
@@ -19,6 +21,7 @@ public class Cell extends Entity {
         this.neighbours = new Cell[4];
         for (int i = 0; i < 4; ++i)
             this.neighbours[i] = null;
+        this.mineSpot = false;
     }
 
     public Unit getUnit() { return this.unit; }
@@ -41,6 +44,9 @@ public class Cell extends Entity {
     public boolean isActive() { return this.active; }
     public void setActive() { this.active = true; }
     public void setInactive() { this.active = false; }
+
+    public boolean isMineSpot() { return this.mineSpot; }
+    public void setMineSpot() { this.mineSpot = true; }
 
     public boolean isFree() { return this.unit == null && this.building == null; }
     public boolean isCapturable(int playerId, int level) {

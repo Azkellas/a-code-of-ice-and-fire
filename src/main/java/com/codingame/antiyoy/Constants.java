@@ -70,4 +70,6 @@ public final class Constants {
     static public final float MAPGENERATOR_R = 0.45f; // percentage of NON-VOID cells initially
     static public final int MAPGENERATOR_ITERATIONSAUTOMATA = 3;
     static public final int MAPGENERATOR_T = 6;  // neighbourhood threshold that defines a TILE
+    static public final int NUMBER_MINESPOTS_MIN = 8;
+    static public final int NUMBER_MINESPOTS_MAX = 20;
 }

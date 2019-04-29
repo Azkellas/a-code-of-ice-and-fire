@@ -54,9 +54,6 @@ public class Referee extends AbstractReferee {
 
     @Override
     public void init() {
-        // send map size
-        sendInitialInput();
-
         // Initialize your game here.
         this.gameState = new GameState(this.gameManager.getSeed());
         // this.endScreenModule = new EndScreenModule();
@@ -99,6 +96,9 @@ public class Referee extends AbstractReferee {
         catch (Exception e) {
             System.err.println(e.getMessage());
         }
+
+        // send map size and mine spots
+        sendInitialInput();
 
         // Initialize viewer
         initializeView();
@@ -255,6 +255,11 @@ public class Referee extends AbstractReferee {
             return false;
         }
 
+        if (action.getBuildType() == BUILDING_TYPE.MINE && !action.getCell().isMineSpot()) {
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (not a mine spot) " + action);
+            return false;
+        }
+
         Building building = new Building(action.getCell(), action.getPlayer(), action.getBuildType());
         this.gameState.addBuilding(building);
         viewController.createBuildingView(building);
@@ -289,9 +294,26 @@ public class Referee extends AbstractReferee {
         firstLine.append(MAP_WIDTH);
         StringBuilder secondLine = new StringBuilder();
         secondLine.append(MAP_HEIGHT);
+        StringBuilder nbMineSpots = new StringBuilder();
+        nbMineSpots.append(gameState.getNbMineSpots());
+
+
         for (Player player : gameManager.getActivePlayers()) {
             player.sendInputLine(firstLine.toString());
             player.sendInputLine(secondLine.toString());
+
+            player.sendInputLine(nbMineSpots.toString());
+
+            // send mine spots
+            for (int y = 0; y < MAP_HEIGHT; ++y) {
+                for (int x = 0; x < MAP_WIDTH; ++x) {
+                    if (this.gameState.getCell(x, y).isMineSpot()) {
+                        StringBuilder mineSpot = new StringBuilder();
+                        mineSpot.append(x).append(" ").append(y);
+                        player.sendInputLine(mineSpot.toString());
+                    }
+                }
+            }
         }
     }
 
