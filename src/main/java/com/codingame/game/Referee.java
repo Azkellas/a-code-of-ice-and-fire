@@ -78,12 +78,12 @@ public class Referee extends AbstractReferee {
                 this.league = LEAGUE.WOOD2;
                 break;
             case 3:
-                // Now Mines and Towers
+                // Now Mines are unlocked
                 MAX_MOVE_LENGTH = 1;
                 this.league = LEAGUE.WOOD1;
                 break;
             default:
-                // Now pathfinding
+                // All rules
                 this.league = LEAGUE.BRONZE;
         }
 
@@ -212,6 +212,11 @@ public class Referee extends AbstractReferee {
     private boolean makeTrainAction(Action action) {
         Player player = gameManager.getPlayer(action.getPlayer());
 
+        if (league == LEAGUE.WOOD3) {
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (only level 1 units in this league) " + action);
+            return false;
+        }
+
         if (gameState.getGold(player.getIndex()) < UNIT_COST[action.getLevel()]) {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (not enough gold) " + action);
             return false;
@@ -235,10 +240,14 @@ public class Referee extends AbstractReferee {
         Player player = gameManager.getPlayer(action.getPlayer());
 
         if (league == LEAGUE.WOOD3 || league == LEAGUE.WOOD2) {
-            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (no building in this league) " + action);
+            String message = "Invalid action (no building in this league)";
+
+            if (league == LEAGUE.WOOD2 && action.getBuildType() == BUILDING_TYPE.TOWER)
+                message = "Invalid action (no TOWER in this league)";
+
+            gameManager.addToGameSummary(player.getNicknameToken() + ": " + message + " " + action);
             return false;
         }
-
 
         if (!action.getCell().isFree()) {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell occupied) " + action);
