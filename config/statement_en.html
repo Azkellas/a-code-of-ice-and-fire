@@ -56,7 +56,7 @@
           </p>
           <figure style="margin-left:auto; margin-right:auto; width:350px;">
               <img src="https://i.imgur.com/udipGqA.png" alt="territory-ownership" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
-              <figcaption>Red's territory is composed of 6 cells. The 4 pink cells are cells they used to control but Green player interrupted part of this territory. They are thus inactive. By capturing the cell marked by an X, Red can make the pink cells active again.</figcaption>
+              <figcaption>Red's territory is composed of 6 cells. The 4 pink cells are cells they used to control but Green player interrupted part of this territory. They are thus inactive. By capturing for example the cell marked by an X, Red can make the pink cells active again.</figcaption>
           </figure>
 
           <br/>
@@ -66,7 +66,7 @@
               <ul>
                 <li><action>MINE</action>: mines product gold each turn and are the main source of income. A mine costs (10 + 2*<var>nbMines</var>) to build. So the first costs 10, the second one 12, and so on and so forth. Mines income is always <const>+4</const>.</li>
                 <li>
-                    <action>TOWER</action>: towers protect nearby owned cells (up, down, left and right, but not diagonals). Cells protected by a tower can only be reached by units of level <const>3</const>. Likewise, the tower can only be destroyed by a level <const>3</const> unit. A tower costs 15 gold to build.
+                    <action>TOWER</action>: towers protect nearby (up, down, left and right, but not diagonals) and <strong>owned</strong> cells (being active or not). Cells protected by a tower can only be reached by enemy units of level <const>3</const>. Likewise, the tower can only be destroyed by a level <const>3</const> unit. A tower costs 15 gold to build.
                     Here is a figure of a tower protection range:
                     <figure style="margin-left:auto; margin-right:auto; width:350px;">
                         <img src="https://i.imgur.com/DzcGk2J.png" alt="tower-protection" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
@@ -79,7 +79,10 @@
               </ul>
               Another building is the <strong>headquarters</strong>. A player has to protect their own headquarters while trying to destroy opponent's one. Losing their headquarters results to a lost game.<br/>
 
-              A player can only build on owned active cells.
+              A player can only build on owned active cells.<br/>
+
+
+              If a building is on an unactive (i.e. not active) it is kept there. A <action>TOWER</action> will still protect surrounding owned cells. However a <action>MINE</action> that is on an unactive cell will not provide income.
               <br/>
           </p>
 
@@ -239,7 +242,7 @@
         <p><span class="statement-lineno">Line 1:</span><var>gold</var>: an int being the amount of gold the player has.</p>
         <p><span class="statement-lineno">Line 2:</span><var>income</var>: an int being the income the player has.</p>
         <p><span class="statement-lineno">Line 3:</span><var>opponentGold</var>: an int being the amount of gold the opponent player has.</p>
-        <p><span class="statement-lineno">Line 4:</span><var>opponentIncome</var>: an int being the amount of gold the player has.</p>
+        <p><span class="statement-lineno">Line 4:</span><var>opponentIncome</var>: an int being the amount of gold the opponent player has.</p>
 
         <p><span class="statement-lineno">Next <var>height</var> lines:</span>
             <ul>
