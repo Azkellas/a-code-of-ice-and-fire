@@ -5,6 +5,7 @@ import com.codingame.gameengine.module.entities.GraphicEntityModule;
 import com.codingame.gameengine.module.entities.Group;
 import com.codingame.gameengine.module.entities.Circle;
 import com.codingame.gameengine.module.entities.Text;
+import com.codingame.gameengine.module.entities.Sprite;
 
 import com.codingame.antiyoy.Unit;
 import com.codingame.gameengine.module.tooltip.TooltipModule;
@@ -16,10 +17,8 @@ import java.util.Observable;
 public class UnitView extends AbstractView {
 
     private Group group;
-    private Circle decors;
-    private Text level;
     private Unit model;
-
+    private Sprite sprite;
     public UnitView(GraphicEntityModule entityModule, TooltipModule tooltipModule, Unit unit) {
         super(entityModule, tooltipModule);
         this.model = unit;
@@ -28,23 +27,20 @@ public class UnitView extends AbstractView {
     }
 
     private void createUnitView() {
-        decors = entityModule.createCircle()
-                .setRadius(UNIT_RADIUS)
-                .setFillColor(getPlayerUnitColor(this.model.getOwner()))
+        String owner = model.getOwner() == 1 ? "BLUE" : "RED";
+        String level = String.valueOf(model.getLevel());
+        String spriteName = "UNIT_" + level + "_" + owner + ".png";
+        sprite = this.entityModule.createSprite()
+                .setImage(spriteName)
+                .setX( - CELL_SIZE/2)
+                .setY( - CELL_SIZE/2)
+                .setBaseHeight(CELL_SIZE)
+                .setBaseWidth(CELL_SIZE)
                 .setZIndex(2);
-        level = this.entityModule.createText(String.valueOf(model.getLevel()))
-                .setAnchor(0.5)
-                .setFillColor(0xffffff)
-                .setFontSize(30)
-                .setStrokeColor(0xffffff)
-                .setStrokeThickness(2.0)
-                .setX(0)
-                .setY(0)
-                .setZIndex(3);
 
         group = entityModule.createGroup()
                 .setScale(1);
-        group.add(decors, level);
+        group.add(sprite);
 
         tooltipModule.setTooltipText(group,  "id: " + model.getId() + "\nlevel: " + model.getLevel() + "\nx: " + model.getX() + "\ny: " + model.getY());
 

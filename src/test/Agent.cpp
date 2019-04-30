@@ -50,6 +50,13 @@ bool isValid(int x, int y, vector<vector<Cell>> const& map) {
 int main() {
     cin >> MAP_WIDTH >> MAP_HEIGHT;
     cerr << MAP_WIDTH << " " << MAP_HEIGHT << endl;
+ 
+    int nbMines;
+    cin >> nbMines; cin.ignore();
+    for (int i = 0; i < nbMines; ++i) {
+        int x, y;
+        cin >> x >> y; cin.ignore();
+    }
     vector<vector<Cell>> map (MAP_WIDTH, vector<Cell> (MAP_HEIGHT));
     while (1) {
         int gold;
