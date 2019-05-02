@@ -22,7 +22,7 @@ public final class Constants {
     static public final int GRID_HEIGHT = SCREEN_HEIGHT - 100;
 
     static private final int PLAYER_TEXT_COLOR[] = {0xcc0000, 0x0000cc};
-    static private final int PLAYER_UNIT_COLOR[] = {0xcc0000, 0x0000cc};
+    static private final int PLAYER_UNIT_COLOR[] = {0xff0305, 0x26b9e5};
     static private final int PLAYER_ACTIVE_CELL_COLOR[] = {0x880000, 0x000088};
     static private final int PLAYER_INACTIVE_CELL_COLOR[] = {0x440000, 0x000044};
 

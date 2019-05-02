@@ -45,16 +45,6 @@ public class CellView extends AbstractView {
                 .setBaseWidth(CELL_SIZE)
                 .setZIndex(2);
 
-        type = this.entityModule.createText("X")
-                .setAnchor(0.5)
-                .setFillColor(0xffffff)
-                .setFontSize(20)
-                .setStrokeColor(0xffffff)
-                .setStrokeThickness(4.0)
-                .setX((int)((CELL_SIZE-2)/2.5))
-                .setY((int)((CELL_SIZE-2)/2.5))
-                .setZIndex(3);
-
         this.spriteName = "CELL_VOID.png";
         this.sprite = this.entityModule.createSprite()
                 .setImage(spriteName)
