@@ -6,6 +6,7 @@ import static com.codingame.antiyoy.Constants.*;
 import static com.codingame.antiyoy.view.Constants.*;
 
 import com.codingame.gameengine.module.entities.GraphicEntityModule;
+import com.codingame.gameengine.module.entities.Sprite;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,7 @@ public class ViewController {
     private List<AbstractView> views = new ArrayList<>();
     private GraphicEntityModule entityModule;
     private TooltipModule tooltipModule;
+    private Sprite background;
 
     private GameStateView gameStateView;
 
@@ -48,6 +50,12 @@ public class ViewController {
 
     private void initView() {
         this.views.addAll(playerViews);
+
+        this.background = this.entityModule.createSprite()
+                .setImage("GRID_1920.jpg")
+                .setX(0)
+                .setY(0)
+                .setZIndex(-1);
     }
 
     public void update() {

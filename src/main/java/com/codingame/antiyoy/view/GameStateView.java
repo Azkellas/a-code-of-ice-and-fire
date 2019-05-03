@@ -8,7 +8,6 @@ import com.codingame.antiyoy.Building;
 import com.codingame.gameengine.module.entities.GraphicEntityModule;
 import com.codingame.gameengine.module.entities.Group;
 import com.codingame.gameengine.module.tooltip.TooltipModule;
-
 import java.util.*;
 
 import static com.codingame.antiyoy.view.Constants.*;
@@ -36,6 +35,7 @@ public class GameStateView extends AbstractView {
                 .setVisible(true)
                 .setZIndex(0)
                 .setScale(1);
+
     }
 
     public CellView createCellView(Cell cell) {

@@ -118,6 +118,11 @@ def find_border(carte, hq_pos):
 width = int(input())
 height = int(input())
 
+nb_mines = int(input())
+
+for i in range(nb_mines):
+    x, y = [int(j) for j in input().split()]
+
 # game loop
 while True:
     gold = int(input())

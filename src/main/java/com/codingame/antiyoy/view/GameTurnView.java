@@ -32,14 +32,14 @@ public class GameTurnView extends AbstractView {
                 .setFillColor(0xffffff)
                 .setFontSize(60)
                 .setStrokeColor(0x000000)
-                .setStrokeThickness(6.0)
-                .setX(PLAYER_AVATAR_RADIUS / 2)
+                .setStrokeThickness(4.0)
+                .setX(LEFT_PANEL_WIDTH / 2 + 75)
                 .setY(0);
 
         group = entityModule.createGroup()
                 .setScale(1)
-                .setX(LEFT_PANEL_WIDTH / 2)
-                .setY(SCREEN_HEIGHT / 2);
+                .setX(0)
+                .setY(473 + 117 / 2);
         group.add(text);
     }
 
