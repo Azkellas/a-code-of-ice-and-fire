@@ -40,49 +40,56 @@
 
           <p><strong>The map</strong></p>
           <p>
-          <p>The map is a grid of size 12x12, where the top-left corner is the case <const>(0,0)</const>.</p>
+          <p>The map is a grid of size 12x12, where the top-left corner is the case <const>(0,0)</const>. The map is randomly generated at the start of each game.</p>
           <p>
-            A cell can be either
+            A map cell can be either
             <ul>
               <li> void: it is not a playable cell (like a hole or a wall).</li>
               <li> neutral: the cell belongs to no player and is colored in grey.</li>
-              <li> captured: the cell belongs to a player and is of the color of the owner.</li>
+              <li> captured: the cell belongs to a player and is of the color of the owner.<img src="../assets/tuile_red02.png"/> <img src="../assets/tuile_blue02.png"/></li>
+              <li> inactive: the cell used to belong to a player but is not connected to this player's territory (see next section). <img src="../assets/tuile_red01.png"/> <img src="../assets/tuile_blue01.png"/></li>
             </ul>
           </p>
+
+
 
           <p><strong>Territory ownership</strong></p>
           <p>
               Along the game, each player will capture cells to enlarge their territory. A player territory is composed of all the cells owned by the player that are <strong>active</strong>. A cell is said to be <strong>active</strong> if and only if the cell is connected to the headquarters. That is, there exists a path from the headquarters to this cell.
           </p>
           <figure style="margin-left:auto; margin-right:auto; width:350px;">
-              <img src="https://i.imgur.com/udipGqA.png" alt="territory-ownership" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
-              <figcaption>Red's territory is composed of 6 cells. The 4 pink cells are cells they used to control but Green player interrupted part of this territory. They are thus inactive. By capturing for example the cell marked by an X, Red can make the pink cells active again.</figcaption>
+              <img src="https://i.imgur.com/LMAw3OG.png" alt="territory-ownership" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
+              <figcaption>Red's territory is composed of 6 cells. The 3 red-dark are cells they used to control but Blue player interrupted part of this territory. They are thus inactive. By capturing for example the cell marked by an X, Red can make these cells active again.</figcaption>
           </figure>
+
 
           <br/>
           <p><strong>Buildings</strong></p>
+
+          <p>
+            Players can <action>BUILD</action> buildings to have more economic or defensive power. A player can only build on owned active and empty cells.<br/>
+          </p>
           <p>
               There are 2 differents buildings that can be built:
               <ul>
-                <li><action>MINE</action>: mines product gold each turn and are the main source of income. A mine costs (20 + 4*<var>nbMines</var>) to build. So the first costs 20, the second one 24, and so on and so forth. Mines income is always <const>+4</const>. Mines can only be built on mine spots.</li>
-                <li>
+                <li><img src="../assets/mine_neutre.png"/><action>MINE</action>: mines product gold each turn and are the main source of income. A mine costs (20 + 4*<var>nbMines</var>) to build. So the first costs 20, the second one 24, and so on and so forth. Mines income is always <const>+4</const>. Mines can only be built on neutral mines: these are specific locations in the map. The cell containing a neutral mine must be first controlled before a <action>MINE</action> can be built on it.</li>
+                <li><img src="../assets/tower_red.png"/>
                     <action>TOWER</action>: towers protect nearby (up, down, left and right, but not diagonals) and <strong>owned</strong> cells (being active or not). Cells protected by a tower can only be reached by enemy units of level <const>3</const>. Likewise, the tower can only be destroyed by a level <const>3</const> unit. A tower costs 15 gold to build.
                     Here is a figure of a tower protection range:
                     <figure style="margin-left:auto; margin-right:auto; width:350px;">
                         <img src="https://i.imgur.com/DzcGk2J.png" alt="tower-protection" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
                         <figcaption>
-                            The tower owned by red protect the nearby cells marked by a grey square. Cells in the diagonal (marked by a black cross) are <strong>not</strong> protected.
+                            The tower owned by Red protect the nearby cells marked by a grey square. Cells in the diagonal (marked by a black cross) are <strong>not</strong> protected.
                             Moreover, the blue cell on the right of the tower is not protected as it is not a red cell.
                         </figcaption>
                     </figure>
                 </li>
               </ul>
-              Another building is the <strong>headquarters</strong>. A player has to protect their own headquarters while trying to destroy opponent's one. Losing their headquarters results to a lost game.<br/>
-
-              A player can only build on owned active and empty cells.<br/>
+              Another building is the <img src="../assets/forteresse_red.png"/> <strong>headquarters</strong>. A player has to protect their own headquarters while trying to destroy opponent's one. Losing their headquarters results to a lost game.<br/>
 
 
-              If a building is on an unactive (i.e. not active) it is kept there. A <action>TOWER</action> will still protect surrounding owned cells. However a <action>MINE</action> that is on an unactive cell will not provide income.
+
+              If a building is on an unactive (i.e. not active) cell, it is kept there. A <action>TOWER</action> will still protect surrounding owned cells. However a <action>MINE</action> that is on an unactive cell will not provide income.
               <br/>
           </p>
 
@@ -152,24 +159,15 @@
 
 
             <ul>
-                <li>Each unit can be moved once each turn. Units can move up to <const>3</const> cells away from their current position, using the command <action>MOVE id x y</action>.
+                <li>Each unit can be moved once each turn. Units move only <const>1</const> cell away from their current position, using the command <action>MOVE id x y</action>.
                 <ul>
-                    <li>For an unit to move to a target cell, there must exist a path of size at most 3 and of <strong>active owned cells</strong> (except the target cell) from the unit's current cell and the target cell. That is, it is not possible to cross over neutral or opponent controled cells. </li>
-                    <li>An unit can jump over buildings and units, as long as the target cell is free or can be captured.</li>
-                    <li>This is summed up in this figure:
-                        <figure style="margin-left:auto; margin-right:auto; width:350px;">
-                            <img src="https://i.imgur.com/JoShA3E.png" alt="unit-movement" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
-                            <figcaption>
-                                Red player is trying to move the unit in green. This unit can move to any cell with a number in the top-right corner (being the distance from the green unit to the cell). Cells marked with a cross (X) in the top-right corner are cells the green unit can <strong>not</strong> capture.
-                            </figcaption>
-                        </figure>
-                    </li>
-                If the target cell is not reachable, pathfinding is done to move the unit the nearest possible to the target.
+                    <li>The target cell must be free or capturable.</li>
+                    <li>If the distance between the unit and the target coordinates x and y is greater than 1, pathfinding is done to get the unit closer.</li>
                 </ul>
                 <li>Players can train armies using the <action>TRAIN level x y</action> action. They can be only trained on cells in player's territory or its direct neighbourhood (border). Armies training follows the same rules as moving: no training can be done on a cell occupied by a friendly unit/building, and the unit must be powerful enough to be trained on a cell occupied by an enemy.</li>
                 <li>All actions are processed sequentially and the game state is recomputed after each one: an action not possible at the beginning of the turn might be done later in the same turn.</li>
                 <figure style="margin-left:auto; margin-right:auto; width:500px;">
-                  <img src="https://i.imgur.com/lVTVhp9.png" alt="action-sequence-diagram" style="margin-left:auto; margin-right:auto; width:500px;" /><br/>
+                  <img src="https://i.imgur.com/6guSobH.png" alt="action-sequence-diagram" style="margin-left:auto; margin-right:auto; width:550px;" /><br/>
               </figure>
 
             </ul>
@@ -317,22 +315,8 @@
     <!-- Protocol block -->
     <div class="blk">
       <div class="title">Constraints</div>
-        <var>WIDTH</var>, <var>HEIGHT</var> <= 15 <br/>
         Allotted response time to output is ≤ <const>50ms</const>.</div>
     </div>
   </div>
 
-  <!-- STORY
-  <div class="statement-story-background">
-    <div class="statement-story-cover" style="background-size: cover; background-image: url(https://www.codingame.com/servlet/fileservlet?id=2210505809934)">
-      <div class="statement-story" style="min-height: 300px; position: relative">
-        <h1>Title</h1>
-        <div class="story-text">Story
-          <br>
-          Totally optional</div>
-      </div>
-    </div>
-  </div>
-  NO STORY FOR NOW
-    -->
 </div>
