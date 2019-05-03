@@ -212,8 +212,8 @@ public class Referee extends AbstractReferee {
     private boolean makeTrainAction(Action action) {
         Player player = gameManager.getPlayer(action.getPlayer());
 
-        if (league == LEAGUE.WOOD3) {
-            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (only level 1 units in this league) " + action);
+        if (action.getLevel() > MAX_LEVEL) {
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (the level must less than " + action.getLevel() + ") " + action);
             return false;
         }
 
