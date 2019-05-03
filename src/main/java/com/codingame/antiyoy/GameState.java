@@ -24,7 +24,7 @@ public class GameState {
 
     private Pathfinding pathfinding;
 
-    public GameState(long seed) {
+    public GameState(long seed, LEAGUE league) {
         // create full map
         this.map = new Cell[MAP_WIDTH][MAP_HEIGHT];
         for(int x = 0; x < MAP_WIDTH; ++x)
@@ -41,9 +41,11 @@ public class GameState {
         Random generator = new Random(seed);
         //if even number, fair distribution
         //if odd number, one is central (TODO)
-        this.nbMineSpots = 2* Math.round((generator.nextInt(NUMBER_MINESPOTS_MAX - NUMBER_MINESPOTS_MIN + 1) + NUMBER_MINESPOTS_MIN)/2.0f);
-
-
+        if (league == LEAGUE.WOOD1 || league == LEAGUE.BRONZE) {
+            this.nbMineSpots = 2* Math.round((generator.nextInt(NUMBER_MINESPOTS_MAX - NUMBER_MINESPOTS_MIN + 1) + NUMBER_MINESPOTS_MIN)/2.0f);
+        } else {
+            this.nbMineSpots = 0;
+        }
     }
 
     // getters
@@ -257,7 +259,7 @@ public class GameState {
     }
 
 
-    public void generateMap() {
+    public void generateMap(LEAGUE league) {
         Random generator = new Random(this.seed);
 
         for (int x = 0; x < MAP_WIDTH; ++x) {
@@ -275,8 +277,10 @@ public class GameState {
         this.map[1][1].setOwner(NEUTRAL);
 
         //always a mine spot next to the HQ (right for P1 and left for P2)
-        this.map[1][0].setMineSpot();
-        this.getSymmetricCell(1,0).setMineSpot();
+        if (league == LEAGUE.WOOD1 || league == LEAGUE.BRONZE) {
+            this.map[1][0].setMineSpot();
+            this.getSymmetricCell(1,0).setMineSpot();
+        }
 
         //apply automata
         for (int i=0; i < MAPGENERATOR_ITERATIONSAUTOMATA; ++i) {
@@ -315,20 +319,22 @@ public class GameState {
         linkComponents(generator);
 
 
-        // generate mine spots (-2 because already 1 generated near HQ)
-        for (int i=0; i < Math.round(this.nbMineSpots/2) -1; i++) {
+        if (league == LEAGUE.WOOD1 || league == LEAGUE.BRONZE) {
+            // generate mine spots (-2 because already 1 generated near HQ)
+            for (int i = 0; i < Math.round(this.nbMineSpots / 2) - 1; i++) {
 
 
-            int randomX = generator.nextInt(MAP_WIDTH);
-            int randomY = generator.nextInt(MAP_HEIGHT);
+                int randomX = generator.nextInt(MAP_WIDTH);
+                int randomY = generator.nextInt(MAP_HEIGHT);
 
-            while (this.map[randomX][randomY].getOwner() == VOID || this.map[randomX][randomY].isMineSpot() || randomX+randomY==0 || randomX+randomY==MAP_WIDTH+MAP_HEIGHT-2) {
-                randomX = generator.nextInt(MAP_WIDTH);
-                randomY = generator.nextInt(MAP_HEIGHT);
+                while (this.map[randomX][randomY].getOwner() == VOID || this.map[randomX][randomY].isMineSpot() || randomX + randomY == 0 || randomX + randomY == MAP_WIDTH + MAP_HEIGHT - 2) {
+                    randomX = generator.nextInt(MAP_WIDTH);
+                    randomY = generator.nextInt(MAP_HEIGHT);
+                }
+
+                this.map[randomX][randomY].setMineSpot();
+                this.getSymmetricCell(randomX, randomY).setMineSpot();
             }
-
-            this.map[randomX][randomY].setMineSpot();
-            this.getSymmetricCell(randomX, randomY).setMineSpot();
         }
 
         // Restore HQs cells
@@ -337,7 +343,6 @@ public class GameState {
         // init pathfinding
         this.pathfinding.init(this.map);
     }
-
 
     /*********************************
 

@@ -54,8 +54,6 @@ public class Referee extends AbstractReferee {
 
     @Override
     public void init() {
-        // Initialize your game here.
-        this.gameState = new GameState(this.gameManager.getSeed());
         // this.endScreenModule = new EndScreenModule();
         this.gameManager.setMaxTurns(1000000); // Turns are determined by realTurns, this is actually maxFrames
 
@@ -87,8 +85,10 @@ public class Referee extends AbstractReferee {
                 this.league = LEAGUE.BRONZE;
         }
 
+        this.gameState = new GameState(this.gameManager.getSeed(), this.league);
+
         // Random generation
-        this.gameState.generateMap();
+        this.gameState.generateMap(this.league);
 
         try {
             this.gameState.createHQs(this.gameManager.getPlayerCount());
@@ -310,6 +310,7 @@ public class Referee extends AbstractReferee {
         for (Player player : gameManager.getActivePlayers()) {
             player.sendInputLine(firstLine.toString());
             player.sendInputLine(secondLine.toString());
+
 
             player.sendInputLine(nbMineSpots.toString());
 
