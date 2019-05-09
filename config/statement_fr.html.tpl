@@ -210,9 +210,28 @@
                         </tr>
                         <tr>
                             <th>Peut détruire</th>
-                            <td><!-- BEGIN level3 level4 -->Mines<br/><!-- END --> Quartier général</td>
-                            <td><!-- BEGIN level3 level4 -->Mines<br/><!-- END -->Quartier général</td>
-                            <td><!-- BEGIN level4 -->Tours<br/><!-- BEGIN level3 -->Mines<br/><!-- END --><!-- END -->Quartier général</td>
+                            <td>
+                                <!-- BEGIN level3 level4 -->
+                                Mines<br/>
+                                <!-- END -->
+                                 Quartier général
+                            </td>
+                            <td>
+                                <!-- BEGIN level3 level4 -->
+                                Mines<br/>
+                                <!-- END -->
+                                Quartier général
+                            </td>
+                            <td>
+                                <!-- BEGIN level4 -->
+                                Tours<br/>
+                                <!-- BEGIN level3 -->
+                                Mines<br/>
+                                <!-- END -->
+
+                                <!-- END -->
+                                Quartier général
+                            </td>
                         </tr>
                     </table>
                     <!-- END -->
@@ -338,7 +357,7 @@
                                 
                                 <!-- BEGIN level3 -->
                                 <li><const>1</const>: Mine</li>
-                                <!-- END-->
+                                <!-- END -->
 
                                 <!-- BEGIN level4 -->
                                 <li><const>1</const>: Mine</li>
@@ -387,7 +406,7 @@
                     <!-- END -->
                     <li><action>WAIT</action></li>
                 </ul>
-                <!-- BEGIN level1 level2-->
+                <!-- BEGIN level1 level2 -->
                 <span class="statement-lineno">Exemple</span>: "MOVE 1 2 3; TRAIN 3 3 3; MOVE 2 3 1"<br>
                 <!-- END -->
                 <!-- BEGIN level3 level4 -->
