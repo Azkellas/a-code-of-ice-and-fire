@@ -19,7 +19,8 @@ skeleton\.iml
 src/test/Agent
 
 \.classpath
-
+.factorypath
+.settings/
 \.project
 statement_en.html
 statement_fr.html
