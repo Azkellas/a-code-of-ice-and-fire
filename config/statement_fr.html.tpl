@@ -160,7 +160,11 @@
                 <p>
                     Pour détruire le quartier général adverse, il est nécessaire de créer une armée. Les unités sont utilisées pour capturer des cases et détruire les bâtiments et unités adverses.<br/>
 
-                    Il y a <const>3</const> niveaux d'unité, et plus ce niveau est haut, plus l'unité est puissante.<!-- BEGIN level1 --> Cependant, dans cette ligue, seule les unités de niveau 1 sont disponibles.<!-- END --> Quand une unité marche sur une case non possédée par le/la propriétaire de cette unité, la case <strong>capturée</strong>. Si une unité ennemie est présente sur cette case, l'unité ennemie est immédiatement tuée et rien n'arrive à l'autre unité.
+                    Il y a <const>3</const> niveaux d'unité, et plus ce niveau est haut, plus l'unité est puissante.
+                    <!-- BEGIN level1 -->
+                    Cependant, dans cette ligue, seule les unités de niveau 1 sont disponibles.
+                    <!-- END -->
+                    Quand une unité marche sur une case non possédée par le/la propriétaire de cette unité, la case <strong>capturée</strong>. Si une unité ennemie est présente sur cette case, l'unité ennemie est immédiatement tuée et rien n'arrive à l'autre unité.
                     <ul>
                         <!-- BEGIN level1 -->
                         <li>Les unités niveau <const>1</const> peuvent bouger sur des cases vides ou le quartier général adverse. Dans cette ligue <strong>seulement</strong>, elles peuvent aussi tuer les unités de niveau 1.</li>
@@ -210,9 +214,28 @@
                         </tr>
                         <tr>
                             <th>Peut détruire</th>
-                            <td><!-- BEGIN level3 level4 -->Mines<br/><!-- END --> Quartier général</td>
-                            <td><!-- BEGIN level3 level4 -->Mines<br/><!-- END -->Quartier général</td>
-                            <td><!-- BEGIN level4 -->Tours<br/><!-- BEGIN level3 -->Mines<br/><!-- END --><!-- END -->Quartier général</td>
+                            <td>
+                                <!-- BEGIN level3 level4 -->
+                                Mines<br/>
+                                <!-- END -->
+                                 Quartier général
+                            </td>
+                            <td>
+                                <!-- BEGIN level3 level4 -->
+                                Mines<br/>
+                                <!-- END -->
+                                Quartier général
+                            </td>
+                            <td>
+                                <!-- BEGIN level4 -->
+                                Tours<br/>
+                                <!-- BEGIN level3 -->
+                                Mines<br/>
+                                <!-- END -->
+
+                                <!-- END -->
+                                Quartier général
+                            </td>
                         </tr>
                     </table>
                     <!-- END -->
@@ -296,7 +319,11 @@
             <div class="title">Entrée d'initialisation</div>
             <div class="text">
                 <p><span class="statement-lineno">Ligne 1: </span>deux entiers <var>width</var> and <var>height</var>, la dimension de la carte</p>
-                <p><span class="statement-lineno">Ligne 2: </span>un entier <var>numberMineSpots</var>: le nombre d'emplacement de mines sur la carte.<!-- BEGIN level1 level2 --> Les emplacements de mines seront utilisés à partir de la ligue Bois 1.<!-- END --></p>
+                <p><span class="statement-lineno">Ligne 2: </span>un entier <var>numberMineSpots</var>: le nombre d'emplacement de mines sur la carte.
+                    <!-- BEGIN level1 level2 -->
+                    Les emplacements de mines seront utilisés à partir de la ligue Bois 1.
+                    <!-- END -->
+                </p>
                 <p><span class="statement-lineno">Prochaines <var>numberMineSpots</var> lignes:</span> deux entiers
                     <ul>
                         <li><var>x</var> et <var>y</var>: coordonnées de l'emplacement de mine.</li>
@@ -338,7 +365,7 @@
                                 
                                 <!-- BEGIN level3 -->
                                 <li><const>1</const>: Mine</li>
-                                <!-- END-->
+                                <!-- END -->
 
                                 <!-- BEGIN level4 -->
                                 <li><const>1</const>: Mine</li>
@@ -387,7 +414,7 @@
                     <!-- END -->
                     <li><action>WAIT</action></li>
                 </ul>
-                <!-- BEGIN level1 level2-->
+                <!-- BEGIN level1 level2 -->
                 <span class="statement-lineno">Exemple</span>: "MOVE 1 2 3; TRAIN 3 3 3; MOVE 2 3 1"<br>
                 <!-- END -->
                 <!-- BEGIN level3 level4 -->
