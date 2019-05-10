@@ -5,6 +5,7 @@ import com.codingame.gameengine.module.entities.Entity;
 import com.codingame.gameengine.module.entities.GraphicEntityModule;
 import com.codingame.gameengine.module.entities.Group;
 import com.codingame.gameengine.module.entities.Text;
+import com.codingame.gameengine.module.entities.Sprite;
 import com.codingame.gameengine.module.tooltip.TooltipModule;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -18,7 +19,7 @@ public class GameTurnView extends AbstractView {
     private AtomicInteger playerTurn;
 
     private Text text;
-
+    private Sprite background;
     public GameTurnView(GraphicEntityModule entityModule, TooltipModule tooltipModule, AtomicInteger gameTurn, AtomicInteger playerTurn) {
         super(entityModule, tooltipModule);
         this.gameTurn = gameTurn;
@@ -27,20 +28,27 @@ public class GameTurnView extends AbstractView {
     }
 
     public void createGameTurnView() {
+
+        background = entityModule.createSprite()
+                .setAnchor(0)
+                .setImage("HUD_TURN.png")
+                .setX(855/2 - 405/2)
+                .setY(456);
+
         text = this.entityModule.createText("")
                 .setAnchor(0.5)
                 .setFillColor(0xffffff)
                 .setFontSize(60)
                 .setStrokeColor(0x000000)
                 .setStrokeThickness(4.0)
-                .setX(LEFT_PANEL_WIDTH / 2 + 75)
-                .setY(0);
+                .setX(855/2)
+                .setY(473 + 117 / 2);
 
         group = entityModule.createGroup()
                 .setScale(1)
                 .setX(0)
-                .setY(473 + 117 / 2);
-        group.add(text);
+                .setY(0);
+        group.add(text, background);
     }
 
     public void updateView() {

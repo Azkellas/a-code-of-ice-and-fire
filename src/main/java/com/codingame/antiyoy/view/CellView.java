@@ -16,7 +16,6 @@ public class CellView extends AbstractView {
 
     private Group group;
     private Rectangle decors;
-    private Rectangle protect;
     private Text type;
     private Cell model;
     private Sprite sprite;
@@ -30,20 +29,11 @@ public class CellView extends AbstractView {
     }
 
     private void createCellView() {
-        protect = this.entityModule.createRectangle()
-                .setHeight( (CELL_SIZE -2) / 5)
-                .setWidth( (CELL_SIZE -2) / 5)
-                .setFillColor(PROTECTED_COLOR)
-                .setX((int)((CELL_SIZE-2)/2.5))
-                .setY((int)((CELL_SIZE-2)/2.5))
-                .setZIndex(2)
-                .setAlpha(0);
-
         this.neutralMine = this.entityModule.createSprite()
                 .setImage("MINE_NEUTRAL.png")
                 .setBaseHeight(CELL_SIZE)
                 .setBaseWidth(CELL_SIZE)
-                .setZIndex(2);
+                .setZIndex(5);
 
         this.spriteName = "CELL_VOID.png";
         this.sprite = this.entityModule.createSprite()
@@ -52,13 +42,15 @@ public class CellView extends AbstractView {
                 .setBaseWidth(CELL_SIZE)
                 .setZIndex(1);
 
-        this.updateSprite();
 
         group = entityModule.createGroup()
                 .setScale(1)
                 .setX(model.getX() * CELL_SIZE)
                 .setY(model.getY() * CELL_SIZE);
-        group.add(protect, this.sprite);
+
+        this.updateSprite();
+
+        group.add(this.sprite);
 
         if (model.getOwner() != VOID) {
             tooltipModule.setTooltipText(group, "x: " + model.getX() + "\ny: " + model.getY());
@@ -67,6 +59,8 @@ public class CellView extends AbstractView {
         if (model.isMineSpot()) {
             tooltipModule.setTooltipText(group, "MINE SPOT\n" + "x: " + model.getX() + "\ny: " + model.getY());
             group.add(neutralMine);
+        } else {
+            this.neutralMine.setVisible(false);
         }
     }
 
@@ -90,6 +84,9 @@ public class CellView extends AbstractView {
                 break;
         }
         String active = model.isActive() ? "ACTIVE" : "INACTIVE";
+        if (model.isProtected()) {
+            active = "PROTECTED";
+        }
         String newSpriteName = "CELL_" + owner;
         if (model.getOwner() >= 0) {
             newSpriteName += "_" + active;
@@ -101,14 +98,11 @@ public class CellView extends AbstractView {
         }
         this.spriteName = newSpriteName;
         this.sprite.setImage(spriteName);
+        this.group.setZIndex( active.equals("PROTECTED") ? 3 : 1);
     }
 
-    public void updateView(){
+    public void updateView() {
         this.updateSprite();
-        boolean isProtected = this.model.isProtected();
-        double alpha = isProtected ? 0.8 : 0.0;
-        if (protect.getAlpha() != alpha)
-            protect.setAlpha(alpha);
     }
 
     public Entity getEntity() {

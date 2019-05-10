@@ -35,11 +35,11 @@ public class UnitView extends AbstractView {
                 .setX( - CELL_SIZE/2)
                 .setY( - CELL_SIZE/2)
                 .setBaseHeight(CELL_SIZE)
-                .setBaseWidth(CELL_SIZE)
-                .setZIndex(2);
+                .setBaseWidth(CELL_SIZE);
 
         group = entityModule.createGroup()
-                .setScale(1);
+                .setScale(1)
+                .setZIndex(10);
         group.add(sprite);
 
         tooltipModule.setTooltipText(group,  "id: " + model.getId() + "\nlevel: " + model.getLevel() + "\nx: " + model.getX() + "\ny: " + model.getY());

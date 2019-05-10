@@ -45,14 +45,14 @@ public class BuildingView extends AbstractView {
                 .setX( - CELL_SIZE/2)
                 .setY( - CELL_SIZE/2)
                 .setBaseHeight(CELL_SIZE)
-                .setBaseWidth(CELL_SIZE)
-                .setZIndex(2);
-
+                .setBaseWidth(CELL_SIZE);
 
         group = entityModule.createGroup()
                 .setScale(1)
                 .setX(model.getX() * CELL_SIZE + (CELL_SIZE-2)/2)
-                .setY(model.getY() * CELL_SIZE + (CELL_SIZE-2)/2);
+                .setY(model.getY() * CELL_SIZE + (CELL_SIZE-2)/2)
+                .setZIndex(10);
+
 
         group.add(sprite);
 

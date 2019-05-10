@@ -21,7 +21,7 @@ public class PlayerView extends AbstractView {
     private Group group;
 
     public Player model;
-    private Sprite avatar;
+    private Sprite background;
     private Text gold;
     private Text income;
     private Text pseudo;
@@ -38,25 +38,24 @@ public class PlayerView extends AbstractView {
 
     public void createPlayerView() {
         int playerIndex = this.model.getIndex();
+        String color = playerIndex == 0 ? "RED" : "BLUE";
 
-        int baseAvatarY = playerIndex == 0 ? 43 : 724;
-        avatar = entityModule.createSprite()
+        int baseY = playerIndex == 0 ? 112 : 644;
+        background = entityModule.createSprite()
                 .setAnchor(0)
-                .setBaseHeight(PLAYER_AVATAR_RADIUS)
-                .setBaseWidth(PLAYER_AVATAR_RADIUS)
-                .setImage(this.model.getAvatarToken())
-                .setX(SCREEN_WIDTH - RIGHT_PANEL_WIDTH - 20)
-                .setY(baseAvatarY + 60);
+                .setImage("HUD_" + color + ".png")
+                .setX(855/2 - 652/2)
+                .setY(baseY);
 
-        int baseY = playerIndex == 0 ? 143 : 683;
+        int textGap = 110;
         pseudo = entityModule.createText(this.model.getNicknameToken())
                 .setAnchor(0.5)
                 .setFillColor(0xffffff)
                 .setFontSize(60)
                 .setStrokeColor(0x000000)
                 .setStrokeThickness(4.0)
-                .setX(75 + 300 /2)
-                .setY(baseY + 60)
+                .setX(855/2)
+                .setY(baseY + textGap)
                 .setFillColor(getTurnColor(playerIndex));
 
         gold = this.entityModule.createText("")
@@ -65,8 +64,8 @@ public class PlayerView extends AbstractView {
                 .setFontSize(40)
                 .setStrokeColor(0x000000)
                 .setStrokeThickness(4.0)
-                .setX(75 + 300 /2)
-                .setY(baseY + 60 + 70);
+                .setX(855/2)
+                .setY(baseY + textGap + 70);
 
         income = this.entityModule.createText("")
                 .setAnchor(0.5)
@@ -74,14 +73,14 @@ public class PlayerView extends AbstractView {
                 .setFontSize(40)
                 .setStrokeColor(0x000000)
                 .setStrokeThickness(4.0)
-                .setX(75 + 300 /2)
-                .setY(baseY + 60 + 70 + 50);
+                .setX(855/2)
+                .setY(baseY + textGap + 70 + 50);
 
         group = entityModule.createGroup()
                 .setScale(1)
                 .setX(0)
                 .setY(0);
-        group.add(avatar, pseudo, gold, income);
+        group.add(background, pseudo, gold, income);
     }
     
     public void updateView() {

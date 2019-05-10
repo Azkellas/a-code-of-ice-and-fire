@@ -14,12 +14,12 @@ public final class Constants {
     static public final int BOARD_WIDTH = SCREEN_WIDTH - LEFT_PANEL_WIDTH - RIGHT_PANEL_WIDTH;
     // static public final int BOARD_WIDTH = BOARD_HEIGHT;
 
-    static public final int CELL_SIZE = Math.min(BOARD_HEIGHT / MAP_HEIGHT, BOARD_WIDTH / MAP_WIDTH);
+    static public final int CELL_SIZE = 85;
 
-    static public final int GRID_X = LEFT_PANEL_WIDTH + WIDTH_GAP + (BOARD_WIDTH  - CELL_SIZE * MAP_WIDTH)  / 2;
-    static public final int GRID_Y = HEIGHT_GAP + (BOARD_HEIGHT - CELL_SIZE * MAP_HEIGHT) / 2;
+    static public final int GRID_X = 855;
+    static public final int GRID_Y = 42;
 
-    static public final int GRID_HEIGHT = SCREEN_HEIGHT - 100;
+    static public final int GRID_HEIGHT = CELL_SIZE * MAP_WIDTH;
 
     static private final int PLAYER_TEXT_COLOR[] = {0xcc0000, 0x0000cc};
     static private final int PLAYER_UNIT_COLOR[] = {0xff0305, 0x26b9e5};
