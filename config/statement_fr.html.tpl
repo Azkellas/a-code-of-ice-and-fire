@@ -63,24 +63,23 @@
                 <p>La carte est une grille de 12x12 dont le coin haut-gauche est la case <const>(0,0)</const>. La carte est générée aléatoirement au début de chaque partie.</p>
                 <p>
                     Une case peut etre
-                    <ul>
-                        <li> néant: ce n'est pas une case jouable (par exemple un trou).</li>
-                        <li> neutre: la case n'appartient à aucun.e joueur/joueuse et est grise.</li>
-                        <li> capturée: la case appartient à un.e joueur/joueuse et est de la couleur de son/sa propriétaire.<img src="http://file.azke.fr/tuile_red02.png" style="height:20px;"/> <img src="http://file.azke.fr/tuile_blue02.png" style="height:20px;"/></li>
-                        <li> inactive: la case a appartenu à un.e joueur/joueuse mais n'est plus connectée à son territoire (voir prochaine partie). <img src="http://file.azke.fr/tuile_red01.png" style="height:20px;"/> <img src="http://file.azke.fr/tuile_blue01.png" style="height:20px;"/></li>
-                    </ul>
                 </p>
-
+                <ul style="padding-top: 0;">
+                    <li> néant: ce n'est pas une case jouable (par exemple un trou).</li>
+                    <li> neutre: la case n'appartient à aucun.e joueur/joueuse et est grise.</li>
+                    <li> capturée: la case appartient à un.e joueur/joueuse et est de la couleur de son/sa propriétaire.<img src="http://file.azke.fr/tuile_red02.png" style="height:20px;"/> <img src="http://file.azke.fr/tuile_blue02.png" style="height:20px;"/></li>
+                    <li> inactive: la case a appartenu à un.e joueur/joueuse mais n'est plus connectée à son territoire (voir prochaine partie). <img src="http://file.azke.fr/tuile_red01.png" style="height:20px;"/> <img src="http://file.azke.fr/tuile_blue01.png" style="height:20px;"/></li>
+                </ul>
 
 
                 <p><strong>Possession de territoire</strong></p>
                 <p>
                     Tout le long du jeu, chaque joueur/joueuse capturera des cases pour agrandir son territoire. Le territoire d'un.e joueur/joueuse est composé de toutes les cases possédées par un.e joueur/joueuse qui sont <strong>active</strong>. Une case est dite <strong>active</strong> si et seulement si la case est connectée au quartier général. C'est à dire, il existe un chemin du quartier général jusqu'à cette case.
                 </p>
-                <figure style="margin-left:auto; margin-right:auto; width:350px;">
+                <div style="margin-left:auto; margin-right:auto; width:350px;">
                     <img src="https://i.imgur.com/LMAw3OG.png" alt="territory-ownership" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
-                    <figcaption>Le territoire du rouge est composé de 6 cases. Les 3 cases rouge foncé sont celles autrefois possédées mais le bleu a coupé une partie de ce territoire. Elles sont donc inactives. En capturant par exemple la case marquée par un X, rouge peut rendre ces cases actives à nouveau.</figcaption>
-                </figure>
+                    <p>Le territoire du rouge est composé de 6 cases. Les 3 cases rouge foncé sont celles autrefois possédées mais le bleu a coupé une partie de ce territoire. Elles sont donc inactives. En capturant par exemple la case marquée par un X, rouge peut rendre ces cases actives à nouveau.</p>
+                </div>
 
 
                 <br/>
@@ -91,7 +90,7 @@
                 </p>
                 <p>
                     Vous commencez le jeu avec un bâtiment important: le <img src="http://file.azke.fr/forteresse_red.png" style="height:20px;"/> <strong>quartier général</strong>.
-                    Un.e joueur/joueuse doit protéger son propre quartier général tout en essayant de détuire celui de son adversaire. Perdre son quartier général fait perdre la partie.<br/>
+                    Un.e joueur/joueuse doit protéger son propre quartier général tout en essayant de détruire celui de son adversaire. Perdre son quartier général fait perdre la partie.<br/>
                     <br/>
                 </p>
                 <!-- END -->
@@ -105,37 +104,40 @@
                 <!-- BEGIN level3 -->
                 <p>
                     Dans cette ligue, il n'y a seulement qu'un bâtiment qui peut être construit:
+                </p>
                 <!-- END -->
 
                 <!-- BEGIN level4 -->
                 <p>
                     Il y a deux bâtiments différents qui peuvent être constuits:
+                </p>
                 <!-- END -->
 
                 <!-- BEGIN level3 level4 -->
-                <ul>
+                <ul style="padding-top: 0; padding-bottom:0;">
                     <li><img src="http://file.azke.fr/mine_neutre.png" style="height:20px;"/><action>MINE</action>: les mines produisent de l'or chaque tour et sont la source principale d'or. Une mine coûte (20 + 4*<var>nbMines</var> à constuire, soit la première coûte 20, la seconde coûte 24, etc. Chaque mine donne <const>+4</const> de revenu. Les mines ne peuvent être construites uniquement sur des endroits spécifiques ("mine spots"). La case étant un <i>mine spot</i> doit d'abord être controllée avant qu'une <action>MINE</action> puisse être construite dessus.</li>
                 <!-- END -->
                 <!-- BEGIN level4 -->
                     <li><img src="http://file.azke.fr/tower_red.png" style="height:20px;"/>
                         <action>TOWER</action>: les tours protègent les cases alentours (haut, bas, gauche, droite, mais pas les diagonales). <strong>Uniquement les cases possédées (qu'elles soit actives ou non) sont protégées.</strong> Les cases protégées par une tour ne peuvent seulement être atteintes que par des unités de niveau <const>3</const>. De même, une tour ne peut être détruite que par une unité de niveau <const>3</const>. Une tour coûte 15 d'or à construire.
                         Voici une illustration de la portée de protection d'une tour:
-                        <figure style="margin-left:auto; margin-right:auto; width:350px;">
+                        <div style="margin-left:auto; margin-right:auto; width:350px;">
                             <img src="https://i.imgur.com/WWu1qPB.png" alt="tower-protection" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
-                            <figcaption>
+                            <p>
                                 La tour possédée par rouge protège les cases alentours marquées par une croix noir. Les cases en diagonal <strong>ne sont pas</strong> protégées. De plus, la case bleue à droite de la tour n'est pas protégée non plus car ce n'est pas une case rouge.
-                            </figcaption>
-                        </figure>
+                            </p>
+                        </div>
                     </li>
                 <!-- END -->
 
                 <!-- BEGIN level3 level4 -->
                 </ul>
+                <p>
                     Un autre bâtiment est le <img src="http://file.azke.fr/forteresse_red.png" style="height:20px;"/> <strong>quartier général</strong>.
-                    Un.e joueur/joueuse doit protéger son propre quartier général tout en essayant de détuire celui de son adversaire. Perdre son quartier général fait perdre la partie.<br/>
-                    
+                    Un.e joueur/joueuse doit protéger son propre quartier général tout en essayant de détruire celui de son adversaire. Perdre son quartier général fait perdre la partie.
+                </p>
+                <p>
                     Si un bâtiment est sur une case inactive, il y reste. Une tour (<action>TOWER</action>) continuera de protéger les cases possédées environnantes. Cependant, une <action>MINE</action> sur une case inactive n'augmente pas le revenu.
-                    <br/>
                 </p>
                 <!-- END -->
 
@@ -145,14 +147,16 @@
                     Au début de chaque tour, les joueurs/joueuses gagnent ou perdent de l'or en fonction de leur revenu. Chaque case <strong>active</strong> possédée donne <const>+1</const> de revenu et chaque mine donne <const>+4</const> de revenu.<br/>
 
                     Les joueurs/joueuses doivent construire des unités pour capturer le quartier général adverse. Ces unités impactent négativement le revenu (coût d'entretien).
-                    <ul>
+                </p>
+                    <ul style="padding-top: 0; padding-bottom:0;">
                         <li>Les unités niveau <const>1</const> réduisent les revenus de <const>1</const>.</li>
                         <!-- BEGIN level2 level3 level4 -->
                         <li>Les unités niveau <const>2</const>réduisent les revenus de <const>4</const>.</li>
                         <li>Les unités niveau <const>3</const> réduisent les revenus de <const>20</const>.</li>
                         <!-- END -->
                     </ul>
-                    Si un.e joueur/joueuse ne peut pas payer son coût d'entretien, toutes ses unités meurent et l'or est mis à <const>0</const> pour ce tour.
+                <p>
+                    Si un.e joueur/joueuse se retrouve avec un revenu négatif et ne peut pas payer son coût d'entretien avec son capital d'or, toutes ses unités meurent et l'or est mis à <const>0</const> pour ce tour.
                 </p>
 
                 <br/>
@@ -165,7 +169,8 @@
                     Cependant, dans cette ligue, seule les unités de niveau 1 sont disponibles.
                     <!-- END -->
                     Quand une unité marche sur une case non possédée par le/la propriétaire de cette unité, la case <strong>capturée</strong>. Si une unité ennemie est présente sur cette case, l'unité ennemie est immédiatement tuée et rien n'arrive à l'autre unité.
-                    <ul>
+                </p>
+                    <ul style="padding-top: 0; padding-bottom:0;">
                         <!-- BEGIN level1 -->
                         <li>Les unités niveau <const>1</const> peuvent bouger sur des cases vides ou le quartier général adverse. Dans cette ligue <strong>seulement</strong>, elles peuvent aussi tuer les unités de niveau 1.</li>
                         <!-- END -->
@@ -183,10 +188,12 @@
                         <li>Les unités niveau <const>3</const>, en outre, peuvent tuer n'importe quelle unité et détruire n'importe quel bâtiment.</li>
                         <!-- END -->
                     </ul>
+                <p>
                     Si une unité est sur une case inactive au début d'un tour, elle est immédiatement tuée.
 
                     <!-- BEGIN level2 level3 level4 -->
                     Voici un tableau résumant les différentes informatiques de chaque unité.
+                </p>
                     <table style="text-align:center; width: 100%; border-spacing: 10px; border-collapse: separate;">
                         <tr>
                             <th>Niveau</th>
@@ -241,22 +248,18 @@
                     <!-- END -->
 
 
-
-                    <ul>
+                    <ul style="padding-top: 0; padding-bottom:0;">
                         <li>Chaque unité ne peut être déplacée qu'une fois par tour. Les unitées bougent de <const>1</const> case, à l'aide de la commande <action>MOVE id x y</action>.
-                        <ul>
-                            <li>La case cible doit être libre ou capturable.</li>
-                            <li>Si la distance entre l'unité et les coordonnées cibles x et y est plus grande que 1, une recherche de chemin est faite pour rapprocher l'unité de sa cible.</li>
+                        <ul style="padding-top: 0; padding-bottom:0;">
+                            <li style="list-style-type: circle;">La case cible doit être libre ou capturable.</li>
+                            <li style="list-style-type: circle;">Si la distance entre l'unité et les coordonnées cibles x et y est plus grande que 1, une recherche de chemin est faite pour rapprocher l'unité de sa cible.</li>
                         </ul>
                         <li>Les unités sont entrainées avec la commande <action>TRAIN niveau x y</action>. Elles ne peuvent être entrainées que sur des cases du territoire du joueur / de la joueuse ou de son voisinage direct (bordure). La création d'armée suit les mêmes règles que le déplacement: aucune action <action>TRAIN</action> ne peut être fait sur uen case occupée par une unité ou bâtiment alliée, et l'unité doit être assez puissante pour être entrainée sur une case occupée par un adversaire.</li>
                         <li>Toutes les actions sont faites séquentiellement et l'état du jeu est recalculé après chacunes d'elles: une action impossible au début du tour pourrait être faite plus tard dans ce même tour.</li>
-                        <figure style="margin-left:auto; margin-right:auto; width:500px;">
-                            <img src="https://i.imgur.com/6guSobH.png" alt="action-sequence-diagram" style="margin-left:auto; margin-right:auto; width:550px;" /><br/>
-                        </figure>
-
                     </ul>
-                    <br/>
-                </p>
+                    <div style="margin-left:auto; margin-right:auto; width:500px;">
+                        <img src="https://i.imgur.com/6guSobH.png" alt="action-sequence-diagram" style="margin-left:auto; margin-right:auto; width:550px;" />
+                    </div>
             </div>
 
             <!-- Victory conditions -->
@@ -299,7 +302,7 @@
 
         <div class="statement-expert-rules-content">
             Le code source ce trouve sur ce lien: <a src="https://github.com/Azkellas/a-code-of-ice-and-fire">https://github.com/Azkellas/a-code-of-ice-and-fire</a>.
-            <ul>
+            <ul style="padding-top: 0; padding-bottom:0;">
                 <li>Il y a entre 8 et 20 emplacement de mine.</li>
                 <li>Un emplacement de mine est toujours présent sur la case de droite (resp. gauche) du quartier général rouge (resp. bleu).</li>
                 <li>Les cases à distance 1 autour du quartier général (incluant la diagonale) ne sont jamais des cases vides.</li>
@@ -324,10 +327,10 @@
                     Les emplacements de mines seront utilisés à partir de la ligue Bois 1.
                     <!-- END -->
                 </p>
-                <p><span class="statement-lineno">Prochaines <var>numberMineSpots</var> lignes:</span> deux entiers
-                    <ul>
-                        <li><var>x</var> et <var>y</var>: coordonnées de l'emplacement de mine.</li>
-                    </ul>
+                <span class="statement-lineno">Prochaines <var>numberMineSpots</var> lignes:</span> deux entiers
+                <ul style="padding-top: 0; padding-bottom:0;">
+                    <li><var>x</var> et <var>y</var>: coordonnées de l'emplacement de mine.</li>
+                </ul>
             </div>
 
             <div class="title">Entrée pour un tour de jeu</div>
@@ -337,64 +340,58 @@
                 <p><span class="statement-lineno">Ligne 3:</span><var>opponentGold</var>: un entier étant la quantité d'or que votre adversaire possède.</p>
                 <p><span class="statement-lineno">Ligne 4:</span><var>opponentIncome</var>: un entier étant le revenu que votre adversaire possède.</p>
 
-                <p><span class="statement-lineno">Prochaines <var>height</var> lignes:</span>
-                    <ul>
-                        <li> <var>width</var> caractères, le propriétaire de la case:
-                        <ul>
-                            <li><const>#</const>: néant</li>
-                            <li><const>.</const>: neutre</li>
-                            <li><const>O</const>: possédée par vous et active</li>
-                            <li><const>o</const>: possédée par vous et inactive</li>
-                            <li><const>X</const>: possédée par l'adversaire et active</li>
-                            <li><const>x</const>: possédée par l'adversaire et inactive</li>
-                        </ul>
-                    </ul>
-                </p>
+                <p><span class="statement-lineno">Prochaines <var>height</var> lignes:</span> <var>width</var> caractères, un pour chaque case:
+                <ul style="padding-top: 0; padding-bottom:0;">
+                    <li><const>#</const>: néant</li>
+                    <li><const>.</const>: neutre</li>
+                    <li><const>O</const>: possédée par vous et active</li>
+                    <li><const>o</const>: possédée par vous et inactive</li>
+                    <li><const>X</const>: possédée par l'adversaire et active</li>
+                    <li><const>x</const>: possédée par l'adversaire et inactive</li>
+                </ul>
                 <p><span class="statement-lineno">Prochaine ligne:</span> <var>buildingCount</var>: la quantité de bâtiments sur la carte.</p>
-                <p><span class="statement-lineno">Prochaines <var>buildingCount</var> lignes:</span> quatre entiers
-                    <ul>
+                <span class="statement-lineno">Prochaines <var>buildingCount</var> lignes:</span> quatre entiers
+                    <ul style="padding-top: 0; padding-bottom:0;">
                         <li><var>owner</var> (propriétaire)
-                            <ul>
-                                <li><const>0</const>: vous</li>
-                                <li><const>1</const>: adversaire</li>
+                            <ul style="padding-top: 0; padding-bottom:0;">
+                                <li style="list-style-type: circle;"><const>0</const>: vous</li>
+                                <li style="list-style-type: circle;"><const>1</const>: adversaire</li>
                             </ul>
                         </li>
                         <li><var>buildingType</var>: le type de bâtiment
-                            <ul>
-                                <li><const>0</const>: QG</li>
+                            <ul style="padding-top: 0; padding-bottom:0;">
+                                <li style="list-style-type: circle;"><const>0</const>: QG</li>
                                 
                                 <!-- BEGIN level3 -->
-                                <li><const>1</const>: Mine</li>
+                                <li style="list-style-type: circle;"><const>1</const>: Mine</li>
                                 <!-- END -->
 
                                 <!-- BEGIN level4 -->
-                                <li><const>1</const>: Mine</li>
-                                <li><const>2</const>: Tour</li>
+                                <li style="list-style-type: circle;"><const>1</const>: Mine</li>
+                                <li style="list-style-type: circle;"><const>2</const>: Tour</li>
                                 <!-- END -->
                             </ul>
                         </li>
                         <li><var>x</var> et <var>y</var>: coordonnées du bâtiment.
                     </ul>
-                </p>
                 <p><span class="statement-lineno">Prochaine ligne:</span><var>unitCount</var>: la quantité d'unités sur la carte.</p>
-                <p><span class="statement-lineno">Prochaines <var>unitCount</var> lignes:</span> cinq entiers
-                    <ul>
+                <span class="statement-lineno">Prochaines <var>unitCount</var> lignes:</span> cinq entiers
+                    <ul style="padding-top: 0; padding-bottom:0;">
                         <li><var>owner</var>
-                            <ul>
-                                <li><const>0</const>: vous</li>
-                                <li><const>1</const>: adversaire</li>
+                            <ul style="padding-top: 0; padding-bottom:0;">
+                                <li style="list-style-type: circle;"><const>0</const>: vous</li>
+                                <li style="list-style-type: circle;"><const>1</const>: adversaire</li>
                             </ul>
                         </li>
-                        <li><var>unitId</var> (identifiant de l'unité)</li>
+                        <li><var>unitId</var>: l'identifiant de l'unité.</li>
                         <!-- BEGIN level1 -->
-                        <li><var>level</var>: <const>1</const> seulement dans cette ligue.</li>
+                        <li><var>level</var>: toujours <const>1</const> (seulement dans cette ligue).</li>
                         <!-- END -->
                         <!-- BEGIN level2 level3 level4 -->
                         <li><var>level</var>: <const>1</const>, <const>2</const> ou <const>3</const>.</li>
                         <!-- END -->
                         <li><var>x</var> et <var>y</var>: coordonnées de l'unité.</li>
                     </ul>
-                </p>
             </div>
         </div>
 
@@ -403,7 +400,7 @@
         <div class="title">Sortie</div>
             <div class="text">
                 <span class="statement-lineno">Une ligne étant la combinaison de ces commandes séparées par <action>;</action></span>
-                <ul>
+                <ul style="padding-top: 0; padding-bottom:0;">
                     <li><action>MOVE id x y</action></li>
                     <li><action>TRAIN level x y</action></li>
                     <!-- BEGIN level3 -->
@@ -426,9 +423,10 @@
     
         <!-- Protocol block -->
         <div class="blk">
-        <div class="title">Contraintes</div>
-            Temps de réponse pour un tour de jeu ≤ <const>50ms</const>.</div>
+            <div class="title">Contraintes</div>
+            Temps de réponse pour un tour de jeu ≤ <const>50ms</const>.
+            <br />
+            Temps de réponse pour le premier tour ≤ <const>1000ms</const>.
         </div>
     </div>
-
 </div>
