@@ -45,7 +45,7 @@
         </h1>
         
         <div class="statement-goal-content">
-            Each player control a faction, starting from an edge of a grid-map.<br/>
+            Each player controls a faction, starting from an edge of a grid-map.<br/>
             Build armies to defeat your opponent by destroying their headquarters.<br/>
             <br/>
         </div>
@@ -60,13 +60,13 @@
         <div>
             <div class="statement-rules-content">
                 <p><strong>The map</strong></p>
-                <p>The map is a grid of size 12x12, where the top-left corner is the case <const>(0,0)</const>. The map is randomly generated at the start of each game.</p>
+                <p>The map is a grid of size 12x12, where the top-left corner is the cell <const>(0,0)</const>. The map is randomly generated at the start of each game.</p>
                 <p>
                     A map cell can be either
                     <ul>
                         <li> void: it is not a playable cell (like a hole or a wall).</li>
                         <li> neutral: the cell belongs to no player and is colored in grey.</li>
-                        <li> captured: the cell belongs to a player and is of the color of the owner.<img src="http://file.azke.fr/tuile_red02.png" style="height:20px;"/> <img src="http://file.azke.fr/tuile_blue02.png" style="height:20px;"/></li>
+                        <li> captured: the cell belongs to a player and is of the color of the owner. <img src="http://file.azke.fr/tuile_red02.png" style="height:20px;"/> <img src="http://file.azke.fr/tuile_blue02.png" style="height:20px;"/></li>
                         <li> inactive: the cell used to belong to a player but is not connected to this player's territory (see next section). <img src="http://file.azke.fr/tuile_red01.png" style="height:20px;"/> <img src="http://file.azke.fr/tuile_blue01.png" style="height:20px;"/></li>
                     </ul>
                 </p>
@@ -75,7 +75,7 @@
 
                 <p><strong>Territory ownership</strong></p>
                 <p>
-                    Along the game, each player will capture cells to enlarge their territory. A player territory is composed of all the cells owned by the player that are <strong>active</strong>. A cell is said to be <strong>active</strong> if and only if the cell is connected to the headquarters. That is, there exists a path from the headquarters to this cell.
+                    Throughout the game, each player will capture cells to enlarge their territory. A player territory is composed of all the cells owned by the player that are <strong>active</strong>. A cell is said to be <strong>active</strong> if and only if the cell is connected to the headquarters. That is, there exists a path of owned cells from the headquarters to this cell.
                 </p>
                 <figure style="margin-left:auto; margin-right:auto; width:350px;">
                     <img src="https://i.imgur.com/LMAw3OG.png" alt="territory-ownership" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
@@ -90,14 +90,14 @@
                     Players cannot build buildings in this league.<br/>
                 </p>
                 <p>
-                    You start the game with one important building. This is the <img src="http://file.azke.fr/forteresse_red.png" style="height:20px;"/> <strong>headquarters</strong>. A player has to protect their own headquarters while trying to destroy opponent's one. Losing their headquarters results to a lost game.<br/>
+                    You start the game with one important building. This is the <img src="http://file.azke.fr/forteresse_red.png" style="height:20px;"/> <strong>headquarters</strong>. A player has to protect their own headquarters while trying to destroy opponent's one. Losing their headquarters results in a lost game.<br/>
                     <br/>
                 </p>
                 <!-- END -->
 
                 <!-- BEGIN level3 level4 -->
                 <p>
-                    Players can <action>BUILD</action> buildings to have more economic or defensive power. A player can only build on owned active and empty cells.<br/>
+                    Players can <action>BUILD</action> buildings to have more economic or defensive power. A player can only build on owned active cells that are unoccupied.<br/>
                 </p>
                 <!-- END -->
 
@@ -113,16 +113,16 @@
 
                 <!-- BEGIN level3 level4 -->
                 <ul>
-                    <li><img src="http://file.azke.fr/mine_neutre.png" style="height:20px;"/><action>MINE</action>: mines product gold each turn and are the main source of income. A mine costs (20 + 4*<var>nbMines</var>) to build. So the first costs 20, the second one 24, and so on and so forth. Mines income is always <const>+4</const>. Mines can only be built on mine spots: these are specific locations in the map. The cell containing a mine spot must be first controlled before a <action>MINE</action> can be built on it.</li>
+                    <li><img src="http://file.azke.fr/mine_neutre.png" style="height:20px;"/><action>MINE</action>: mines produce gold each turn and are the main source of income. A mine costs (20 + 4*<var>nbMines</var>) to build. So the first costs 20, the second one 24, and so on and so forth. A mine's income is always <const>+4</const>. Mines can only be built on mine spots: these are specific locations on the map.</li>
                 <!-- END -->
                 <!-- BEGIN level4 -->
                     <li><img src="http://file.azke.fr/tower_red.png" style="height:20px;"/>
-                        <action>TOWER</action>: towers protect nearby (up, down, left and right, but not diagonals) and <strong>owned</strong> cells (being active or not). Cells protected by a tower can only be reached by enemy units of level <const>3</const>. Likewise, the tower can only be destroyed by a level <const>3</const> unit. A tower costs 15 gold to build.
+                        <action>TOWER</action>: towers protect nearby (up, down, left and right, but not diagonals) and <strong>owned</strong> cells (being active or not). Cells protected by a tower can only be reached by enemy units of level <const>3</const>. Likewise, the tower can only be destroyed by a level <const>3</const> unit. A tower costs <const>15</const> gold to build.
                         Here is a figure of a tower protection range:
                         <figure style="margin-left:auto; margin-right:auto; width:350px;">
                             <img src="https://i.imgur.com/WWu1qPB.png" alt="tower-protection" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
                             <figcaption>
-                                The tower owned by Red protect the nearby cells marked by a black cross. Cells in the diagonal are <strong>not</strong> protected. Moreover, the blue cell on the right of the tower is not protected as it is not a red cell.
+                                The tower owned by Red protects the nearby cells marked by a black cross. Cells on the diagonals are <strong>not</strong> protected. Moreover, the blue cell on the right of the tower is not protected as it is not a red cell.
                             </figcaption>
                         </figure>
                     </li>
@@ -130,11 +130,11 @@
 
                 <!-- BEGIN level3 level4 -->
                 </ul>
-                    Another building is the <img src="http://file.azke.fr/forteresse_red.png" style="height:20px;"/> <strong>headquarters</strong>. A player has to protect their own headquarters while trying to destroy opponent's one. Losing their headquarters results to a lost game.<br/>
+                    Another building is the <img src="http://file.azke.fr/forteresse_red.png" style="height:20px;"/> <strong>headquarters</strong>. A player has to protect their own headquarters while trying to destroy opponent's one. Losing their headquarters results in a lost game.<br/>
 
 
 
-                    If a building is on an unactive (i.e. not active) cell, it is kept there. A <action>TOWER</action> will still protect surrounding owned cells. However a <action>MINE</action> that is on an unactive cell will not provide income.
+                    If a building is on an inactive cell, it stays there. A <action>TOWER</action> will still protect surrounding owned cells. However a <action>MINE</action> that is on an inactive cell will not provide income.
                     <br/>
                 </p>
                 <!-- END -->
@@ -142,9 +142,9 @@
                 <br/>
                 <p><strong>Income</strong></p>
                 <p>
-                    At the beginning of each turn, a player gain or lose gold based on their income. A player has <const>+1</const> income for each <strong>active</strong> cell owned and <const>+4</const> income for each mine in possession.<br/>
+                    At the beginning of each turn, a player gains or loses gold based on their income. A player has <const>+1</const> income for each <strong>active</strong> cell owned and <const>+4</const> income for each mine in their territory.<br/>
 
-                    Players will have to build units to capture opponent's headquarters. These units cost income (upkeep).
+                    Players will have to build units to capture the opponent's headquarters. These units cost income (upkeep).
                     <ul>
                         <li>Level <const>1</const> units reduce income by <const>1</const>.</li>
                         <!-- BEGIN level2 level3 level4 -->
@@ -152,15 +152,19 @@
                         <li>Level <const>3</const> units reduce income by <const>20</const>.</li>
                         <!-- END -->
                     </ul>
-                    If a player cannot pay their upkeep, all player's units die and the player has <const>0</const> gold for this turn.
+                    If a player has negative income and cannot pay their upkeep using their gold capital, all player's units die and the player has <const>0</const> gold for this turn.
                 </p>
 
                 <br/>
                 <p><strong>Armies</strong></p>
                 <p>
-                    To destroy opponent's headquarters, a player has to train armies. Armies are used to capture cells and destroy opponent's buildings and units. <br/>
+                    To destroy opponent's headquarters, a player has to train up an army. Units of an army are used to capture cells and destroy opponent's buildings and units. <br/>
 
-                    There are <const>3</const> levels of units and the higher the level, the stronger the unit is.<!-- BEGIN level1 --> However, in this league, there is only access to level 1 units.<!-- END --> When a player unit walks on a cell not owned by this player, the cell is <strong>captured</strong>. Also, when a player unit walks on a cell where another enemy unit is, the enemy unit is instantly killed (without harm to the player unit).
+                    There are <const>3</const> levels of units and the higher the level, the stronger the unit is.
+                    <!-- BEGIN level1 -->
+                    However, in this league, only level 1 units are available.
+                    <!-- END -->
+                    When a player unit walks on a cell not owned by this player, the cell is <strong>captured</strong>. Also, when a player unit walks on a cell where another enemy unit is, the enemy unit is instantly killed (without harm to the player unit).
                     <ul>
                         <!-- BEGIN level1 -->
                         <li>Level <const>1</const> units can move on empty cells or opponent headquarters. In this league <strong>only</strong>, they can also kill level 1 units.</li>
@@ -180,10 +184,10 @@
                         <!-- END -->
                     </ul>
 
-                    If an unit is on an unactive (i.e. not active) cell at the beginning of a turn, the unit is instantly killed.
+                    If a unit is on an inactive cell at the beginning of a turn, the unit is instantly killed.
 
                     <!-- BEGIN level2 level3 level4 -->
-                    Here is a table summary for each units, including their recruitment cost and their impact on income (upkeep):
+                    Here is a table summary for each unit, including their recruitment cost and their impact on income (upkeep):
 
                     <table style="text-align:center; width: 100%; border-spacing: 10px; border-collapse: separate;">
                         <tr>
@@ -222,12 +226,12 @@
 
 
                     <ul>
-                        <li>Each unit can be moved once each turn. Units move only <const>1</const> cell away from their current position, using the command <action>MOVE id x y</action>.
+                        <li>Each unit can be moved once each turn. Units move only <const>1</const> cell towards their target position, using the command <action>MOVE id x y</action>.
                         <ul>
                             <li>The target cell must be free or capturable.</li>
-                            <li>If the distance between the unit and the target coordinates x and y is greater than 1, pathfinding is done to get the unit closer.</li>
+                            <li>If the distance between the unit and the target coordinates x and y is greater than 1, pathfinding is automatically done to get the unit closer.</li>
                         </ul>
-                        <li>Players can train armies using the <action>TRAIN level x y</action> action. They can be only trained on cells in player's territory or its direct neighbourhood (border). Armies training follows the same rules as moving: no training can be done on a cell occupied by a friendly unit/building, and the unit must be powerful enough to be trained on a cell occupied by an enemy.</li>
+                        <li>Players can train new units for their army using the <action>TRAIN level x y</action> action. They can only be trained on cells in the player's territory or its direct neighbourhood (border). Training follows the same rules as moving: no training can be done on a cell occupied by a friendly unit/building, and the unit must be powerful enough to be trained on a cell occupied by an enemy.</li>
                         <li>All actions are processed sequentially and the game state is recomputed after each one: an action not possible at the beginning of the turn might be done later in the same turn.</li>
                         <figure style="margin-left:auto; margin-right:auto; width:500px;">
                             <img src="https://i.imgur.com/6guSobH.png" alt="action-sequence-diagram" style="margin-left:auto; margin-right:auto; width:550px;" /><br/>
@@ -246,7 +250,7 @@
                     <div class="text">
                         <ul style="padding-bottom: 0;">
                             <li>Capture the enemy headquarters.</li>
-                            <li>After <const>100</const> turns, you have more military power than your opponent, where the military power is computed by the sum of cost of all units you have + the amount of gold you have.</li>
+                            <li>After <const>100</const> turns, you have more military power than your opponent, where the military power is computed by the sum of the cost of all units you have + the amount of gold you have.</li>
                         </ul>
                     </div>
                 </div>
@@ -259,8 +263,7 @@
                     <div class="title">Lose Conditions</div>
                     <div class="text">
                         <ul style="padding-bottom: 0;">
-                            <li>Program times out.</li>
-                            <li>Output an invalid command.</li>
+                            <li>You fail to provide a valid command in time.</li>
                         </ul>
                     </div>
                 </div>
@@ -279,9 +282,9 @@
         <div class="statement-expert-rules-content">
             The source code can be found here: <a src="https://github.com/Azkellas/a-code-of-ice-and-fire">https://github.com/Azkellas/a-code-of-ice-and-fire</a>.
             <ul>
-                <li>There are between 8 and 20 mine spots.</li>
-                <li>A mine spot is always present on the right (resp. left) cell of red's (resp. blue) headquarters.</li>
-                <li>Cells surrounding the headquarters at distance 1 (including the diagonal) are nether VOID cells.</li>
+                <li>There are between <const>8</const> and <const>20</const> mine spots.</li>
+                <li>A mine spot is always present on the right cell of red's headquarters and the left side of blue's headquarters.</li>
+                <li>Cells surrounding the headquarters at distance 1 (including diagonally) are never <strong>void</strong> cells.</li>
             </ul>
         </div>
     </div>
@@ -298,7 +301,11 @@
             <div class="title">Initialization input</div>
             <div class="text">
                 <p><span class="statement-lineno">Line 1: </span>two ints <var>width</var> and <var>height</var>, the dimensions of the map</p>
-                <p><span class="statement-lineno">Line 2: </span>one int <var>numberMineSpots</var>: the number of mine spots on the map.<!-- BEGIN level1 level2 --> Mine spots will be used from Wood1 league.<!-- END --></p>
+                <p><span class="statement-lineno">Line 2: </span>one int <var>numberMineSpots</var>: the number of mine spots on the map.
+                    <!-- BEGIN level1 level2 -->
+                    Mine spots will be used from Wood1 league onwards.
+                    <!-- END -->
+                </p>
                 <p><span class="statement-lineno">Next <var>numberMineSpots</var> lines:</span> two ints
                     <ul>
                         <li><var>x</var> and <var>y</var>: coordinates of the mine spot.</li>
@@ -318,8 +325,8 @@
                         <ul>
                             <li><const>#</const>: void</li>
                             <li><const>.</const>: neutral</li>
-                            <li><const>O</const>: own and active cell</li>
-                            <li><const>o</const>: own and inactive</li>
+                            <li><const>O</const>: owned and active cell</li>
+                            <li><const>o</const>: owned and inactive</li>
                             <li><const>X</const>: active opponent cell</li>
                             <li><const>x</const>: inactive opponent cell</li>
                         </ul>
@@ -367,7 +374,7 @@
                         <!-- BEGIN level2 level3 level4 -->
                         <li><var>level</var>: <const>1</const>, <const>2</const> or <const>3</const>.</li>
                         <!-- END -->
-                        <li><var>x</var> and <var>y</var>: unit's cell coordinates.</li>
+                        <li><var>x</var> and <var>y</var>: unit's coordinates.</li>
                     </ul>
                 </p>
             </div>
@@ -403,10 +410,8 @@
         <div class="blk">
             <div class="title">Constraints</div>
             Allotted response time to output is ≤ <const>50ms</const>.
+            Allotted response time to output on the first time is ≤ <const>1000ms</const>.
         </div>
     </div>
     
 </div>
-
-</div>
-
