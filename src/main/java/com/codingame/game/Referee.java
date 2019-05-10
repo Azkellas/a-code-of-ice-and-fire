@@ -299,19 +299,11 @@ public class Referee extends AbstractReferee {
     }
 
     private void sendInitialInput() {
-        StringBuilder firstLine = new StringBuilder();
-        firstLine.append(MAP_WIDTH);
-        StringBuilder secondLine = new StringBuilder();
-        secondLine.append(MAP_HEIGHT);
         StringBuilder nbMineSpots = new StringBuilder();
         nbMineSpots.append(gameState.getNbMineSpots());
 
 
         for (Player player : gameManager.getActivePlayers()) {
-            player.sendInputLine(firstLine.toString());
-            player.sendInputLine(secondLine.toString());
-
-
             player.sendInputLine(nbMineSpots.toString());
 
             // send mine spots

@@ -321,8 +321,7 @@
         <div class="blk">
             <div class="title">Entrée d'initialisation</div>
             <div class="text">
-                <p><span class="statement-lineno">Ligne 1: </span>deux entiers <var>width</var> and <var>height</var>, la dimension de la carte</p>
-                <p><span class="statement-lineno">Ligne 2: </span>un entier <var>numberMineSpots</var>: le nombre d'emplacement de mines sur la carte.
+                <p><span class="statement-lineno">Ligne 1: </span>un entier <var>numberMineSpots</var>: le nombre d'emplacement de mines sur la carte.
                     <!-- BEGIN level1 level2 -->
                     Les emplacements de mines seront utilisés à partir de la ligue Bois 1.
                     <!-- END -->

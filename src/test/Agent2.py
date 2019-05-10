@@ -115,8 +115,6 @@ def find_border(carte, hq_pos):
 
 
 
-width = int(input())
-height = int(input())
 
 nb_mines = int(input())
 
@@ -136,7 +134,7 @@ while True:
     en_hq_pos = None
 
     carte = []
-    for i in range(height):
+    for i in range(HEIGHT):
         line = list(input())
         carte.append(line)
         debug(line)

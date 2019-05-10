@@ -328,8 +328,7 @@
         <div class="blk">
             <div class="title">Initialization input</div>
             <div class="text">
-                <p><span class="statement-lineno">Line 1: </span>two ints <var>width</var> and <var>height</var>, the dimensions of the map</p>
-                <p><span class="statement-lineno">Line 2: </span>one int <var>numberMineSpots</var>: the number of mine spots on the map.
+                <p><span class="statement-lineno">Line 1: </span>one int <var>numberMineSpots</var>: the number of mine spots on the map.
                     <!-- BEGIN level1 level2 -->
                     Mine spots will be used from Wood1 league onwards.
                     <!-- END -->
@@ -433,7 +432,7 @@
             <div class="title">Constraints</div>
             Allotted response time to output is ≤ <const>50ms</const>.
             <br />
-            Allotted response time to output on the first time is ≤ <const>1000ms</const>.
+            Allotted response time to output on the first turn is ≤ <const>1000ms</const>.
         </div>
     </div>
 </div>

@@ -45,8 +45,8 @@ class Building {
     Building() = default;
 };
 
-int MAP_WIDTH;
-int MAP_HEIGHT;
+int MAP_WIDTH = 12;
+int MAP_HEIGHT = 12;
 bool isInside(int x, int y) {
     return x >= 0 && x < MAP_WIDTH && y >= 0 && y < MAP_HEIGHT;
 }
@@ -57,7 +57,6 @@ bool isValid(int x, int y, vector<vector<Cell>> const& map) {
 
 int main() {
     srand(0);
-    cin >> MAP_WIDTH >> MAP_HEIGHT;
     cerr << MAP_WIDTH << " " << MAP_HEIGHT << endl;
     vector<vector<Cell>> map (MAP_WIDTH, vector<Cell> (MAP_HEIGHT));
     while (1) {
