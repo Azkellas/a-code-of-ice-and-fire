@@ -21,3 +21,5 @@ src/test/Agent
 \.classpath
 
 \.project
+statement_en.html
+statement_fr.html
