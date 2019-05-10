@@ -7,7 +7,7 @@ read gold:int
 read income:int
 read opponentGold:int
 read opponentIncome:int
-loop height read line:string(width)
+loop height read line:word(width)
 read buildingCount:int
 loop buildingCount read owner:int buildingType:int x:int y:int
 read unitCount:int
