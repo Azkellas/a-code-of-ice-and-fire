@@ -324,7 +324,6 @@ public class Referee extends AbstractReferee {
         this.gameState.sendState(player);
     }
 
-
     private void readInput(Player player) {
         try {
             List<String> outputs = player.getOutputs();
@@ -343,11 +342,12 @@ public class Referee extends AbstractReferee {
 
                 if (!matchMoveTrain(player, actionStr) && !matchBuild(player, actionStr)) {
                     // unrecognized pattern: timeout
-                    gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (unknown pattern) " + actionStr);
+                    gameManager.addToGameSummary(player.getNicknameToken() + ": Unrecognised command (\"" + actionStr+"\")");
                     // clear actions
                     actionList.clear();
-                    player.deactivate(String.format("$%d timeout!", player.getIndex()));
+                    player.deactivate(String.format("$%d: unrecognised command (\"%s\")", player.getIndex(), actionStr));
                     checkForEndGame();
+                    break;
                 }
             }
         } catch (TimeoutException e) {
