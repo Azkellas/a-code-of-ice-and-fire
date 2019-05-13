@@ -17,9 +17,6 @@ OPPONENT_INACTIVE_CELL = "x"
 COST_UNIT = 10
 WIDTH = HEIGHT = 12
 
-width = int(input())
-height = int(input())
-
 def clamp_coordinates(x):
     return min(WIDTH-1, max(0, x))
 
@@ -42,7 +39,7 @@ while True:
     en_hq_pos = None
 
     game_map = []
-    for i in range(height):
+    for i in range(HEIGHT):
         line = list(input())
         game_map.append(line)
 

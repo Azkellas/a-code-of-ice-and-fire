@@ -17,9 +17,6 @@ OPPONENT_INACTIVE_CELL = "x"
 COST_UNIT = 10
 WIDTH = HEIGHT = 12
 
-width = int(input())
-height = int(input())
-
 def clamp_coordinates(x):
 	return min(WIDTH-1, max(0, x))
 
@@ -38,7 +35,7 @@ while True:
 	my_hq_pos = None
 	en_hq_pos = None
 
-	for i in range(height):
+	for i in range(HEIGHT):
 		line = list(input())
 
 	building_count = int(input())
