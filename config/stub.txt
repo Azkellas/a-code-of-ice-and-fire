@@ -1,5 +1,3 @@
-read width:int
-read height:int
 read numberMineSpots:int
 loop numberMineSpots read x:int y:int
 gameloop
