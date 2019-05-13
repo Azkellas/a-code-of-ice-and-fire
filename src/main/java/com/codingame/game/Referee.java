@@ -165,7 +165,7 @@ public class Referee extends AbstractReferee {
         this.currentPlayer.set( (this.currentPlayer.intValue() + 1) % PLAYER_COUNT);
         if (this.currentPlayer.intValue() == 0) {
             this.realTurn.addAndGet(1);
-            System.out.println("Turn: " + this.realTurn);
+            // System.out.println("Turn: " + this.realTurn);
             if (this.realTurn.intValue() > MAX_TURNS) {
                 discriminateEndGame();
                 return false;
@@ -213,7 +213,7 @@ public class Referee extends AbstractReferee {
         Player player = gameManager.getPlayer(action.getPlayer());
 
         if (action.getLevel() > MAX_LEVEL) {
-            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (the level must less than " + action.getLevel() + ") " + action);
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (the level must be less than " + action.getLevel() + ") " + action);
             return false;
         }
 
@@ -394,13 +394,13 @@ public class Referee extends AbstractReferee {
         int y = Integer.parseInt(moveTrainMatcher.group(4));
 
         if (!gameState.isInside(x, y)) {
-            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (out of bound) " + actionStr);
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (out of bounds) " + actionStr);
             return true;
         }
 
         if (type == ACTIONTYPE.TRAIN) {
             if (league == LEAGUE.WOOD3 && idOrLevel != 1) {
-                gameManager.addToGameSummary(player.getNicknameToken() + ": expected a level 1 in wood 3 " + actionStr);
+                gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (only level 1 units in this league) " + actionStr);
                 return true;
             }
             createTrainAction(player, idOrLevel, x, y, actionStr);
@@ -423,7 +423,7 @@ public class Referee extends AbstractReferee {
         int y = Integer.parseInt(buildMatcher.group(3));
 
         if (!gameState.isInside(x, y)) {
-            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (out of bound) " + actionStr);
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (out of bounds) " + actionStr);
             return true;
         }
 

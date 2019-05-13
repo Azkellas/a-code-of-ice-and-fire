@@ -218,7 +218,8 @@ public class GameState {
             return;
         }
 
-        System.err.println("We have " + connectedComponents.size() + " components");
+        // System.err.println("We have " + connectedComponents.size() + " components");
+
         // we find the barycenter of each connected components
         List<Vector2> randomPoints = new ArrayList<>();
 
