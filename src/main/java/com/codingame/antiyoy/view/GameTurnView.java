@@ -1,5 +1,6 @@
 package com.codingame.antiyoy.view;
 
+import com.codingame.gameengine.module.entities.Curve;
 import com.codingame.gameengine.module.entities.Entity;
 
 import com.codingame.gameengine.module.entities.GraphicEntityModule;
@@ -54,7 +55,7 @@ public class GameTurnView extends AbstractView {
     public void updateView() {
         this.text
             .setText("Turn " + gameTurn.intValue())
-            .setFillColor(getTurnColor(playerTurn.intValue()));
+            .setFillColor(getTurnColor(playerTurn.intValue()), Curve.IMMEDIATE);
     }
 
     public Entity getEntity() {
