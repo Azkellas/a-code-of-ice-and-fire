@@ -118,7 +118,7 @@
                 <!-- END -->
                 <!-- BEGIN level4 -->
                     <li><img src="http://file.azke.fr/tower_red.png" style="height:20px;"/>
-                        <action>TOWER</action>: towers protect nearby (up, down, left and right, but not diagonals) and <strong>owned</strong> cells (being active or not). Cells protected by a tower can only be reached by enemy units of level <const>3</const>. Likewise, the tower can only be destroyed by a level <const>3</const> unit. A tower costs <const>15</const> gold to build.
+                        <action>TOWER</action>: towers protect nearby (up, down, left and right, but not diagonals) and <strong>owned</strong> cells (being active or not). Cells protected by a tower can only be reached by enemy units of level <const>3</const>. Likewise, the tower can only be destroyed by a level <const>3</const> unit. A tower costs <const>15</const> gold to build and cannot be built on a mine spot.
                         Here is a figure of a tower protection range:
                         <div style="margin-left:auto; margin-right:auto; width:350px;">
                             <img src="https://i.imgur.com/WWu1qPB.png" alt="tower-protection" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>

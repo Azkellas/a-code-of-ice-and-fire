@@ -269,6 +269,11 @@ public class Referee extends AbstractReferee {
             return false;
         }
 
+        if (action.getBuildType() == BUILDING_TYPE.TOWER && action.getCell().isMineSpot()) {
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cannot build tower on mine spot) " + action);
+            return false;
+        }
+
         Building building = new Building(action.getCell(), action.getPlayer(), action.getBuildType());
         this.gameState.addBuilding(building);
         viewController.createBuildingView(building);

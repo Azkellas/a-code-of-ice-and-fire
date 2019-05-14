@@ -119,7 +119,7 @@
                 <!-- END -->
                 <!-- BEGIN level4 -->
                     <li><img src="http://file.azke.fr/tower_red.png" style="height:20px;"/>
-                        <action>TOWER</action>: les tours protègent les cases alentours (haut, bas, gauche, droite, mais pas les diagonales). <strong>Uniquement les cases possédées (qu'elles soit actives ou non) sont protégées.</strong> Les cases protégées par une tour ne peuvent seulement être atteintes que par des unités de niveau <const>3</const>. De même, une tour ne peut être détruite que par une unité de niveau <const>3</const>. Une tour coûte 15 d'or à construire.
+                        <action>TOWER</action>: les tours protègent les cases alentours (haut, bas, gauche, droite, mais pas les diagonales). <strong>Uniquement les cases possédées (qu'elles soit actives ou non) sont protégées.</strong> Les cases protégées par une tour ne peuvent seulement être atteintes que par des unités de niveau <const>3</const>. De même, une tour ne peut être détruite que par une unité de niveau <const>3</const>. Une tour coûte 15 d'or à construire et ne peut pas être construite sur un emplacement de mine.
                         Voici une illustration de la portée de protection d'une tour:
                         <div style="margin-left:auto; margin-right:auto; width:350px;">
                             <img src="https://i.imgur.com/WWu1qPB.png" alt="tower-protection" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
