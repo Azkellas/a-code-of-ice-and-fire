@@ -45,7 +45,7 @@
         </h1>
         
         <div class="statement-goal-content">
-            Chaque joueur/joueuse controle une faction, commençant dans un coin de la carte (représentée par une grille).<br/>
+            Chaque joueur contrôle une faction, commençant dans un coin de la carte (représentée par une grille).<br/>
             Entrainez des armées pour défaire votre adversaire en détruisant son quartier général.<br/>
             <br/>
         </div>
@@ -66,15 +66,15 @@
                 </p>
                 <ul style="padding-top: 0;">
                     <li> néant: ce n'est pas une case jouable (par exemple un trou).</li>
-                    <li> neutre: la case n'appartient à aucun.e joueur/joueuse et est grise.</li>
-                    <li> capturée: la case appartient à un.e joueur/joueuse et est de la couleur de son/sa propriétaire.<img src="http://file.azke.fr/tuile_red02.png" style="height:20px;"/> <img src="http://file.azke.fr/tuile_blue02.png" style="height:20px;"/></li>
-                    <li> inactive: la case a appartenu à un.e joueur/joueuse mais n'est plus connectée à son territoire (voir prochaine partie). <img src="http://file.azke.fr/tuile_red01.png" style="height:20px;"/> <img src="http://file.azke.fr/tuile_blue01.png" style="height:20px;"/></li>
+                    <li> neutre: la case n'appartient à aucun joueur et est grise.</li>
+                    <li> capturée: la case appartient à un joueur et est de la couleur de son propriétaire.<img src="http://file.azke.fr/tuile_red02.png" style="height:20px;"/> <img src="http://file.azke.fr/tuile_blue02.png" style="height:20px;"/></li>
+                    <li> inactive: la case a appartenu à un joueur mais n'est plus connectée à son territoire (voir prochaine partie). <img src="http://file.azke.fr/tuile_red01.png" style="height:20px;"/> <img src="http://file.azke.fr/tuile_blue01.png" style="height:20px;"/></li>
                 </ul>
 
 
                 <p><strong>Possession de territoire</strong></p>
                 <p>
-                    Tout le long du jeu, chaque joueur/joueuse capturera des cases pour agrandir son territoire. Le territoire d'un.e joueur/joueuse est composé de toutes les cases possédées par un.e joueur/joueuse qui sont <strong>active</strong>. Une case est dite <strong>active</strong> si et seulement si la case est connectée au quartier général. C'est à dire, il existe un chemin du quartier général jusqu'à cette case.
+                    Tout le long du jeu, chaque joueur/joueuse capturera des cases pour agrandir son territoire. Le territoire d'un joueur est composé de toutes les cases possédées par un joueur qui sont <strong>active</strong>. Une case est dite <strong>active</strong> si et seulement si la case est connectée au quartier général. C'est à dire, il existe un chemin du quartier général jusqu'à cette case.
                 </p>
                 <div style="margin-left:auto; margin-right:auto; width:350px;">
                     <img src="https://i.imgur.com/LMAw3OG.png" alt="territory-ownership" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
@@ -86,18 +86,18 @@
                 <p><strong>Bâtiments</strong></p>
                 <!-- BEGIN level1 level2 -->
                 <p>
-                    Les joueurs/joueuses ne peuvent pas construire de bâtiment dans cette ligue.<br/>
+                    Les joueurs ne peuvent pas construire de bâtiment dans cette ligue.<br/>
                 </p>
                 <p>
                     Vous commencez le jeu avec un bâtiment important: le <img src="http://file.azke.fr/forteresse_red.png" style="height:20px;"/> <strong>quartier général</strong>.
-                    Un.e joueur/joueuse doit protéger son propre quartier général tout en essayant de détruire celui de son adversaire. Perdre son quartier général fait perdre la partie.<br/>
+                    Un joueur doit protéger son propre quartier général tout en essayant de détruire celui de son adversaire. Perdre son quartier général fait perdre la partie.<br/>
                     <br/>
                 </p>
                 <!-- END -->
 
                 <!-- BEGIN level3 level4 -->
                 <p>
-                    Les joueurs/joueuses peuvent construire des bâtiments avec l'action <action>BUILD</action> pour avoir plus de pouvir économique ou défensif. Il n'est possible de construire que sur une case possédée et active.<br/>
+                    Les joueurs peuvent construire des bâtiments avec l'action <action>BUILD</action> pour avoir plus de pouvir économique ou défensif. Il n'est possible de construire que sur une case possédée et active.<br/>
                 </p>
                 <!-- END -->
 
@@ -134,7 +134,7 @@
                 </ul>
                 <p>
                     Un autre bâtiment est le <img src="http://file.azke.fr/forteresse_red.png" style="height:20px;"/> <strong>quartier général</strong>.
-                    Un.e joueur/joueuse doit protéger son propre quartier général tout en essayant de détruire celui de son adversaire. Perdre son quartier général fait perdre la partie.
+                    Un joueur doit protéger son propre quartier général tout en essayant de détruire celui de son adversaire. Perdre son quartier général fait perdre la partie.
                 </p>
                 <p>
                     Si un bâtiment est sur une case inactive, il y reste. Une tour (<action>TOWER</action>) continuera de protéger les cases possédées environnantes. Cependant, une <action>MINE</action> sur une case inactive n'augmente pas le revenu.
@@ -146,7 +146,7 @@
                 <p>
                     Au début de chaque tour, les joueurs/joueuses gagnent ou perdent de l'or en fonction de leur revenu. Chaque case <strong>active</strong> possédée donne <const>+1</const> de revenu et chaque mine donne <const>+4</const> de revenu.<br/>
 
-                    Les joueurs/joueuses doivent construire des unités pour capturer le quartier général adverse. Ces unités impactent négativement le revenu (coût d'entretien).
+                    Les joueurs doivent construire des unités pour capturer le quartier général adverse. Ces unités impactent négativement le revenu (coût d'entretien).
                 </p>
                     <ul style="padding-top: 0; padding-bottom:0;">
                         <li>Les unités niveau <const>1</const> réduisent les revenus de <const>1</const>.</li>
@@ -156,7 +156,7 @@
                         <!-- END -->
                     </ul>
                 <p>
-                    Si un.e joueur/joueuse se retrouve avec un revenu négatif et ne peut pas payer son coût d'entretien avec son capital d'or, toutes ses unités meurent et l'or est mis à <const>0</const> pour ce tour.
+                    Si un joueur se retrouve avec un revenu négatif et ne peut pas payer son coût d'entretien avec son capital d'or, toutes ses unités meurent et l'or est mis à <const>0</const> pour ce tour.
                 </p>
 
                 <br/>
@@ -339,7 +339,7 @@
                 <p><span class="statement-lineno">Ligne 3:</span><var>opponentGold</var>: un entier étant la quantité d'or que votre adversaire possède.</p>
                 <p><span class="statement-lineno">Ligne 4:</span><var>opponentIncome</var>: un entier étant le revenu que votre adversaire possède.</p>
 
-                <p><span class="statement-lineno">Prochaines <var>height</var> lignes:</span> <var>width</var> caractères, un pour chaque case:
+                <p><span class="statement-lineno">Prochaines <const>12</const> lignes:</span> <const>12</const> caractères, un pour chaque case:
                 <ul style="padding-top: 0; padding-bottom:0;">
                     <li><const>#</const>: néant</li>
                     <li><const>.</const>: neutre</li>
