@@ -25,6 +25,7 @@ public class PlayerView extends AbstractView {
     private Text gold;
     private Text income;
     private Text pseudo;
+    private Sprite avatar;
     AtomicInteger goldModel;
     AtomicInteger incomeModel;
 
@@ -41,10 +42,20 @@ public class PlayerView extends AbstractView {
         String color = playerIndex == 0 ? "RED" : "BLUE";
 
         int baseY = playerIndex == 0 ? 112 : 644;
+
+        avatar = entityModule.createSprite()
+                .setAnchor(0)
+                .setBaseHeight(PLAYER_AVATAR_RADIUS-12)
+                .setBaseWidth(PLAYER_AVATAR_RADIUS-12)
+                .setImage(this.model.getAvatarToken())
+                .setX(50)
+                .setY(baseY + 350/2 - PLAYER_AVATAR_RADIUS/2)
+                .setZIndex(20);
+
         background = entityModule.createSprite()
                 .setAnchor(0)
                 .setImage("HUD_" + color + ".png")
-                .setX(855/2 - 652/2)
+                .setX(238 - 50 - PLAYER_AVATAR_RADIUS/2)
                 .setY(baseY);
 
         int textGap = 110;
@@ -80,7 +91,7 @@ public class PlayerView extends AbstractView {
                 .setScale(1)
                 .setX(0)
                 .setY(0);
-        group.add(background, pseudo, gold, income);
+        group.add(background, avatar, pseudo, gold, income);
     }
     
     public void updateView() {
