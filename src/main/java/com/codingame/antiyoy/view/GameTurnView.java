@@ -56,6 +56,7 @@ public class GameTurnView extends AbstractView {
         this.text
             .setText("Turn " + gameTurn.intValue())
             .setFillColor(getTurnColor(playerTurn.intValue()), Curve.IMMEDIATE);
+        entityModule.commitEntityState(0, this.text);
     }
 
     public Entity getEntity() {
