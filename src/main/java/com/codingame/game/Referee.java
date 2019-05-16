@@ -394,10 +394,19 @@ public class Referee extends AbstractReferee {
             return false;
 
         ACTIONTYPE type = (moveTrainMatcher.group(1).equals("TRAIN")) ? ACTIONTYPE.TRAIN : ACTIONTYPE.MOVE;
-        int idOrLevel = Integer.parseInt(moveTrainMatcher.group(2));
-        int x = Integer.parseInt(moveTrainMatcher.group(3));
-        int y = Integer.parseInt(moveTrainMatcher.group(4));
+        int idOrLevel;
+        int x;
+        int y;
 
+        try {
+            idOrLevel = Integer.parseInt(moveTrainMatcher.group(2));
+            x = Integer.parseInt(moveTrainMatcher.group(3));
+            y = Integer.parseInt(moveTrainMatcher.group(4));
+        } catch (NumberFormatException e) {
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (out of bounds) " + actionStr);
+            return true;
+        }
+    
         if (!gameState.isInside(x, y)) {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (out of bounds) " + actionStr);
             return true;
@@ -424,8 +433,16 @@ public class Referee extends AbstractReferee {
 
         String typeStr = buildMatcher.group(1);
         BUILDING_TYPE buildType = Building.convertType(typeStr);
-        int x = Integer.parseInt(buildMatcher.group(2));
-        int y = Integer.parseInt(buildMatcher.group(3));
+        int x;
+        int y;
+
+        try {
+            x = Integer.parseInt(buildMatcher.group(2));
+            y = Integer.parseInt(buildMatcher.group(3));
+        } catch (NumberFormatException e) {
+            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (out of bounds) " + actionStr);
+            return true;
+        }
 
         if (!gameState.isInside(x, y)) {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (out of bounds) " + actionStr);
