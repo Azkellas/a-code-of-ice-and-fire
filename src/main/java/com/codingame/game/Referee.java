@@ -449,15 +449,17 @@ public class Referee extends AbstractReferee {
     }
     private void checkForEndGame() {
         if (!gameManager.getPlayer(0).isActive()) {
-            // score = rank
+            // score = military value
+            List<AtomicInteger> scores = this.gameState.getScores();
             gameManager.getPlayer(0).setScore(-1);
-            gameManager.getPlayer(1).setScore(1);
+            gameManager.getPlayer(1).setScore(scores.get(1).intValue());
             gameManager.endGame();
         }
         if (!gameManager.getPlayer(1).isActive()) {
-            // score = rank
+            // score = military value
+            List<AtomicInteger> scores = this.gameState.getScores();
             gameManager.getPlayer(1).setScore(-1);
-            gameManager.getPlayer(0).setScore(1);
+            gameManager.getPlayer(0).setScore(scores.get(0).intValue());
             gameManager.endGame();
         }
     }
