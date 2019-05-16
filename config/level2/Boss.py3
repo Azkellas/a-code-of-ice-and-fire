@@ -15,6 +15,11 @@ OPPONENT_ACTIVE_CELL = "X"
 OPPONENT_INACTIVE_CELL = "x"
 
 COST_UNIT = 10
+UPKEEP_UNIT = {
+  1: 1,
+  2: 4,
+  3: 20
+}
 WIDTH = HEIGHT = 12
 
 def clamp_coordinates(x):
@@ -55,14 +60,26 @@ while True:
     actions = ["WAIT"]
 
     unit_count = int(input())
+    rush = True
     for i in range(unit_count):
         owner, unitId, level, x, y = [int(j) for j in input().split()]
 
         if owner == ME:
-            actions.append("MOVE {} {} {}".format(unitId, clamp_coordinates(x+random.choice([1, -1])), clamp_coordinates(y+random.choice([1, -1]))))
+            if rush:
+                actions.append("MOVE {} {} {}".format(unitId, en_hq_pos[0], en_hq_pos[1]))
+                rush = False
+            else:
+                actions.append("MOVE {} {} {}".format(unitId, clamp_coordinates(x+random.choice([1, -1])), clamp_coordinates(y+random.choice([1, -1]))))
 
-
-    if gold >= COST_UNIT:
+    if gold >= COST_UNIT * 2 and income >= UPKEEP_UNIT[2]:
+        if my_hq_pos[1] == 0:
+            spawn_point_x = 0
+            spawn_point_y = 1
+        else:
+            spawn_point_x = my_hq_pos[0]
+            spawn_point_y = my_hq_pos[1]-1
+        actions.append("TRAIN 2 {} {}".format(spawn_point_x, spawn_point_y))
+    elif gold >= COST_UNIT:
         if my_hq_pos[0] == 0:
             spawn_point_x = 1
             spawn_point_y = 0

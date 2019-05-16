@@ -18,6 +18,7 @@ OPPONENT_ACTIVE_CELL = "X"
 OPPONENT_INACTIVE_CELL = "x"
 
 COST_UNIT = 10
+COST_MINE = 20
 WIDTH = HEIGHT = 12
 
 class Unit:
@@ -27,14 +28,15 @@ class Unit:
 		self.owner = owner
 		self.id = _id
 
-def clamp_coordinates(x):
-	return min(WIDTH-1, max(0, x))
+def clamp_coordinates(x, y):
+	return min(WIDTH-1, max(0, x)), min(HEIGHT-1, max(0, y))
 
 
+mine_spots = []
 nb_mines = int(input())
-
 for i in range(nb_mines):
 	x, y = [int(j) for j in input().split()]
+	mine_spots.append((x,y))
 
 # game loop
 while True:
@@ -53,6 +55,8 @@ while True:
 		line = list(input())
 		game_map.append(line)
 
+	occupied_cells = []
+
 	building_count = int(input())
 	for i in range(building_count):
 		owner, buildingType, x, y = [int(j) for j in input().split()]
@@ -61,6 +65,8 @@ while True:
 			my_hq_pos = (x,y)
 		if buildingType == HQ and owner != ME:
 			en_hq_pos = (x,y)
+		if owner == ME:
+			occupied_cells.append((x,y))
 
 	actions = ["WAIT"]
 
@@ -69,34 +75,52 @@ while True:
 	for i in range(unit_count):
 		owner, unitId, level, x, y = [int(j) for j in input().split()]
 		unit = Unit(unitId, owner, x, y)
+		occupied_cells.append((x,y))
 
 		if owner == ME:
 			my_units.append(unit)
-			actions.append("MOVE {} {} {}".format(unitId, clamp_coordinates(x+random.choice([1, -1])), clamp_coordinates(y+random.choice([1, -1]))))
 
+	for unit in my_units:
+		if random.randint(0, 1) == 1:
+			move_to_x, move_to_y = clamp_coordinates(unit.x, unit.y + random.choice([1, -1]))
+		else:
+			move_to_x, move_to_y = clamp_coordinates(unit.x + random.choice([1, -1]), unit.y)
+
+		if game_map[move_to_y][move_to_x] != VOID and (move_to_x, move_to_y) not in occupied_cells:
+			actions.append("MOVE {} {} {}".format(unit.id, move_to_x, move_to_y))
+			occupied_cells.remove((unit.x, unit.y))
+			occupied_cells.append((move_to_x, move_to_y))
+
+	if gold >= COST_MINE:
+		for x,y in mine_spots:
+			if game_map[y][x] == OWN_ACTIVE_CELL and (x,y) not in occupied_cells:
+				actions.append(f"BUILD MINE {x} {y}")
+				gold -= COST_MINE
+				mine_spots.remove((x,y))
+				break
 
 	if gold >= COST_UNIT:
 		if my_hq_pos[0] == 0:
 			spawn_point_x = 1
 			spawn_point_y = 0
-			reverse_map = False
+			reverse = True
 		else:
 			spawn_point_x = my_hq_pos[0]-1
 			spawn_point_y = my_hq_pos[1]
-			reverse_map = True
-		actions.append("TRAIN 1 {} {}".format(spawn_point_x, spawn_point_y))
+			reverse = False
+		if (spawn_point_x, spawn_point_y) not in occupied_cells:
+			actions.append("TRAIN 1 {} {}".format(spawn_point_x, spawn_point_y))
+			occupied_cells.append((spawn_point_x, spawn_point_y))
 
-		if reverse_map:
-			game_map = [reversed(l) for l in reversed(game_map)]
+		# if reverse_map:
+		# 	game_map = [reversed(l) for l in reversed(game_map)]
 
-		used = []
-		for (y, line) in enumerate(game_map):
-			for (x, cell) in enumerate(line):
-				if cell == OWN_ACTIVE_CELL and (x,y) != my_hq_pos and not (x,y) in used:
+		for (y, line) in enumerate(game_map) if not reverse else reversed(list(enumerate(game_map))):
+			for (x, cell) in enumerate(line) if not reverse else reversed(list(enumerate(line))):
+				if cell == OWN_ACTIVE_CELL and (x,y) != my_hq_pos and not (x,y) in occupied_cells:
 					actions.append("TRAIN 1 {} {}".format(x, y))
 					gold -= COST_UNIT
-					used.append((x,y))
+					occupied_cells.append((x,y))
 			if gold < COST_UNIT: break
 
-	debug(actions)
 	print(";".join(actions))
