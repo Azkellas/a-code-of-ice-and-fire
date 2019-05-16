@@ -2,7 +2,7 @@
 <div id="statement_back" class="statement_back" style="display:none"></div>
 <div class="statement-body">
 
-    <!-- BEGIN level2 level3 level4 -->
+    <!-- BEGIN level1 level2 level3 level4 -->
     <!-- LEAGUE ALERT -->
     <div style="color: #7cc576;
     background-color: rgba(124, 197, 118,.1);
@@ -36,13 +36,13 @@
               In Bronze league, all rules will be unlocked and the real challenge will begin. <br/> <br/>
             <!-- END -->
             <!-- BEGIN level2 -->
-            You are now able to train level 2 and 3 units. Level 1 units cannot kill level 1 units anymore.<br/>
+            You are now able to train level 2 and 3 units. Level 1 units cannot kill level 1 units anymore.<br/> <br/>
             <!-- END -->
             <!-- BEGIN level3 -->
-            You are now able to build mines (<action>BUILD MINE</action>) to generate more income. They can be built only on mine spots.<br />
+            You are now able to build mines (<action>BUILD MINE</action>) to generate more income. They can be built only on mine spots.<br/> <br/>
             <!-- END -->
             <!-- BEGIN level4 -->
-            You are now able to build towers (<action>BUILD TOWER</action>) to protect cells. You now have access to all the rules.<br />
+            You are now able to build towers (<action>BUILD TOWER</action>) to protect cells. You now have access to all the rules.<br/> <br/>
             <!-- END -->
             <!-- BEGIN level1 level2 level3 level4 -->
               Starter AIs are available in the <a target="_blank" href="https://github.com/Azkellas/a-code-of-ice-and-fire/tree/master/src/test/starterkit">Starter Kit</a>. They can help you get started with coding your own bot.
@@ -60,8 +60,7 @@
         </h1>
         
         <div class="statement-goal-content">
-            Build armies to defeat your opponent by destroying their headquarters.<br/>
-            <br/>
+            Build armies to defeat your opponent by destroying their headquarters.
         </div>
     </div>
 
@@ -77,17 +76,16 @@
                 <p>The map is a grid of size <const>12x12</const>, where the top-left corner is the cell <const>(0,0)</const>. The map is randomly generated at the start of each game.
                 </p>
                 <p>
-                    Both players start from opposite edges of the map (<const>(0,0)</const> and <const>(11,11)</const>).</p>
+                    Both players start with <strong>headquarters (HQ)</strong> from opposite edges of the map (<const>(0,0)</const> and <const>(11,11)</const>).</p>
                 <p>
                     A map cell can be either:
                 </p>
-                    <ul style="padding-top: 0;">
-                        <li> void (<const>#</const>): it is not a playable cell (like a hole or a wall).</li>
-                        <li> neutral (<const>.</const>): the cell is neutral (colored in grey).</li>
-                        <li> captured (<const>O</const> or <const>X</const>): the cell belongs to a player and is of the color of the owner. <img src="http://file.azke.fr/tuile_red02.png" style="height:20px;"/> <img src="http://file.azke.fr/tuile_blue02.png" style="height:20px;"/></li>
-                        <li> inactive (<const>o</const> or <const>x</const>): the cell used to belong to a player but is not connected to this player's territory anymore (see next section). <img src="http://file.azke.fr/tuile_red01.png" style="height:20px;"/> <img src="http://file.azke.fr/tuile_blue01.png" style="height:20px;"/></li>
-                    </ul>
-
+                <ul style="padding-top: 0;">
+                    <li> void (<const>#</const>): not a playable cell.</li>
+                    <li> neutral (<const>.</const>): doesn't belong to any player.</li>
+                    <li> captured (<const>O</const> or <const>X</const>): belongs to a player.</li>
+                    <li> inactive (<const>o</const> or <const>x</const>): belongs to a player but inactive.</li>
+                </ul>
 
                 <br/>
                 <p><strong>Territory ownership</strong></p>
@@ -98,8 +96,8 @@
                     A cell is said to be <strong>active</strong> if and only if the cell is connected to the headquarters. That is, there exists a path of owned cells from the headquarters to this cell.
                 </p>
                 <div style="margin-left:auto; margin-right:auto; width:350px;">
-                    <img src="https://i.imgur.com/LMAw3OG.png" alt="territory-ownership" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
-                    <p>The red player's territory is composed of 6 cells. They used to own the 3 red-dark cells but the blue player interrupted part of this territory. These cells are thus inactive. By capturing, for example, the cell marked by an X, the red player can make these cells active again.</p>
+                    <img src="https://www.codingame.com/servlet/mfileservlet?id=28933360811968" alt="territory-ownership" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
+                    <p>The red territory is composed of 6 cells. The 3 red-dark cells are now inactive because the blue player interrupted part of this territory. By capturing, for example, the cell marked by an X, the red player can make these cells active again.</p>
                 </div>
 
                 <br/>
@@ -153,9 +151,6 @@
 
                 <br/>
                 <p><strong>Buildings</strong></p>
-                <p>
-                    Players starts the game with the most important building: the <img src="http://file.azke.fr/forteresse_red.png" style="height:20px;"/> <strong>headquarters (HQ)</strong>. Losing headquarters results in a lost game.<br/>
-                </p>
                 <!-- BEGIN level1 level2 -->
                 <p>
                     In this league, players cannot build buildings.<br/>
@@ -172,7 +167,7 @@
                         In this league, players can only build one building: the <action>MINE</action>.
                     </p>
                     <ul style="padding-top: 0; padding-bottom: 0;">
-                        <li><img src="http://file.azke.fr/mine_neutre.png" style="height:20px;"/><action>MINE</action>: mines produce gold each turn and can only be built on mine spots. Mines cost <const>20 + 4 * playerNbOfMines</const> to build. So the first costs 20, the second one 24... A mine's income is always <const>+4</const>.</li>
+                        <li><img src="http://file.azke.fr/mine_neutre.png" style="height:20px;"/><action>MINE</action>: mines produce gold each turn and can only be built on mine spots. Mines cost <const>20 + 4 * playerNbOfMines</const> to build. So the first costs <const>20</const>, the second one <const>24</const>... A mine's income is always <const>+4</const>.</li>
                     </ul>
                 </div>
                 <!-- END -->
@@ -189,7 +184,7 @@
                     </p>
                 </div>
                 <ul style="padding-top: 0; padding-bottom: 0;">
-                    <li><img src="http://file.azke.fr/mine_neutre.png" style="height:20px;"/><action>MINE</action>: mines produce gold each turn and can only be built on mine spots. Mines cost <const>20 + 4 * playerNbOfMines</const>. So the first costs 20, the second one 24... A mine's income is always <const>+4</const>.</li>
+                    <li><img src="http://file.azke.fr/mine_neutre.png" style="height:20px;"/><action>MINE</action>: mines produce gold each turn and can only be built on mine spots. Mines cost <const>20 + 4 * playerNbOfMines</const>. So the first costs <const>20</const>, the second one <const>24</const>... A mine's income is always <const>+4</const>.</li>
                     <li style="color: #7cc576;
                     background-color: rgba(124, 197, 118,.1);
                     padding: 2px;"><img src="http://file.azke.fr/tower_red.png" style="height:20px;"/>
@@ -212,7 +207,7 @@
                     Players can build two different building: the <action>MINE</action> and the <action>TOWER</action>.
                 </p>
                 <ul style="padding-top: 0; padding-bottom: 0;">
-                    <li><img src="http://file.azke.fr/mine_neutre.png" style="height:20px;"/><action>MINE</action>: mines produce gold each turn and can only be built on mine spots. Mines cost <const>20 + 4 * playerNbOfMines</const>. So the first costs 20, the second one 24... A mine's income is always <const>+4</const>.</li>
+                    <li><img src="http://file.azke.fr/mine_neutre.png" style="height:20px;"/><action>MINE</action>: mines produce gold each turn and can only be built on mine spots. Mines cost <const>20 + 4 * playerNbOfMines</const>. So the first costs <const>20</const>, the second one <const>24</const>... A mine's income is always <const>+4</const>.</li>
                     <li><img src="http://file.azke.fr/tower_red.png" style="height:20px;"/>
                         <action>TOWER</action>: towers protect owned cells that are adjacent (up, down, left and right, but not diagonally). Cells protected by a tower can only be reached by enemy units of level <const>3</const>. Likewise, the tower can only be destroyed by a level <const>3</const> unit. A tower costs <const>15</const> gold to build and cannot be built on a mine spot.
                         Here is a figure of a tower protection range:
@@ -243,21 +238,14 @@
                 <br/>
                 <p><strong>Armies</strong></p>
                 <p>
-                    Army units are used to capture cells and to destroy opponent's buildings and units.
-                </p>
-                <p>
-                    There are <const>3</const> levels of units. The higher the level, the stronger the unit is.
-                    <!-- BEGIN level1 -->
-                    <br/>
-                    However, in this league, only level 1 units are available. They cost <const>10</const> to train.
-                    <!-- END -->
-                </p>
-                <p>
-                    To capture a cell, destroy a unit or a building on a cell, a unit has to move on the cell.
+                    Army units can move to capture cells and to destroy opponent's buildings and units.
                 </p>
                 <!-- BEGIN level1 -->
                 <p>
-                    In this league <strong>only</strong>, level 1 units can destroy other level 1 units. Only the attacker unit survives.
+                    Level 1 units can be trained using the command <action>TRAIN 1 x y</action>. The target cell <const>(x,y)</const> must be in the player's territory or its direct neighbourhood (adjacent cells). Level 1 units cost <const>10</const> to train.
+                </p>
+                <p>
+                    Level 1 units can destroy other level 1 units and HQ. Only the attacking unit survives.
                 </p>
                 <!-- END -->
                 <!-- BEGIN level2 -->
@@ -265,21 +253,33 @@
                     background-color: rgba(124, 197, 118,.1);
                     padding: 2px;">
                     <p>
-                        Army units can only destroy units of inferior level, except level 3 units which can destroy any unit.
+                        Army units of different levels (<const>1</const>, <const>2</const> or <const>3</const>) can be trained using the command <action>TRAIN level x y</action>. The target cell <const>(x,y)</const> must be in the player's territory or its direct neighbourhood (adjacent cells).
                     </p>
                     <p>
-                        If the attacking unit cannot destroy the defending unit, the action is invalid; nothing happens. </br>
-                        If both units are level 3, only the attacker survives.
+                        Army units can only destroy units of inferior level, except level 3 units which can destroy any unit. 
                     </p>
                 </div>
                 <!-- END -->
-                <!-- BEGIN level3 level4 level5 -->
+                <!-- BEGIN level2 level3 level4 level5 -->
                 <p>
-                    Army units can only destroy units of inferior level, except level 3 units which can destroy any unit.
+                    Army units of different levels (<const>1</const>, <const>2</const> or <const>3</const>) can be trained using the command <action>TRAIN level x y</action>. The target cell <const>(x,y)</const> must be in the player's territory or its direct neighbourhood (adjacent cells).
                 </p>
                 <p>
-                    If the attacking unit cannot destroy the defending unit, the action is invalid; nothing happens. </br>
-                    If both units are level 3, only the attacker survives.
+                    Army units can only destroy units of inferior level, except level 3 units which can destroy any unit. 
+                </p>
+                <!-- END -->
+                <!-- BEGIN level2 -->
+                <div style="color: #7cc576;
+                    background-color: rgba(124, 197, 118,.1);
+                    padding: 2px;">
+                    <p>
+                        Every unit can destroy every building.
+                    </p>
+                </div>
+                <!-- END -->
+                <!-- BEGIN level3 -->
+                <p>
+                    Every unit can destroy every building.
                 </p>
                 <!-- END -->
                 <!-- BEGIN level4 -->
@@ -290,7 +290,7 @@
                         Towers can only be destroyed by level 3 units.
                     </p>
                     <p>
-                        Army units of level inferior to 3 cannot move on a cell protected by an opponent tower.
+                        Only level 3 units can be trained or moved on a cell protected by an opponent tower.
                     </p>
                 </div>
                 <!-- END -->
@@ -299,97 +299,185 @@
                     Towers can only be destroyed by level 3 units.
                 </p>
                 <p>
-                    Army units of level inferior to 3 cannot move on a cell protected by an opponent tower.
+                    Only level 3 units can be trained or moved on a cell protected by an opponent tower.
                 </p>
                 <!-- END -->
                 <p>
+                    Each unit can only move one cell per turn by using the command <action>MOVE id x y</action>.
+                </p>
+                <p> 
+                    It's not possible to train or move on a cell with a friendly building or unit on it.
+                </p>
+                <p>
+                    An army unit cannot move on the same turn it's trained.
+                </p>
+                <p>
+                    When using <action>MOVE id x y</action>, if the distance between the unit and the target coordinates <const>(x,y)</const> is greater than 1, the unit moves towards the target.
+                </p>
+                <p>
+                    To train a unit or move it on an enemy unit or building, the attacking unit must be able to destroy the defending unit or building. If so, the attacking unit always survives. Else, the action is invalid; nothing happens.
+                </p>
+                <p>
                     If a unit is on an inactive cell at the beginning of a turn, the unit is instantly destroyed.
                 </p>
-                    <!-- BEGIN level2 level3 level4 level5 -->
-                <p>
-                    Summary of every unit characteristics:
-                </p>
-                    <table style="text-align:center; width: 100%; border-spacing: 10px; border-collapse: separate;">
-                        <tr>
-                            <th>Level</th>
-                            <td>1</td>
-                            <td>2</td>
-                            <td>3</td>
-                        </tr>
-                        <tr>
-                            <th>Recruitment cost</th>
-                            <td>10</td>
-                            <td>20</td>
-                            <td>30</td>
-                        </tr>
-                        <tr>
-                            <th>Upkeep</th>
-                            <td>1</td>
-                            <td>4</td>
-                            <td>20</td>
-                        </tr>
-                        <tr>
-                            <th>Can kill units level</th>
-                            <td>-</td>
-                            <td>1</td>
-                            <td>1, 2, 3</td>
-                        </tr>
-                        <tr>
-                            <th>Can destroy</th>
-                            <td>
-                                <!-- BEGIN level3 level4 level5 -->
-                                Mines
-                                <br/>
-                                <!-- END -->
-                                HQ
-                            </td>
-                            <td>
-                                <!-- BEGIN level3 level4 level 5-->
-                                Mines
-                                <br/>
-                                <!-- END -->
-                                HQ
-                            </td>
-                            <td>
-                                <!-- BEGIN level3 level4 level 5-->
-                                Mines
-                                <br/>
-                                <!-- END -->
-                                <!-- BEGIN level4 level 5 -->
-                                Towers
-                                <br/>
-                                <!-- END -->
-                                HQ
-                            </td>
-                        </tr>
-                    </table>
+                <!-- BEGIN level1 -->
+                <table style="text-align:center; width: 100%; border-spacing: 10px; border-collapse: separate;">
+                    <tr>
+                        <th>Level</th>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <th>Recruitment cost</th>
+                        <td>10</td>
+                    </tr>
+                    <tr>
+                        <th>Upkeep</th>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <th>Can kill units level</th>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <th>Can destroy</th>
+                        <td>
+                            HQ
+                        </td>
+                    </tr>
+                </table>
+                <!-- END -->
+                <!-- BEGIN level2 -->
+                <table style="text-align:center; width: 100%; border-spacing: 10px; border-collapse: separate; color: #7cc576;
+                background-color: rgba(124, 197, 118,.1);
+                padding: 2px;">
+                    <tr>
+                        <th>Level</th>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <th>Recruitment cost</th>
+                        <td>10</td>
+                        <td>20</td>
+                        <td>30</td>
+                    </tr>
+                    <tr>
+                        <th>Upkeep</th>
+                        <td>1</td>
+                        <td>4</td>
+                        <td>20</td>
+                    </tr>
+                    <tr>
+                        <th>Can kill units level</th>
+                        <td>-</td>
+                        <td>1</td>
+                        <td>1, 2, 3</td>
+                    </tr>
+                    <tr>
+                        <th>Can destroy</th>
+                        <td>
+                            HQ
+                        </td>
+                        <td>
+                            HQ
+                        </td>
+                        <td>
+                            HQ
+                        </td>
+                    </tr>
+                <!-- BEGIN level3 level4 level5 -->
+                <table style="text-align:center; width: 100%; border-spacing: 10px; border-collapse: separate;">
+                    <tr>
+                        <th>Level</th>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <th>Recruitment cost</th>
+                        <td>10</td>
+                        <td>20</td>
+                        <td>30</td>
+                    </tr>
+                    <tr>
+                        <th>Upkeep</th>
+                        <td>1</td>
+                        <td>4</td>
+                        <td>20</td>
+                    </tr>
+                    <tr>
+                        <th>Can kill units level</th>
+                        <td>-</td>
+                        <td>1</td>
+                        <td>1, 2, 3</td>
+                    </tr>
+                    <!-- BEGIN level3 -->
+                    <tr style="color: #7cc576;
+                background-color: rgba(124, 197, 118,.1);
+                padding: 2px;">
+                        <th>Can destroy</th>
+                        <td>
+                            Mines
+                            <br/>
+                            HQ
+                        </td>
+                        <td>
+                            Mines
+                            <br/>
+                            HQ
+                        </td>
+                        <td>
+                            Mines
+                            <br/>
+                            HQ
+                        </td>
+                    </tr>
                     <!-- END -->
+                    <!-- BEGIN level4 level5 -->
+                    <tr>
+                        <th>Can destroy</th>
+                        <td>
+                            Mines
+                            <br/>
+                            HQ
+                        </td>
+                        <td>
+                            Mines
+                            <br/>
+                            HQ
+                        </td>
+                        <!-- BEGIN level4 -->
+                        <td style="color: #7cc576;
+                background-color: rgba(124, 197, 118,.1);
+                padding: 2px;">
+                            Mines
+                            <br/>
+                            Towers
+                            <br/>
+                            HQ
+                        </td>
+                        <!-- END -->
+                    <!-- BEGIN level5 -->
+                        <td>
+                            Mines
+                            <br/>
+                            Towers
+                            <br/>
+                            HQ
+                        </td>
+                        <!-- END -->
+                    </tr>
+                    <!-- END -->
+                </table>
+                <!-- END -->
                 
-
-                
-                    <ul style="padding-top: 0; padding-bottom: 0;">
-                        <li>Each unit can only move one cell per turn by using the command <action>MOVE id x y</action>.</li>
-                        <ul style="padding-top: 0; padding-bottom: 0;">
-                            <li style="list-style-type: circle;">
-                                The target cell must be free or capturable. Units cannot move on friendly buildings.
-                            </li>
-                            <li style="list-style-type: circle;">
-                                If the distance between the unit and the target coordinates (x,y) is greater than 1, the unit moves towards the target.
-                            </li>
-                            <li style="list-style-type: circle;">
-                                A army unit cannot move the turn it's created.
-                            </li>
-                        </ul>
-                        <li>Players can train new units for their army using the <action>TRAIN level x y</action> action. They can only be trained on cells in the player's territory or its direct neighbourhood (border).
-                        </li>
-                        <li>
-                            Training follows the same rules as moving: no training can be done on a cell occupied by a friendly unit/building, and the unit must be powerful enough to be trained on a cell occupied by an enemy.</li>
-                        <li>All actions are processed sequentially. Every invalid actions are ignored.</li>
-                        
-                    </ul>
-                    <div style="margin-left:auto; margin-right:auto; width:500px;">
-                            <img src="https://i.imgur.com/6guSobH.png" alt="action-sequence-diagram" style="margin-left:auto; margin-right:auto; width:550px;" />
-                    </div>
+                <p>
+                    All actions are processed sequentially. Invalid actions are ignored.
+                </p>
+                <div style="margin-left:auto; margin-right:auto; width:500px;">
+                        <img src="https://i.imgur.com/6guSobH.png" alt="action-sequence-diagram" style="margin-left:auto; margin-right:auto; width:550px;" />
+                </div>
             </div>
 
             <!-- Victory conditions -->

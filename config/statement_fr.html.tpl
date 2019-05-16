@@ -2,7 +2,7 @@
 <div id="statement_back" class="statement_back" style="display:none"></div>
 <div class="statement-body">
 
-    <!-- BEGIN level2 level3 level4 -->
+    <!-- BEGIN level1 level2 level3 level4 -->
     <!-- LEAGUE ALERT -->
     <div style="color: #7cc576;
     background-color: rgba(124, 197, 118,.1);
@@ -35,13 +35,13 @@
               En ligue Bronze, toutes les règles sont débloquées et alors débute le challenge, le vrai. <br/> <br/>
             <!-- END -->
             <!-- BEGIN level2 -->
-            Vous pouvez désormais entraîner des unités de niveau 2 et 3. Les unités de niveau 1 ne peuvent plus détruire d'unités de niveau 1.<br/>
+            Vous pouvez désormais entraîner des unités de niveau 2 et 3. Les unités de niveau 1 ne peuvent plus détruire d'unités de niveau 1.<br/> <br/>
             <!-- END -->
             <!-- BEGIN level3 -->
-            Vous pouvez désormais construire des mines (<action>BUILD MINE</action>) pour augmenter votre revenu d'or. Les mines ne peuvent être construites qu'à certains endroits spécifiques.<br />
+            Vous pouvez désormais construire des mines (<action>BUILD MINE</action>) pour augmenter votre revenu d'or. Les mines ne peuvent être construites qu'à certains endroits spécifiques.<br/> <br/>
             <!-- END -->
             <!-- BEGIN level4 -->
-            Vous pouvez désormais construire des tours (<action>BUILD TOWER</action>) pour protéger des cases. Vous avez accès à toutes les règles.<br />
+            Vous pouvez désormais construire des tours (<action>BUILD TOWER</action>) pour protéger des cases. Vous avez accès à toutes les règles.<br/> <br/>
             <!-- END -->
             <!-- BEGIN level1 level2 level3 level4 -->
               Des IAs de base sont disponibles dans le <a target="_blank" href="https://github.com/Azkellas/a-code-of-ice-and-fire/tree/master/src/test/starterkit">kit de démarrage</a>. Elles peuvent vous aider à démarrer votre propre IA.
@@ -59,8 +59,7 @@
         </h1>
         
         <div class="statement-goal-content">
-            Entrainez des armées pour défaire votre adversaire en détruisant son quartier général.<br/>
-            <br/>
+            Entrainez des armées pour défaire votre adversaire en détruisant son quartier général.
         </div>
     </div>
 
@@ -75,29 +74,29 @@
                 <p><strong>La carte</strong></p>
                 <p>La carte est une grille de <const>12x12</const> dont le coin en haut à gauche est la case <const>(0,0)</const>. La carte est générée aléatoirement au début de chaque partie. </p>
                 <p>
-                    Les deux joueurs commencent dans des coins opposés de la carte (<const>(0,0)</const> et <const>(11,11)</const>).
+                    Les deux joueurs commencent la partie avec un <strong>quartier général (QG)</strong> dans des coins opposés de la carte (<const>(0,0)</const> et <const>(11,11)</const>).
                 </p>
                 <p>
                     Une case peut être
                 </p>
                 <ul style="padding-top: 0;">
-                    <li> néant (<const>#</const>) : ce n'est pas une case jouable (par exemple un trou).</li>
-                    <li> neutre (<const>.</const>) : la case n'appartient à aucun joueur et est grise.</li>
-                    <li> capturée (<const>O</const> ou <const>X</const>) : la case appartient à un joueur et est de la couleur de son propriétaire.<img src="http://file.azke.fr/tuile_red02.png" style="height:20px;"/> <img src="http://file.azke.fr/tuile_blue02.png" style="height:20px;"/></li>
-                    <li> inactive (<const>o</const> ou <const>x</const>) : la case a appartenu à un joueur mais n'est plus connectée à son territoire (voir prochaine partie). <img src="http://file.azke.fr/tuile_red01.png" style="height:20px;"/> <img src="http://file.azke.fr/tuile_blue01.png" style="height:20px;"/></li>
+                    <li> néant (<const>#</const>) : n'est pas une case jouable.</li>
+                    <li> neutre (<const>.</const>) : n'appartient à aucun joueur.</li>
+                    <li> capturée (<const>O</const> ou <const>X</const>) : appartient à un joueur.</li>
+                    <li> inactive (<const>o</const> ou <const>x</const>) : appartient à un joueur mais <i>inactive</i>.</li>
                 </ul>
 
-
+                <br/>
                 <p><strong>Possession de territoire</strong></p>
                 <p>
                     Chaque joueur capture des cases pour agrandir son territoire. Le territoire d'un joueur est composé de toutes les cases possédées par un joueur qui sont <strong>actives</strong>.
                 </p>
                 <p>
-                    Une case est dite <strong>active</strong> si et seulement si la case est connectée au quartier général ; c'est à dire, s'il existe un chemin menant du quartier général jusqu'à cette case.
+                    Une case est dite <strong>active</strong> si et seulement si la case est connectée au QG ; c'est à dire, s'il existe un chemin menant du QG jusqu'à cette case.
                 </p>
-                <div style="margin-left:auto; margin-right:auto;">
-                    <img src="https://i.imgur.com/LMAw3OG.png" alt="territory-ownership" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
-                    <p>Ici, le territoire du joueur rouge est composé de 6 cases. Les 3 cases rouge foncé sont celles autrefois possédées mais le joueur bleu a coupé une partie de ce territoire. Elles sont donc inactives. En capturant, par exemple, la case marquée par un X, le joueur rouge peut rendre ces cases actives à nouveau.</p>
+                <div style="margin-left:auto; margin-right:auto; width:350px;">
+                    <img src="https://www.codingame.com/servlet/mfileservlet?id=28933360811968" alt="territory-ownership" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
+                    <p>Ici, le territoire rouge est composé de 6 cases. Les 3 cases rouge foncé sont maintenant inactives car le joueur bleu a coupé une partie du territoire. En capturant, par exemple, la case marquée par un X, le joueur rouge peut rendre ces cases actives à nouveau.</p>
                 </div>
 
                 <br/>
@@ -151,9 +150,6 @@
 
                 <br/>
                 <p><strong>Bâtiments</strong></p>
-                <p>
-                    Chaque joueur commence la partie avec le bâtiment le plus important : le <img src="http://file.azke.fr/forteresse_red.png" style="height:20px;"/> <strong>quartier général (QG)</strong>. Perdre son quartier général fait perdre la partie.
-                </p>
                 <!-- BEGIN level1 level2 -->
                 <p>
                     Dans cette ligue, les joueurs ne peuvent pas construire de bâtiment.
@@ -171,7 +167,7 @@
                         Dans cette ligue, les joueurs ne peuvent construire qu'un batiment : la <action>MINE</action>.
                     </p>
                     <ul style="padding-top: 0; padding-bottom:0;">
-                        <li><img src="http://file.azke.fr/mine_neutre.png" style="height:20px;"/><action>MINE</action>: les mines produisent de l'or chaque tour et ne peuvent être construites qu'à certains endroits spécifiques. Le coût de construction d'une mine vaut <const>20 + 4 * nbMinesDuJoueur</const> soit la première coûte 20, la seconde coûte 24, etc. Chaque mine possédée et active augmente le revenu de son propriétaire de <const>4</const>.</li>
+                        <li><img src="http://file.azke.fr/mine_neutre.png" style="height:20px;"/><action>MINE</action>: les mines produisent de l'or chaque tour et ne peuvent être construites qu'à certains endroits spécifiques. Le coût de construction d'une mine vaut <const>20 + 4 * nbMinesDuJoueur</const> soit la première coûte <const>20</const>, la seconde coûte <const>24</const>, etc. Chaque mine possédée et active augmente le revenu de son propriétaire de <const>4</const>.</li>
                     </ul>
                 </div>
                 <!-- END -->
@@ -189,7 +185,7 @@
                 </div>
                 <ul style="padding-top: 0; padding-bottom:0;">
                     <li><img src="http://file.azke.fr/mine_neutre.png" style="height:20px;"/>
-                        <action>MINE</action>: les mines produisent de l'or chaque tour et ne peuvent être construites qu'à certains endroits spécifiques. Le coût de construction d'une mine vaut <const>20 + 4 * nbMinesDuJoueur</const> soit la première coûte 20, la seconde coûte 24, etc. Chaque mine possédée et active augmente le revenu de son propriétaire de <const>4</const>.</li>
+                        <action>MINE</action>: les mines produisent de l'or chaque tour et ne peuvent être construites qu'à certains endroits spécifiques. Le coût de construction d'une mine vaut <const>20 + 4 * nbMinesDuJoueur</const> soit la première coûte <const>20</const>, la seconde coûte <const>24</const>, etc. Chaque mine possédée et active augmente le revenu de son propriétaire de <const>4</const>.</li>
                     <li style="color: #7cc576;
                 background-color: rgba(124, 197, 118,.1);
                 padding: 2px;"><img src="http://file.azke.fr/tower_red.png" style="height:20px;"/>
@@ -212,7 +208,7 @@
                 </p>
                 <ul style="padding-top: 0; padding-bottom:0;">
                     <li><img src="http://file.azke.fr/mine_neutre.png" style="height:20px;"/>
-                        <action>MINE</action>: les mines produisent de l'or chaque tour et ne peuvent être construites qu'à certains endroits spécifiques. Le coût de construction d'une mine vaut <const>20 + 4 * nbMinesDuJoueur</const> soit la première coûte 20, la seconde coûte 24, etc. Chaque mine possédée et active augmente le revenu de son propriétaire de <const>4</const>.</li>
+                        <action>MINE</action>: les mines produisent de l'or chaque tour et ne peuvent être construites qu'à certains endroits spécifiques. Le coût de construction d'une mine vaut <const>20 + 4 * nbMinesDuJoueur</const> soit la première coûte <const>20</const>, la seconde coûte <const>24</const>, etc. Chaque mine possédée et active augmente le revenu de son propriétaire de <const>4</const>.</li>
                     <li><img src="http://file.azke.fr/tower_red.png" style="height:20px;"/>
                         <action>TOWER</action>: les tours protègent les cases possedées et directement adjacentes (en haut, en bas, à gauche et à droite, mais pas en diagonale). Une case protégée par une tour ne peut être atteinte par une unité ennemie, à moins qu'elle soit de niveau <const>3</const>. De même, une tour ne peut être détruite que par une unité de niveau <const>3</const>. Une tour coûte 15 d'or à construire et ne peut pas être construite sur un emplacement de mine.
                         <div style="margin-left:auto; margin-right:auto; width:350px;">
@@ -231,24 +227,20 @@
                 <!-- BEGIN level4 level5 -->
                 <p>
                     Si un bâtiment est sur une case inactive, il n'est pas détruit ; il est seulement inactif.
-                <!-- END -->
                 </p>
                 <!-- END -->
 
                 <br/>
                 <p><strong>Armées</strong></p>
                 <p>
-                    Les unités sont utilisées pour capturer des cases et pour détruire les bâtiments et unités adverses.
+                    Les unités d'armée peuvent se déplacer pour capturer des cases et pour détruire les bâtiments et unités adverses.
                 </p>
                 <p>
                     Il y a <const>3</const> niveaux d'unité. Plus ce niveau est haut, plus l'unité est puissante.
                 <!-- BEGIN level1 -->
                 <br/>
-                    Cependant, dans cette ligue, seule les unités de niveau 1 sont disponibles. Le coût d'entraînement est de <const>10</const>.
+                    Cependant, dans cette ligue, seule les unités de niveau 1 sont disponibles. Leur coût d'entraînement est de <const>10</const>.
                 <!-- END -->
-                </p>
-                <p>
-                    Pour capturer une case, détruire une unité ou un bâtiment sur une case, une unité doit se déplacer dessus. 
                 </p>
                 <!-- BEGIN level1 -->
                 <p>
@@ -363,7 +355,7 @@
                             <li style="list-style-type: circle;">La case cible doit être libre ou capturable. Les bâtiments sont infranchissables par des unités alliées.</li>
                             <li style="list-style-type: circle;">Si la distance entre l'unité et les coordonnées cibles (x,y) est supérieure à <const>1</const>, l'unité se déplace vers sa cible.</li>
                             <li style="list-style-type: circle;">
-                                Une unité ne peut pas se déplacer le tour où elle est entraîner.
+                                Une unité ne peut pas se déplacer le tour où elle est entraînée.
                             </li>
                         </ul>
                         <li>Les unités sont entrainées avec la commande <action>TRAIN niveau x y</action>. Elles ne peuvent être entrainées que sur des cases du territoire du joueur ou de son voisinage direct (bordure).
@@ -571,7 +563,7 @@
         <li>En ligue Bois 1, vous pouvez construire des mines.</li>
         <!-- END -->
         <!-- BEGIN level1 level2 level3 -->
-        <li>EN ligue Bronze, vous pouvez construire des tours.</li>
+        <li>En ligue Bronze, vous pouvez construire des tours.</li>
         <!-- END -->
       </ul>
   </div>
