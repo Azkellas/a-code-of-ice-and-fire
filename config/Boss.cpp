@@ -131,7 +131,8 @@ int main() {
         }
 
         cerr << "finished reading" << endl;
-        bool first = true;
+
+        cout << "WAIT;";
 
         // move
         for (auto& unit : units) {
@@ -143,11 +144,10 @@ int main() {
                 Cell* neighbour = cell.neighbours[dir];
                 if (neighbour == nullptr || neighbour->owner == 0 || neighbour->occupied)
                     continue;
-                cout << (first ? "" : " ") << "MOVE " << unit.id << " " << neighbour->x << " " << neighbour->y << ";";
+                cout << " MOVE " << unit.id << " " << neighbour->x << " " << neighbour->y << ";";
                 map[unit.x][unit.y].occupied = false;
                 map[neighbour->x][neighbour->y].occupied = true;
                 neighbour->owner = 0;
-                first = false;
                 break;
             }
         }
@@ -164,17 +164,16 @@ int main() {
                         continue;
                     if (rand() % 100 < 50)
                     {
-                        cout << (first ? "" : " ") << "BUILD " << "TOWER" << " " << x << " " << y << ";";
-                        cerr << (first ? "" : " ") << "BUILD " << "TOWER" << " " << x << " " << y << ";";
+                        cout << " BUILD " << "TOWER" << " " << x << " " << y << ";";
+                        cerr << " BUILD " << "TOWER" << " " << x << " " << y << ";";
                         gold -= 15;
                     }
                     else {
-                        cout << (first ? "" : " ") << "BUILD " << "MINE" << " " << x << " " << y << ";";
-                        cerr << (first ? "" : " ") << "BUILD " << "MINE" << " " << x << " " << y << ";";
+                        cout << " BUILD " << "MINE" << " " << x << " " << y << ";";
+                        cerr << " BUILD " << "MINE" << " " << x << " " << y << ";";
                         gold -= 20;
                     }
                     map[x][y].occupied = true;
-                    first = false;
                     mad = (rand() % 100 < 10);
                 }
             }
@@ -204,8 +203,7 @@ int main() {
                             level = 1;
                         if (gold < level * 10)
                             continue;
-                        cout << (first ? "" : " ") << "TRAIN " << level << " " << x << " " << y << ";";
-                        first = false;
+                        cout << " TRAIN " << level << " " << x << " " << y << ";";
                         map[x][y].owner = 0;
                         mad = true;
                         gold -= level * 10;
