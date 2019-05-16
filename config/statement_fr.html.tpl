@@ -1,4 +1,4 @@
-<!-- LEAGUES level1 level2 level3 level4 -->
+<!-- LEAGUES level1 level2 level3 level4 level5 -->
 <div id="statement_back" class="statement_back" style="display:none"></div>
 <div class="statement-body">
 
@@ -43,6 +43,9 @@
             <!-- BEGIN level4 -->
             Vous pouvez désormais construire des tours (<action>BUILD TOWER</action>) pour protéger des cases. Vous avez accès à toutes les règles.<br />
             <!-- END -->
+            <!-- BEGIN level1 level2 level3 level4 -->
+              Des IAs de base sont disponibles dans le <a target="_blank" href="https://github.com/Azkellas/a-code-of-ice-and-fire/tree/master/src/test/starterkit">kit de démarrage</a>. Elles peuvent vous aider à démarrer votre propre IA.
+            <!-- END -->
         </span>
     </div>
     <!-- END -->
@@ -75,7 +78,7 @@
                     Les deux joueurs commencent dans des coins opposés de la carte (<const>(0,0)</const> et <const>(11,11)</const>).
                 </p>
                 <p>
-                    Une case peut etre
+                    Une case peut être
                 </p>
                 <ul style="padding-top: 0;">
                     <li> néant (<const>#</const>) : ce n'est pas une case jouable (par exemple un trou).</li>
@@ -92,7 +95,7 @@
                 <p>
                     Une case est dite <strong>active</strong> si et seulement si la case est connectée au quartier général ; c'est à dire, s'il existe un chemin menant du quartier général jusqu'à cette case.
                 </p>
-                <div style="margin-left:auto; margin-right:auto; width:350px;">
+                <div style="margin-left:auto; margin-right:auto;">
                     <img src="https://i.imgur.com/LMAw3OG.png" alt="territory-ownership" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
                     <p>Ici, le territoire du joueur rouge est composé de 6 cases. Les 3 cases rouge foncé sont celles autrefois possédées mais le joueur bleu a coupé une partie de ce territoire. Elles sont donc inactives. En capturant, par exemple, la case marquée par un X, le joueur rouge peut rendre ces cases actives à nouveau.</p>
                 </div>
@@ -121,7 +124,7 @@
                     </ul>
                 </div>
                 <!-- END -->
-                <!-- BEGIN level3 level4 -->
+                <!-- BEGIN level3 level4 level5 -->
                     <ul style="padding-top: 0; padding-bottom:0;">
                         <li>Les unités de niveau <const>1</const> réduisent les revenus de <const>1</const> par unité.</li>
                         <li>Les unités de niveau <const>2</const> réduisent les revenus de <const>4</const> par unité.</li>
@@ -137,7 +140,7 @@
                     </p>
                 </div>
                 <!-- END -->
-                <!-- BEGIN level4 -->
+                <!-- BEGIN level4 level5 -->
                     <p>
                         Une mine augmente le revenu d'un joueur de <const>+4</const>.
                     </p>
@@ -184,29 +187,50 @@
                         Les joueurs peuvent construire deux types de batiment : la <action>MINE</action> et la <action>TOUR</action>.
                     </p>
                 </div>
-                    <ul style="padding-top: 0; padding-bottom:0;">
-                        <li><img src="http://file.azke.fr/mine_neutre.png" style="height:20px;"/>
-                            <action>MINE</action>: les mines produisent de l'or chaque tour et ne peuvent être construites qu'à certains endroits spécifiques. Le coût de construction d'une mine vaut <const>20 + 4 * nbMinesDuJoueur</const> soit la première coûte 20, la seconde coûte 24, etc. Chaque mine possédée et active augmente le revenu de son propriétaire de <const>4</const>.</li>
-                        <li style="color: #7cc576;
-                    background-color: rgba(124, 197, 118,.1);
-                    padding: 2px;"><img src="http://file.azke.fr/tower_red.png" style="height:20px;"/>
-                            <action>TOWER</action>: les tours protègent les cases possedées et directement adjacentes (en haut, en bas, à gauche et à droite, mais pas en diagonale). Une case protégée par une tour ne peut être atteinte par une unité ennemie, à moins qu'elle soit de niveau <const>3</const>. De même, une tour ne peut être détruite que par une unité de niveau <const>3</const>. Une tour coûte 15 d'or à construire et ne peut pas être construite sur un emplacement de mine.
-                            <div style="margin-left:auto; margin-right:auto; width:350px;">
-                                <img src="https://i.imgur.com/WWu1qPB.png" alt="tower-protection" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
-                                <p>
-                                    La tour possédée par le joueur rouge protège les cases alentours marquées par une croix noire. Les cases en diagonale <strong>ne sont pas</strong> protégées. De plus, la case bleue à droite de la tour n'est pas protégée non plus car ce n'est pas une case rouge.
-                                </p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+                <ul style="padding-top: 0; padding-bottom:0;">
+                    <li><img src="http://file.azke.fr/mine_neutre.png" style="height:20px;"/>
+                        <action>MINE</action>: les mines produisent de l'or chaque tour et ne peuvent être construites qu'à certains endroits spécifiques. Le coût de construction d'une mine vaut <const>20 + 4 * nbMinesDuJoueur</const> soit la première coûte 20, la seconde coûte 24, etc. Chaque mine possédée et active augmente le revenu de son propriétaire de <const>4</const>.</li>
+                    <li style="color: #7cc576;
+                background-color: rgba(124, 197, 118,.1);
+                padding: 2px;"><img src="http://file.azke.fr/tower_red.png" style="height:20px;"/>
+                        <action>TOWER</action>: les tours protègent les cases possedées et directement adjacentes (en haut, en bas, à gauche et à droite, mais pas en diagonale). Une case protégée par une tour ne peut être atteinte par une unité ennemie, à moins qu'elle soit de niveau <const>3</const>. De même, une tour ne peut être détruite que par une unité de niveau <const>3</const>. Une tour coûte 15 d'or à construire et ne peut pas être construite sur un emplacement de mine.
+                        <div style="margin-left:auto; margin-right:auto; width:350px;">
+                            <img src="https://i.imgur.com/WWu1qPB.png" alt="tower-protection" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
+                            <p>
+                                La tour possédée par le joueur rouge protège les cases alentours marquées par une croix noire. Les cases en diagonale <strong>ne sont pas</strong> protégées. De plus, la case bleue à droite de la tour n'est pas protégée non plus car ce n'est pas une case rouge.
+                            </p>
+                        </div>
+                    </li>
+                </ul>
                 <!-- END -->
-                <!-- BEGIN level3 level4 -->
+                <!-- BEGIN level5 -->
                 <p>
-                    Si un bâtiment est sur une case inactive, il n'est pas détruit.
-                    <!-- BEGIN level4 -->
-                <br/>
-                Une tour (<action>TOWER</action>) continue de protéger les cases possédées environnantes.
+                    Les joueurs peuvent construire des bâtiments avec l'action <action>BUILD</action> pour augmenter leur puissance économique ou militaire. Il n'est possible de construire que sur une case possédée et active.<br/>
+                </p>
+                <p>
+                    Les joueurs peuvent construire deux types de batiment : la <action>MINE</action> et la <action>TOUR</action>.
+                </p>
+                <ul style="padding-top: 0; padding-bottom:0;">
+                    <li><img src="http://file.azke.fr/mine_neutre.png" style="height:20px;"/>
+                        <action>MINE</action>: les mines produisent de l'or chaque tour et ne peuvent être construites qu'à certains endroits spécifiques. Le coût de construction d'une mine vaut <const>20 + 4 * nbMinesDuJoueur</const> soit la première coûte 20, la seconde coûte 24, etc. Chaque mine possédée et active augmente le revenu de son propriétaire de <const>4</const>.</li>
+                    <li><img src="http://file.azke.fr/tower_red.png" style="height:20px;"/>
+                        <action>TOWER</action>: les tours protègent les cases possedées et directement adjacentes (en haut, en bas, à gauche et à droite, mais pas en diagonale). Une case protégée par une tour ne peut être atteinte par une unité ennemie, à moins qu'elle soit de niveau <const>3</const>. De même, une tour ne peut être détruite que par une unité de niveau <const>3</const>. Une tour coûte 15 d'or à construire et ne peut pas être construite sur un emplacement de mine.
+                        <div style="margin-left:auto; margin-right:auto; width:350px;">
+                            <img src="https://i.imgur.com/WWu1qPB.png" alt="tower-protection" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
+                            <p>
+                                La tour possédée par le joueur rouge protège les cases alentours marquées par une croix noire. Les cases en diagonale <strong>ne sont pas</strong> protégées. De plus, la case bleue à droite de la tour n'est pas protégée non plus car ce n'est pas une case rouge.
+                            </p>
+                        </div>
+                    </li>
+                </ul>
+                <!-- END -->
+                <!-- BEGIN level3 -->
+                <p>
+                    Si un bâtiment est sur une case inactive, il n'est pas détruit ; il est seulement inactif.
+                <!-- END -->
+                <!-- BEGIN level4 level5 -->
+                <p>
+                    Si un bâtiment est sur une case inactive, il n'est pas détruit ; il est seulement inactif.
                 <!-- END -->
                 </p>
                 <!-- END -->
@@ -220,7 +244,7 @@
                     Il y a <const>3</const> niveaux d'unité. Plus ce niveau est haut, plus l'unité est puissante.
                 <!-- BEGIN level1 -->
                 <br/>
-                    Cependant, dans cette ligue, seule les unités de niveau 1 sont disponibles.
+                    Cependant, dans cette ligue, seule les unités de niveau 1 sont disponibles. Le coût d'entraînement est de <const>10</const>.
                 <!-- END -->
                 </p>
                 <p>
@@ -244,7 +268,7 @@
                     </p>
                 </div>
                 <!-- END -->
-                <!-- BEGIN level3 level4 -->
+                <!-- BEGIN level3 level4 level5 -->
                 <p>
                     Une unité ne peut détruire que des unités de niveau inférieur, excepté les unités de level 3 qui peuvent détruire toutes les unités
                 </p>
@@ -265,10 +289,18 @@
                     </p>
                 </div>
                 <!-- END -->
+                <!-- BEGIN level5 -->
+                <p>
+                    Les tours ne peuvent être détruites que par des unités de niveau 3.
+                </p>
+                <p>
+                    Une unité de niveau inférieur à 3 ne peut pas se déplacer sur une case protégée par une tour adverse.
+                </p>
+                <!-- END -->
                 <p>
                     Si une unité se retrouve sur une case inactive au début d'un tour, elle est immédiatement détruite.
                 </p>
-                <!-- BEGIN level2 level3 level4 -->
+                <!-- BEGIN level2 level3 level4 level5 -->
                 <p>
                     Résumé des différentes caractéristiques de chaque unité.
                 </p>
@@ -300,22 +332,22 @@
                         <tr>
                             <th>Peut détruire</th>
                             <td>
-                                <!-- BEGIN level3 level4 -->
+                                <!-- BEGIN level3 level4 level5 -->
                                 Mines<br/>
                                 <!-- END -->
                                 QG
                             </td>
                             <td>
-                                <!-- BEGIN level3 level4 -->
+                                <!-- BEGIN level3 level4 level5 -->
                                 Mines<br/>
                                 <!-- END -->
                                 QG
                             </td>
                             <td>
-                                <!-- BEGIN level3 level4 -->
+                                <!-- BEGIN level3 level4 level5 -->
                                 Mines<br/>
                                 <!-- END -->
-                                <!-- BEGIN level4 -->
+                                <!-- BEGIN level4 level5 -->
                                 Tours<br/>
                                 <!-- END -->
                                 QG
@@ -326,10 +358,13 @@
 
 
                     <ul style="padding-top: 0; padding-bottom:0;">
-                        <li>Chaque unité ne peut se déplacer que d' <const>1</const> case par tour, à l'aide de la commande <action>MOVE id x y</action>.
+                        <li>Chaque unité ne peut se déplacer que d' <const>1</const> case par tour, à l'aide de la commande <action>MOVE id x y</action>.</li>
                         <ul style="padding-top: 0; padding-bottom:0;">
                             <li style="list-style-type: circle;">La case cible doit être libre ou capturable. Les bâtiments sont infranchissables par des unités alliées.</li>
                             <li style="list-style-type: circle;">Si la distance entre l'unité et les coordonnées cibles (x,y) est supérieure à <const>1</const>, l'unité se déplace vers sa cible.</li>
+                            <li style="list-style-type: circle;">
+                                Une unité ne peut pas se déplacer le tour où elle est entraîner.
+                            </li>
                         </ul>
                         <li>Les unités sont entrainées avec la commande <action>TRAIN niveau x y</action>. Elles ne peuvent être entrainées que sur des cases du territoire du joueur ou de son voisinage direct (bordure).
                         </li>
@@ -373,7 +408,7 @@
     </div>
 
     <!-- EXPERT RULES -->
-    <!-- BEGIN level4 -->
+    <!-- BEGIN level4 level5 -->
     <div class="statement-section statement-expertrules">
         <h1>
             <span class="icon icon-expertrules">&nbsp;</span>
@@ -445,13 +480,13 @@
                                 <li style="list-style-type: circle;"><const>1</const>: Mine</li>
                                 <!-- END -->
 
-                                <!-- BEGIN level4 -->
+                                <!-- BEGIN level4 level5 -->
                                 <li style="list-style-type: circle;"><const>1</const>: Mine</li>
                                 <li style="list-style-type: circle;"><const>2</const>: Tour</li>
                                 <!-- END -->
                             </ul>
                         </li>
-                        <li><var>x</var> et <var>y</var>, les coordonnées du bâtiment.
+                        <li><var>x</var> et <var>y</var>, les coordonnées du bâtiment.</li>
                     </ul>
                 <p><span class="statement-lineno">Prochaine ligne:</span> <var>unitCount</var>, la quantité d'unités sur la carte.</p>
                 <span class="statement-lineno">Prochaines <var>unitCount</var> lignes:</span> cinq entiers
@@ -466,7 +501,7 @@
                         <!-- BEGIN level1 -->
                         <li><var>level</var>: toujours <const>1</const> (seulement dans cette ligue).</li>
                         <!-- END -->
-                        <!-- BEGIN level2 level3 level4 -->
+                        <!-- BEGIN level2 level3 level4 level5 -->
                         <li><var>level</var>: <const>1</const>, <const>2</const> ou <const>3</const>.</li>
                         <!-- END -->
                         <li><var>x</var> et <var>y</var>: coordonnées de l'unité.</li>
@@ -484,13 +519,13 @@
                     <!-- BEGIN level1 -->
                     <li><action>TRAIN level x y</action> où level vaut <const>1</const></li>
                     <!-- END -->
-                    <!-- BEGIN level2 level3 level4-->
+                    <!-- BEGIN level2 level3 level4 level5 -->
                     <li><action>TRAIN level x y</action> où level vaut <const>1</const>, <const>2</const> ou <const>3</const></li>
                     <!-- END -->
                     <!-- BEGIN level3 -->
                     <li><action>BUILD type-batiment x y</action> où le type-batiment est uniquement <action>MINE</action>.</li>
                     <!-- END -->
-                    <!-- BEGIN level4 -->
+                    <!-- BEGIN level4 level5 -->
                     <li><action>BUILD type-batiment x y</action> où le type-baiment est soit <action>MINE</action> ou <action>TOWER</action>.</li>
                     <!-- END -->
                     <li><action>WAIT</action> pour ne rien faire</li>
@@ -498,7 +533,7 @@
                 <!-- BEGIN level1 level2 -->
                 <span class="statement-lineno">Exemple</span>: "MOVE 1 2 3; TRAIN 3 3 3; MOVE 2 3 1"<br>
                 <!-- END -->
-                <!-- BEGIN level3 level4 -->
+                <!-- BEGIN level3 level4 level5 -->
                 <span class="statement-lineno">Exemple</span>: "MOVE 1 2 3; TRAIN 3 3 3; BUILD MINE 0 1"<br>
                 <!-- END -->
                 <br>
@@ -514,3 +549,30 @@
         </div>
     </div>
 </div>
+
+<!-- BEGIN level1 level2 level3 -->
+  <div style="color: #7cc576;
+      background-color: rgba(124, 197, 118,.1);
+      padding: 20px;
+      margin-top: 10px;
+      text-align: left;">
+    <div style="text-align: center; margin-bottom: 6px">
+      <img src="//cdn.codingame.com/smash-the-code/statement/league_wood_04.png" />
+    </div>
+    <p style="text-align: center; font-weight: 700; margin-bottom: 6px;">
+      Qu'est-ce qui vous attend dans les ligues supérieures ?
+    </p>
+       Voici les règles supplémentaires à débloquer dans les ligues supérieures :
+      <ul style="margin-top: 0;padding-bottom: 0;" class="statement-next-rules">
+        <!-- BEGIN level1 -->
+        <li>En ligue Bois 2, vous pouvez entraîner des unités de niveau 2 et 3.</li>
+        <!-- END -->
+        <!-- BEGIN level1 level2 -->
+        <li>En ligue Bois 1, vous pouvez construire des mines.</li>
+        <!-- END -->
+        <!-- BEGIN level1 level2 level3 -->
+        <li>EN ligue Bronze, vous pouvez construire des tours.</li>
+        <!-- END -->
+      </ul>
+  </div>
+  <!-- END -->
