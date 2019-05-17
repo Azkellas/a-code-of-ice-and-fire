@@ -638,11 +638,14 @@
                     <!-- END -->
                     <li><action>WAIT</action> pour ne rien faire</li>
                 </ul>
+                <p>
+                    Vous pouvez ajouter un message à afficher dans le viewer en utilisant la commande <action>MSG mon message</action>.
+                </p>
                 <!-- BEGIN level1 level2 -->
-                <span class="statement-lineno">Exemple</span>: "MOVE 1 2 3; TRAIN 3 3 3; MOVE 2 3 1"<br>
+                <span class="statement-lineno">Exemple</span>: "MOVE 1 2 3; TRAIN 3 3 3; MOVE 2 3 1; MSG Team Ice"<br>
                 <!-- END -->
                 <!-- BEGIN level3 level4 level5 -->
-                <span class="statement-lineno">Exemple</span>: "MOVE 1 2 3; TRAIN 3 3 3; BUILD MINE 0 1"<br>
+                <span class="statement-lineno">Exemple</span>: "MOVE 1 2 3; TRAIN 3 3 3; BUILD MINE 0 1; MSG Team Ice"<br>
                 <!-- END -->
                 <br>
             </div>
