@@ -95,7 +95,7 @@
                 </p>
                 <div style="margin-left:auto; margin-right:auto; width:350px;">
                     <img src="https://www.codingame.com/servlet/mfileservlet?id=28933360811968" alt="territory-ownership" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
-                    <p>Ici, le territoire rouge est composé de 6 cases. Les 3 cases rouge foncé sont maintenant inactives car le joueur bleu a coupé une partie du territoire. En capturant, par exemple, la case marquée par un X, le joueur rouge peut rendre ces cases actives à nouveau.</p>
+                    <p><i>Ici, le territoire rouge est composé de 6 cases. Les 3 cases rouge foncé sont maintenant inactives car le joueur bleu a coupé une partie du territoire. En capturant, par exemple, la case marquée par un X, le joueur rouge peut rendre ces cases actives à nouveau.</i></p>
                 </div>
 
                 <br/>
@@ -190,7 +190,7 @@
                         <div style="margin-left:auto; margin-right:auto; width:350px;">
                             <img src="https://www.codingame.com/servlet/mfileservlet?id=28956841128576" alt="tower-protection" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
                             <p>
-                                La tour possédée par le joueur rouge protège les cases adjacentes marquées par une croix noire. Les cases en diagonale <strong>ne sont pas</strong> protégées. De plus, la case bleue à droite de la tour n'est pas protégée non plus car ce n'est pas une case rouge.
+                                <i>La tour possédée par le joueur rouge protège les cases adjacentes marquées par une croix noire. Les cases en diagonale <strong>ne sont pas</strong> protégées. De plus, la case bleue à droite de la tour n'est pas protégée non plus car ce n'est pas une case rouge.</i>
                             </p>
                         </div>
                     </li>
@@ -213,7 +213,7 @@
                         <div style="margin-left:auto; margin-right:auto; width:350px;">
                             <img src="https://www.codingame.com/servlet/mfileservlet?id=28956841128576" alt="tower-protection" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
                             <p>
-                                La tour possédée par le joueur rouge protège les cases adjacentes marquées par une croix noire. Les cases en diagonale <strong>ne sont pas</strong> protégées. De plus, la case bleue à droite de la tour n'est pas protégée non plus car ce n'est pas une case rouge.
+                                <i>La tour possédée par le joueur rouge protège les cases adjacentes marquées par une croix noire. Les cases en diagonale <strong>ne sont pas</strong> protégées. De plus, la case bleue à droite de la tour n'est pas protégée non plus car ce n'est pas une case rouge.</i>
                             </p>
                         </div>
                     </li>
@@ -523,7 +523,7 @@
         </h1>
 
         <div class="statement-expert-rules-content">
-            Le code source du jeu se trouve ici : <a src="https://github.com/Azkellas/a-code-of-ice-and-fire">https://github.com/Azkellas/a-code-of-ice-and-fire</a>.
+            Le code source du jeu se trouve ici : <a target="_blank" href="https://github.com/Azkellas/a-code-of-ice-and-fire">https://github.com/Azkellas/a-code-of-ice-and-fire</a>.
             <ul style="padding-top: 0; padding-bottom:0;">
                 <li>Il y a entre <const>8</const> et <const>20</const> emplacements de mine.</li>
                 <li>Un emplacement de mine est toujours présent sur la case directement à droite (resp. gauche) du QG rouge (resp. bleu).</li>

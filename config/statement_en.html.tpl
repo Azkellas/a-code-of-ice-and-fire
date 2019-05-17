@@ -523,7 +523,7 @@
         </h1>
 
         <div class="statement-expert-rules-content">
-            The source code can be found here: <a src="https://github.com/Azkellas/a-code-of-ice-and-fire">https://github.com/Azkellas/a-code-of-ice-and-fire</a>.
+            The source code can be found here: <a target="_blank" href="https://github.com/Azkellas/a-code-of-ice-and-fire">https://github.com/Azkellas/a-code-of-ice-and-fire</a>.
             <ul style="padding-top: 0; padding-bottom: 0;">
                 <li>There are between <const>8</const> and <const>20</const> mine spots.</li>
                 <li>A mine spot is always present on the cell directly on the right of the red HQ and on the cell directly on the left of the blue HQ.</li>
