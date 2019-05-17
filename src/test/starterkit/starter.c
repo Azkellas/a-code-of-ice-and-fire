@@ -1,8 +1,7 @@
 //---------------------------------------
 // CODE OF ICE AND FIRE - Starter kit
 //---------------------------------------
-// Ce code de démarrage cherche une case de déplacement pour toutes les unités
-// Puis une case d'entraînement pour toutes les cases actives
+// Ce code de dÃ©marrage cherche une case d'entraÃ®nement pour toutes les cases actives
 //---------------------------------------
 
 	#include <stdlib.h>
@@ -98,7 +97,7 @@
 //--------- Globales ---------
 
     GAME initGame;                                  // Constantes du jeu
-    char message[100];                              // Message personnalisé   
+    char message[100];                              // Message personnalisÃ©   
     
 //--------- Programme ---------
 
@@ -109,21 +108,21 @@ int main() {
     //------------ Boucle principale ---------
     while (1) {
         
-        STATE* s = newState();                      // Créer un état du jeu
+        STATE* s = newState();                      // CrÃ©er un Ã©tat du jeu
         inputLoop(s);                               // Lire les infos du tour
         sprintf(message, "MSG Je tente ce coup");       // Initialiser le message
         
-        MOVE bestMove = {M_WAIT, 0, 0, 0};          // Initialiser un coup par défaut
-        int nbMove = 0;                             // Nombre de coups trouvés
+        MOVE bestMove = {M_WAIT, 0, 0, 0};          // Initialiser un coup par dÃ©faut
+        int nbMove = 0;                             // Nombre de coups trouvÃ©s
         
-        // Entraînement des unités
+        // EntraÃ®nement des unitÃ©s
         for(int j = 0; j < G_HEIGHT; j++) {
             for(int i = 0; i < G_WIDTH; i++) {
                 if(s->player[ME].gold < TRAIN_COST) break;
                 if(s->grid[j][i] != 'O' && s->grid[j][i] != 'o') continue; 
                 
-                // Chercher une case pour l'entraînement
-                 POSITION pos = {i, j};   // Initialiser une case de déplacement
+                // Chercher une case pour l'entraÃ®nement
+                 POSITION pos = {i, j};   // Initialiser une case de dÃ©placement
                 if(i > 0 && s->grid[j][i - 1] == '.') pos.x--;
                 else if(i < G_WIDTH - 1 && s->grid[j][i + 1] == '.') pos.x++;
                 else if(j > 0 && s->grid[j - 1][i] == '.') pos.y--;
@@ -138,9 +137,9 @@ int main() {
                 }
             }      
         
-        if(!nbMove) playMove(&bestMove);            // Attendre si pas de coups trouvé
+        if(!nbMove) playMove(&bestMove);            // Attendre si pas de coups trouvÃ©
         printf("%s\n", message);                    // Terminer la commande
-        free(s);                                    // Libérer la mémoire
+        free(s);                                    // LibÃ©rer la mÃ©moire
         }
 
     return 0;
@@ -148,7 +147,7 @@ int main() {
 
 //--------- Fonctions ---------
 
-// Input au démarrage
+// Input au dÃ©marrage
 
     void inputInit(GAME* g) {
         
@@ -159,7 +158,7 @@ int main() {
     		}
     	}
 
-// Input à chaque boucle
+// Input Ã  chaque boucle
 
     void inputLoop(STATE* s) {
         
@@ -190,7 +189,7 @@ int main() {
             }
     }
 
-// Préparer l'action
+// PrÃ©parer l'action
 
     void setMove(MOVE* m, int move, int info, int x, int y) {
         m->move = move;
@@ -220,6 +219,6 @@ int main() {
         
         }
         
-// Allocation mémoire
+// Allocation mÃ©moire
 
     STATE* newState() { return malloc(sizeof(STATE)); }
