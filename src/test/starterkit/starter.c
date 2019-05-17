@@ -1,15 +1,14 @@
 //----------------------------------------------
 // CODE OF ICE AND FIRE - Starter kit
 //----------------------------------------------
-// Ce code de démarrage cherche une case 
-// d'entraînement autour de chaque case actives
+// This code looks for empty cells to train on, no move action
 //----------------------------------------------
 
     #include <stdlib.h>
     #include <stdio.h>
     #include <string.h>
 
-// --------- Constantes -----------
+// --------- Constants -----------
 
     #define G_WIDTH                    12
     #define G_HEIGHT                   12
@@ -95,61 +94,61 @@
     void setMove(MOVE*, int, int, int, int);
     void playMove(MOVE*);
     
-//--------- Globales ---------
+//--------- Globals ---------
 
-    GAME initGame;                                                              // Constantes du jeu
-    char message[100];                                                          // Message personnalisé   
+    GAME initGame;                                                              
+    char message[100];                                                             
 
-//--------- Programme ---------
+//--------- Main entrance ---------
 
 int main() {
     
-    inputInit(&initGame);                                                       // Lire les infos du jeu
+    inputInit(&initGame);                                                       
 
-    //------------ Boucle principale ---------
+    //------------ Main loop ---------
     
     while (1) {
         
-        STATE* s = newState();                                                  // Créer un état du jeu
-        inputLoop(s);                                                           // Lire les infos du tour
-        sprintf(message, "MSG Je tente ce coup");                               // Initialiser le message
+        STATE* s = newState();                                                  
+        inputLoop(s);                                                           // Read current turn data
+        sprintf(message, "MSG Let's do this!");                                 // Set message
         
-        MOVE bestMove = {M_WAIT, 0, 0, 0};                                      // Initialiser une action par défaut
-        int nbMove = 0;                                                         // Nombre de coups trouvés
+        MOVE bestMove = {M_WAIT, 0, 0, 0};                                      // Init base action
+        int nbMove = 0;                                                         // Counter of moves made
         
         // Entraînement des unités
-        for(int j = 0; j < G_HEIGHT; j++) {                                     // Pour chaque case
+        for(int j = 0; j < G_HEIGHT; j++) {                                     // For each cell
             for(int i = 0; i < G_WIDTH; i++) {
-                if(s->player[ME].gold < TRAIN_COST) break;                      // Interrompre si pas assez d'or
-                if(s->grid[j][i] != 'O' && s->grid[j][i] != 'o') continue;      // Traiter uniquement les cases actives
+                if(s->player[ME].gold < TRAIN_COST) break;                      // Stop if not enough gold
+                if(s->grid[j][i] != 'O' && s->grid[j][i] != 'o') continue;      // Only check active cells
                 
-                // Chercher une case pour l'entraînement
-                POSITION pos = {i, j};                                          // Initialiser une case de déplacement
-                if(i > 0 && s->grid[j][i - 1] == '.') pos.x--;                  // Chercher une case neutre à droite
-                else if(i < G_WIDTH - 1 && s->grid[j][i + 1] == '.') pos.x++;   // Sinon à gauche
-                else if(j > 0 && s->grid[j - 1][i] == '.') pos.y--;             // Sinon en haut
-                else if(j < G_HEIGHT - 1 && s->grid[j + 1][i] == '.') pos.y++;  // Sinon en bas
+                // Look for a cell to train on
+                POSITION pos = {i, j};                                          // Init a position
+                if(i > 0 && s->grid[j][i - 1] == '.') pos.x--;                  // Look on the right
+                else if(i < G_WIDTH - 1 && s->grid[j][i + 1] == '.') pos.x++;   // On the left
+                else if(j > 0 && s->grid[j - 1][i] == '.') pos.y--;             // Above
+                else if(j < G_HEIGHT - 1 && s->grid[j + 1][i] == '.') pos.y++;  // Below
                 
                 // Jouer le coup si il existe
-                if(pos.x != i || pos.y != j) {                                  // Si on a trouvé ne case voisine neutre
-                    setMove(&bestMove, M_TRAIN, 1, pos.x, pos.y);               // Préparer l'action d'entraînement
-                    playMove(&bestMove);                                        // Lancer l'action
-                    nbMove++;                                                   // Compter les actions
+                if(pos.x != i || pos.y != j) {                                  // If we found a move
+                    setMove(&bestMove, M_TRAIN, 1, pos.x, pos.y);               // Prepare to make the action
+                    playMove(&bestMove);                                        // Do it
+                    nbMove++;                                                   // Count it
                     }
                 }
             }      
         
-        if(!nbMove) playMove(&bestMove);                                        // Attendre si pas de coups trouvé
-        printf("%s\n", message);                                                // Terminer la ligne d'actions
-        free(s);                                                                // Libérer la mémoire
+        if(!nbMove) playMove(&bestMove);                                        // Print WAIT if nothing found
+        printf("%s\n", message);                                                // Print message and end line
+        free(s);                                                                // Free memory
         }
 
     return 0;
     }
 
-//--------- Fonctions ---------
+//--------- Functions ---------
 
-// Input au démarrage
+// Mine spots input
 
     void inputInit(GAME* g) {
         
@@ -160,7 +159,7 @@ int main() {
             }
         }
 
-// Input à chaque boucle
+// Loop inputs
 
     void inputLoop(STATE* s) {
         
@@ -191,7 +190,7 @@ int main() {
                 }
         }
 
-// Préparer l'action
+// Prepare action
 
     void setMove(MOVE* m, int move, int info, int x, int y) {
         m->move = move;
@@ -200,14 +199,14 @@ int main() {
         m->y = y;
         }
         
-// Lancer l'action
+// Make action
 
     void playMove(MOVE *m) {
 
         switch(m->move) {
 
             case(M_WAIT) : 
-                printf("WAIT;WAIT;"); 
+                printf("WAIT;"); 
                 break;
 
             case(M_MOVE) : 
@@ -220,6 +219,6 @@ int main() {
             }
         }
         
-// Allocation mémoire
+// Allocate memory
 
     STATE* newState() { return malloc(sizeof(STATE)); }
