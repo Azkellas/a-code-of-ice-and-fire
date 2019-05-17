@@ -1,6 +1,6 @@
 # List of CodingHubs
 
-- **bubi24 at his own place near Genève**: May 18 from 4 pm to 8 pm
+- **bubi24 at his own place near Genève**: May 19 from 4 pm to 8 pm
 
 	[Facebook event](https://www.facebook.com/events/452639562138491/)
 	
@@ -26,9 +26,11 @@
 	
 	Contact: sebastien.delmas@sgcib.com
   
-- **KonamiCode at Kontur in St Petersburg**:
+- **KonamiCode at SKB Kontur in St Petersburg**: May 19th from 4:30 pm to 7:30 pm
 
-  [Telegram group](https://t.me/KonturHubSpb)
+  [event page](https://eventskbkontur.timepad.ru/event/980762/)
+
+[More info about the CodingHubs + a map](https://www.codingame.com/playgrounds/40701/contribute---help/codinghubs)
 
 Feel free to add your own!
 
