@@ -50,10 +50,16 @@ public class Cell extends Entity {
 
     public boolean isFree() { return this.unit == null && this.building == null; }
     public boolean isCapturable(int playerId, int level) {
-        // not on enemy cells protected by towers
-        if (this.getOwner() != playerId && this.isProtected() && level < CAPTURE_LEVEL) {
+        // not on enemy active cells protected by towers
+        if (this.getOwner() != playerId && this.isActive() && this.isProtected() && level < CAPTURE_LEVEL) {
             return false;
         }
+
+        // not on enemy tower even if inactive
+        if (this.getOwner() != playerId && this.building != null && this.building.getType() == BUILDING_TYPE.TOWER && level < CAPTURE_LEVEL) {
+            return false;
+        }
+
 
         // not protected and free
         if (this.isFree()) {
@@ -76,6 +82,7 @@ public class Cell extends Entity {
     }
 
     public boolean isProtected() {
+        // has a tower on it
         if (this.building != null && this.building.getType() == BUILDING_TYPE.TOWER)
             return true;
 
@@ -83,7 +90,8 @@ public class Cell extends Entity {
             if (neighbour == null || neighbour.getOwner() != this.getOwner())
                 continue;
             Building neighbourBuilding = neighbour.getBuilding();
-            if (neighbourBuilding != null && neighbourBuilding.getType() == BUILDING_TYPE.TOWER)
+            // only active towers protect nearby cells
+            if (neighbour.isActive() && neighbourBuilding != null && neighbourBuilding.getType() == BUILDING_TYPE.TOWER)
                 return true;
         }
         return false;

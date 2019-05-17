@@ -1,3 +1,39 @@
+CODE-START-Clojure
+(ns Player
+  (:gen-class))
+
+; Auto-generated code below aims at helping you parse
+; the standard input according to the problem statement.
+
+(defn -main [& args]
+  (let [numberMineSpots (read)]
+    (loop [i numberMineSpots]
+      (when (> i 0)
+        (let [x (read) y (read) _ (read-line)]
+        (recur (dec i)))))
+    (while true
+      (let [gold (read) income (read) opponentGold (read) opponentIncome (read) _ (read-line)]
+        (loop [i 12]
+          (when (> i 0)
+            (let [line (read-line)]
+            (recur (dec i)))))
+        (let [buildingCount (read)]
+          (loop [i buildingCount]
+            (when (> i 0)
+              (let [owner (read) buildingType (read) x (read) y (read) _ (read-line)]
+              (recur (dec i)))))
+          (let [unitCount (read)]
+            (loop [i unitCount]
+              (when (> i 0)
+                (let [owner (read) unitId (read) level (read) x (read) y (read) _ (read-line)]
+                (recur (dec i)))))
+            
+            ; (binding [*out* *err*]
+            ;   (println "Debug messages..."))
+            
+            ; Write answer to stdout
+            (println "WAIT")))))))
+CODE-END-Clojure
 read numberMineSpots:int
 loop numberMineSpots read x:int y:int
 gameloop
