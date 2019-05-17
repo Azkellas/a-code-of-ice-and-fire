@@ -25,6 +25,7 @@ public class PlayerView extends AbstractView {
     private Text gold;
     private Text income;
     private Text pseudo;
+    private Text message;
     private Sprite avatar;
     AtomicInteger goldModel;
     AtomicInteger incomeModel;
@@ -58,7 +59,7 @@ public class PlayerView extends AbstractView {
                 .setX(238 - 50 - PLAYER_AVATAR_RADIUS/2)
                 .setY(baseY);
 
-        int textGap = 110;
+        int textGap = 85;
         pseudo = entityModule.createText(this.model.getTrimedPseudo())
                 .setAnchor(0.5)
                 .setFillColor(0xffffff)
@@ -87,11 +88,20 @@ public class PlayerView extends AbstractView {
                 .setX(855/2)
                 .setY(baseY + textGap + 70 + 50);
 
+        message = this.entityModule.createText("")
+                .setAnchor(0.5)
+                .setFillColor(0xffffff)
+                .setFontSize(35)
+                .setStrokeColor(0x000000)
+                .setStrokeThickness(4.0)
+                .setX(855/2)
+                .setY(baseY + textGap + 70 + 50 + 50);
+
         group = entityModule.createGroup()
                 .setScale(1)
                 .setX(0)
                 .setY(0);
-        group.add(background, avatar, pseudo, gold, income);
+        group.add(background, avatar, pseudo, gold, income, message);
     }
     
     public void updateView() {
@@ -101,6 +111,7 @@ public class PlayerView extends AbstractView {
         } else {
             this.income.setText("Income: " + incomeModel.toString());
         }
+        this.message.setText(model.getMessage());
     }
 
     public Entity getEntity() {

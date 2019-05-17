@@ -139,7 +139,7 @@ public class Referee extends AbstractReferee {
                 return;
             }
             Player player = gameManager.getPlayer(this.currentPlayer.intValue());
-
+            player.resetMessage();
             // compute new golds / zones / killed units
             gameState.initTurn(this.currentPlayer.intValue());
 
@@ -345,6 +345,11 @@ public class Referee extends AbstractReferee {
                     continue;
                 }
 
+                if (matchMsg(player, actionStr)) {
+                    // set message
+                    continue;
+                }
+
                 if (!matchMoveTrain(player, actionStr) && !matchBuild(player, actionStr)) {
                     // unrecognized pattern: timeout
                     gameManager.addToGameSummary(player.getNicknameToken() + ": Unrecognised command (\"" + actionStr+"\")");
@@ -386,6 +391,21 @@ public class Referee extends AbstractReferee {
 
         Action action = new Action(actionStr, ACTIONTYPE.MOVE, player.getIndex(), id, this.gameState.getCell(x, y));
         this.actionList.add(action);
+    }
+
+    private boolean matchMsg(Player player, String actionStr) {
+        Matcher msgMatcher = MSG_PATTERN.matcher(actionStr);
+        if (!msgMatcher.find()) {
+            return false;
+        }
+
+        try {
+            String message = actionStr.substring(4);
+            player.setMessage(message);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private boolean matchMoveTrain(Player player, String actionStr) {

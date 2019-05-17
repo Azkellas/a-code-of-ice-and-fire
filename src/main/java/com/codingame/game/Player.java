@@ -4,7 +4,23 @@ import com.codingame.gameengine.core.AbstractMultiplayerPlayer;
 // Uncomment the line below and comment the line under it to create a Solo Game
 public class Player extends AbstractMultiplayerPlayer {
     protected int expectedOutputLines = 1;
+    private String message = "";
 
+    public void setMessage(String msg) {
+        this.message = msg;
+    }
+
+    public void resetMessage() {
+        this.message = "";
+    }
+
+    public String getMessage() {
+        if (this.message.length() > 20) {
+            return message.substring(0, 17) + "...";
+        }
+        return message;
+
+    }
     @Override
     public int getExpectedOutputLines() {
         // Returns the number of expected lines of outputs for a player
@@ -13,12 +29,12 @@ public class Player extends AbstractMultiplayerPlayer {
 
     public String getTrimedPseudo() {
         String nickname = this.getNicknameToken();
-        nickname = "azertyuiopqsdfghjklmwxcvbn";
         if (nickname.length() > 15) {
             nickname = nickname.substring(0, 12) + "...";
         }
         return nickname;
     }
+
     public void setExpectedOutputLines(int lines) {
         this.expectedOutputLines = lines;
     }
