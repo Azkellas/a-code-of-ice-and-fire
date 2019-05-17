@@ -2,7 +2,6 @@
 <div id="statement_back" class="statement_back" style="display:none"></div>
 <div class="statement-body">
 
-    <!-- BEGIN level1 level2 level3 level4 -->
     <!-- LEAGUE ALERT -->
     <div style="color: #7cc576;
     background-color: rgba(124, 197, 118,.1);
@@ -12,6 +11,7 @@
     margin-bottom: 10px;
     text-align: left;">
 
+        <!-- BEGIN level1 level2 level3 level4 -->
         <div style="text-align: center; margin-bottom: 6px">
             <img src="//cdn.codingame.com/smash-the-code/statement/league_wood_04.png"/>
         </div>
@@ -30,6 +30,7 @@
           Welcome to the Bronze league!
           <!-- END -->
         </p>
+        <!-- END -->
         <span class="statement-league-alert-content">
             <!-- BEGIN level1 -->
               Wood leagues should be considered as a tutorial which lets players discover the different rules of the game. <br/>
@@ -44,12 +45,12 @@
             <!-- BEGIN level4 -->
             You are now able to build towers (<action>BUILD TOWER</action>) to protect cells. You now have access to all the rules.<br/> <br/>
             <!-- END -->
-            <!-- BEGIN level1 level2 level3 level4 -->
               Starter AIs are available in the <a target="_blank" href="https://github.com/Azkellas/a-code-of-ice-and-fire/tree/develop/src/test/starterkit">Starter Kit</a>. They can help you get started with coding your own bot.
-            <!-- END -->
+
+            Check out the <a target="_blank" href="https://github.com/Azkellas/a-code-of-ice-and-fire/blob/develop/COMMUNITY.MD">community events</a> this week and have fun coding!
         </span>
     </div>
-    <!-- END -->
+    
 
 
     <!-- GOAL -->

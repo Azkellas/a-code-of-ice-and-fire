@@ -2,7 +2,6 @@
 <div id="statement_back" class="statement_back" style="display:none"></div>
 <div class="statement-body">
 
-    <!-- BEGIN level1 level2 level3 level4 -->
     <!-- LEAGUE ALERT -->
     <div style="color: #7cc576;
     background-color: rgba(124, 197, 118,.1);
@@ -12,6 +11,7 @@
     margin-bottom: 10px;
     text-align: left;">
 
+    <!-- BEGIN level1 level2 level3 level4 -->
         <div style="text-align: center; margin-bottom: 6px">
             <img src="//cdn.codingame.com/smash-the-code/statement/league_wood_04.png"/>
         </div>
@@ -29,6 +29,7 @@
           Bienvenue en ligue Bronze !
           <!-- END -->
         </p>
+        <!-- END -->
         <span class="statement-league-alert-content">
             <!-- BEGIN level1 -->
               Les ligues Bois doivent être considérées comme un tutoriel pour apprendre les différentes règles du jeu. <br>
@@ -43,12 +44,12 @@
             <!-- BEGIN level4 -->
             Vous pouvez désormais construire des tours (<action>BUILD TOWER</action>) pour protéger des cases. Vous avez accès à toutes les règles.<br/> <br/>
             <!-- END -->
-            <!-- BEGIN level1 level2 level3 level4 -->
+
               Des IAs de base sont disponibles dans le <a target="_blank" href="https://github.com/Azkellas/a-code-of-ice-and-fire/tree/develop/src/test/starterkit">kit de démarrage</a>. Elles peuvent vous aider à démarrer votre propre IA.
-            <!-- END -->
+
+            Découvrez les <a target="_blank" href="https://github.com/Azkellas/a-code-of-ice-and-fire/blob/develop/COMMUNITY.MD">évenements de la communauté</a> cette semaine et prenez du plaisir à coder!
         </span>
     </div>
-    <!-- END -->
 
 
     <!-- GOAL -->
