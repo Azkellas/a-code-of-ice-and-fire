@@ -13,7 +13,6 @@ public class Player extends AbstractMultiplayerPlayer {
 
     public String getTrimedPseudo() {
         String nickname = this.getNicknameToken();
-        nickname = "azertyuiopqsdfghjklmwxcvbn";
         if (nickname.length() > 15) {
             nickname = nickname.substring(0, 12) + "...";
         }
