@@ -45,7 +45,7 @@
             You are now able to build towers (<action>BUILD TOWER</action>) to protect cells. You now have access to all the rules.<br/> <br/>
             <!-- END -->
             <!-- BEGIN level1 level2 level3 level4 -->
-              Starter AIs are available in the <a target="_blank" href="https://github.com/Azkellas/a-code-of-ice-and-fire/tree/master/src/test/starterkit">Starter Kit</a>. They can help you get started with coding your own bot.
+              Starter AIs are available in the <a target="_blank" href="https://github.com/Azkellas/a-code-of-ice-and-fire/tree/develop/src/test/starterkit">Starter Kit</a>. They can help you get started with coding your own bot.
             <!-- END -->
         </span>
     </div>
