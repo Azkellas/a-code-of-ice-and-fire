@@ -38,6 +38,7 @@ public final class Constants {
     public static final Pattern MOVETRAIN_PATTERN = Pattern.compile("^(MOVE|TRAIN) ([0-9]*) ([0-9]*) ([0-9]*)$");
     public static final Pattern MOVE_PATTERN = Pattern.compile("^MOVE ([0-9]*) ([0-9]*) ([0-9]*)$");
     public static final Pattern TRAIN_PATTERN = Pattern.compile("^TRAIN ([0-9]*) ([0-9]*) ([0-9]*)$");
+    public static final Pattern MSG_PATTERN = Pattern.compile("^MSG (.*)$");
     public  static final Pattern BUILD_PATTERN = Pattern.compile("^BUILD (TOWER|MINE) ([0-9]*) ([0-9]*)$");
 
     public static final int BUILDING_COST(BUILDING_TYPE type) {

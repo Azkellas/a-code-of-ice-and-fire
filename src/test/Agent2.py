@@ -121,8 +121,11 @@ nb_mines = int(input())
 for i in range(nb_mines):
     x, y = [int(j) for j in input().split()]
 
+msgI = 0
+iTurn = 0
 # game loop
 while True:
+    iTurn += 1
     gold = int(input())
     debug(gold)
     income = int(input())
@@ -184,6 +187,10 @@ while True:
             voisin = neighbours[0]
 
         actions.append("MOVE {} {} {}".format(unit.id, voisin[0], voisin[1]))
+        if (iTurn % 2 == 0):
+            actions.append("MSG TESTAZERATPYOTRIEZAGFAZ " + str(msgI))
+            msgI += 1
+
         carte[voisin[1]][voisin[0]] = OWN_ACTIVE_CELL
         #actions.append("MOVE {} {} {}".format(unit.id, en_hq_pos[0], en_hq_pos[1]))
 
@@ -196,6 +203,10 @@ while True:
             cell = border.pop()
 
         actions.append("TRAIN {} {} {}".format(1, cell[0], cell[1]))
+        if (iTurn % 2 == 0):
+            actions.append("MSG TEST " + str(msgI))
+            msgI += 1
+
         carte[cell[1]][cell[0]] = OWN_ACTIVE_CELL
 
         # Update border
@@ -213,5 +224,4 @@ while True:
 
     # Write an action using print
     # To debug: print("Debug messages...", file=sys.stderr)
-
     print(";".join(actions))
