@@ -256,7 +256,7 @@
                         Des unités d'armée de différents niveaux (<const>1</const>, <const>2</const> ou <const>3</const>) peuvent être entraînées en utilisant la commande <action>TRAIN level x y</action>. La case cible <const>(x,y)</const> doit être une des cases du territoire du joueur ou de son voisinage direct (bordure).
                     </p>
                     <p>
-                        Une unité ne peut détruire que des unités de niveau inférieur, excepté les unités de level 3 qui peuvent détruire toutes les unités.
+                        Une unité ne peut détruire que des unités de niveau inférieur, excepté les unités de niveau 3 qui peuvent détruire toutes les unités.
                     </p>
                 </div>
                 <!-- END -->
@@ -265,7 +265,7 @@
                     Des unités d'armée de différents niveaux (<const>1</const>, <const>2</const> ou <const>3</const>) peuvent être entraînées en utilisant la commande <action>TRAIN level x y</action>. La case cible <const>(x,y)</const> doit être une des cases du territoire du joueur ou de son voisinage direct (bordure).
                 </p>
                 <p>
-                    Une unité ne peut détruire que des unités de niveau inférieur, excepté les unités de level 3 qui peuvent détruire toutes les unités.
+                    Une unité ne peut détruire que des unités de niveau inférieur, excepté les unités de niveau 3 qui peuvent détruire toutes les unités.
                 </p>
                 <!-- END -->
                 <!-- BEGIN level2 -->

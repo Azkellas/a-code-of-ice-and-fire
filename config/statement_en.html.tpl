@@ -178,7 +178,7 @@
                     background-color: rgba(124, 197, 118,.1);
                     padding: 2px;">
                     <p>
-                        Players can build two different building: the <action>MINE</action> and the <action>TOWER</action>.
+                        Players can build two different buildings: the <action>MINE</action> and the <action>TOWER</action>.
                     </p>
                 </div>
                 <ul style="padding-top: 0; padding-bottom: 0;">
@@ -205,7 +205,7 @@
                     Players can <action>BUILD</action> buildings to improve their economy or military power. A player can only build on owned active cells that are unoccupied.
                 </p>
                 <p>
-                    Players can build two different building: the <action>MINE</action> and the <action>TOWER</action>.
+                    Players can build two different buildings: the <action>MINE</action> and the <action>TOWER</action>.
                 </p>
                 <ul style="padding-top: 0; padding-bottom: 0;">
                     <li><img src="http://file.azke.fr/mine_neutre.png" style="height:20px;"/><action>MINE</action>: mines produce gold each turn and can only be built on mine spots. Mines cost <const>20 + 4 * playerNbOfMines</const>. So the first costs <const>20</const>, the second one <const>24</const>... A mine's income is always <const>+4</const>.</li>
