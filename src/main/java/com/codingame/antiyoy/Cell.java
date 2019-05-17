@@ -82,6 +82,7 @@ public class Cell extends Entity {
     }
 
     public boolean isProtected() {
+        // has a tower on it
         if (this.building != null && this.building.getType() == BUILDING_TYPE.TOWER)
             return true;
 
@@ -89,7 +90,8 @@ public class Cell extends Entity {
             if (neighbour == null || neighbour.getOwner() != this.getOwner())
                 continue;
             Building neighbourBuilding = neighbour.getBuilding();
-            if (neighbourBuilding != null && neighbourBuilding.getType() == BUILDING_TYPE.TOWER)
+            // only active towers protect nearby cells
+            if (neighbour.isActive() && neighbourBuilding != null && neighbourBuilding.getType() == BUILDING_TYPE.TOWER)
                 return true;
         }
         return false;
