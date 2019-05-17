@@ -34,8 +34,8 @@ Feel free to add your own!
 
 # List of Streams
 
-- **Wood 3 to Bronze** in Kotlin by csj: Saturday 18 at 1 PM CEST (7 AM EDT)
+- **[Wood 3 to Bronze](https://www.twitch.tv/codingame)** in Kotlin by csj: Saturday 18 at 1 PM CEST (7 AM EDT)
 
-- **Road to Silver** in Python3 by Icebox: Tuesday 21 at 6 PM CEST
+- **[Road to Silver](https://www.twitch.tv/codingame)** in Python3 by Icebox: Tuesday 21 at 6 PM CEST
 
 Feel free to add your own!
