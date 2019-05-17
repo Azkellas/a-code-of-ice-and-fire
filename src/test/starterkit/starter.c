@@ -113,8 +113,8 @@ int main() {
         inputLoop(s);                               // Lire les infos du tour
         sprintf(message, "MSG Je tente ce coup");   // Initialiser le message
         
-        MOVE bestMove = {M_WAIT, 0, 0, 0};            // Initialiser un coup par défaut
-        int nbMove = 0;                                // Nombre de coups trouvés
+        MOVE bestMove = {M_WAIT, 0, 0, 0};          // Initialiser un coup par défaut
+        int nbMove = 0;                             // Nombre de coups trouvés
         
         // Entraînement des unités
         for(int j = 0; j < G_HEIGHT; j++) {
