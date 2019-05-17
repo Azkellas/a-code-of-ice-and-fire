@@ -83,10 +83,9 @@
                     <li> néant (<const>#</const>) : n'est pas une case jouable.</li>
                     <li> neutre (<const>.</const>) : n'appartient à aucun joueur.</li>
                     <li> capturée (<const>O</const> ou <const>X</const>) : appartient à un joueur.</li>
-                    <li> inactive (<const>o</const> ou <const>x</const>) : appartient à un joueur mais <i>inactive</i>.</li>
+                    <li> inactive (<const>o</const> ou <const>x</const>) : appartient à un joueur mais inactive.</li>
                 </ul>
 
-                <br/>
                 <p><strong>Possession de territoire</strong></p>
                 <p>
                     Chaque joueur capture des cases pour agrandir son territoire. Le territoire d'un joueur est composé de toutes les cases possédées par un joueur qui sont <strong>actives</strong>.
@@ -148,18 +147,14 @@
                     Si un joueur se retrouve avec un revenu négatif et ne peut pas payer le coût d'entretien de ses unités avec son or, toutes ses unités sont détruites et son total d'or est remis à <const>0</const>.
                 </p>
 
-                <br/>
-                <p><strong>Bâtiments</strong></p>
-                <!-- BEGIN level1 level2 -->
-                <p>
-                    Dans cette ligue, les joueurs ne peuvent pas construire de bâtiment.
-                </p>
-                <!-- END -->
 
                 <!-- BEGIN level3 -->
+
                 <div style="color: #7cc576;
                     background-color: rgba(124, 197, 118,.1);
                     padding: 2px;">
+                    <br/>
+                    <p><strong>Bâtiments</strong></p>
                     <p>
                         Les joueurs peuvent construire des bâtiments avec l'action <action>BUILD</action> pour augmenter leur puissance économique ou militaire. Il n'est possible de construire que sur une case possédée, active et non occupée.
                     </p>
@@ -173,6 +168,8 @@
                 <!-- END -->
 
                 <!-- BEGIN level4 -->
+                <br/>
+                <p><strong>Bâtiments</strong></p>
                 <p>
                     Les joueurs peuvent construire des bâtiments avec l'action <action>BUILD</action> pour augmenter leur puissance économique ou militaire. Il n'est possible de construire que sur une case possédée et active.<br/>
                 </p>
@@ -191,15 +188,17 @@
                 padding: 2px;"><img src="http://file.azke.fr/tower_red.png" style="height:20px;"/>
                         <action>TOWER</action>: les tours protègent les cases possedées et directement adjacentes (en haut, en bas, à gauche et à droite, mais pas en diagonale). Une case protégée par une tour ne peut être atteinte par une unité ennemie, à moins qu'elle soit de niveau <const>3</const>. De même, une tour ne peut être détruite que par une unité de niveau <const>3</const>. Une tour coûte 15 d'or à construire et ne peut pas être construite sur un emplacement de mine.
                         <div style="margin-left:auto; margin-right:auto; width:350px;">
-                            <img src="https://i.imgur.com/WWu1qPB.png" alt="tower-protection" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
+                            <img src="https://www.codingame.com/servlet/mfileservlet?id=28956841128576" alt="tower-protection" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
                             <p>
-                                La tour possédée par le joueur rouge protège les cases alentours marquées par une croix noire. Les cases en diagonale <strong>ne sont pas</strong> protégées. De plus, la case bleue à droite de la tour n'est pas protégée non plus car ce n'est pas une case rouge.
+                                La tour possédée par le joueur rouge protège les cases adjacentes marquées par une croix noire. Les cases en diagonale <strong>ne sont pas</strong> protégées. De plus, la case bleue à droite de la tour n'est pas protégée non plus car ce n'est pas une case rouge.
                             </p>
                         </div>
                     </li>
                 </ul>
                 <!-- END -->
                 <!-- BEGIN level5 -->
+                <br/>
+                <p><strong>Bâtiments</strong></p>
                 <p>
                     Les joueurs peuvent construire des bâtiments avec l'action <action>BUILD</action> pour augmenter leur puissance économique ou militaire. Il n'est possible de construire que sur une case possédée et active.<br/>
                 </p>
@@ -212,17 +211,22 @@
                     <li><img src="http://file.azke.fr/tower_red.png" style="height:20px;"/>
                         <action>TOWER</action>: les tours protègent les cases possedées et directement adjacentes (en haut, en bas, à gauche et à droite, mais pas en diagonale). Une case protégée par une tour ne peut être atteinte par une unité ennemie, à moins qu'elle soit de niveau <const>3</const>. De même, une tour ne peut être détruite que par une unité de niveau <const>3</const>. Une tour coûte 15 d'or à construire et ne peut pas être construite sur un emplacement de mine.
                         <div style="margin-left:auto; margin-right:auto; width:350px;">
-                            <img src="https://i.imgur.com/WWu1qPB.png" alt="tower-protection" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
+                            <img src="https://www.codingame.com/servlet/mfileservlet?id=28956841128576" alt="tower-protection" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
                             <p>
-                                La tour possédée par le joueur rouge protège les cases alentours marquées par une croix noire. Les cases en diagonale <strong>ne sont pas</strong> protégées. De plus, la case bleue à droite de la tour n'est pas protégée non plus car ce n'est pas une case rouge.
+                                La tour possédée par le joueur rouge protège les cases adjacentes marquées par une croix noire. Les cases en diagonale <strong>ne sont pas</strong> protégées. De plus, la case bleue à droite de la tour n'est pas protégée non plus car ce n'est pas une case rouge.
                             </p>
                         </div>
                     </li>
                 </ul>
                 <!-- END -->
                 <!-- BEGIN level3 -->
-                <p>
-                    Si un bâtiment est sur une case inactive, il n'est pas détruit ; il est seulement inactif.
+                <div style="color: #7cc576;
+                    background-color: rgba(124, 197, 118,.1);
+                    padding: 2px;">
+                    <p>
+                        Si un bâtiment est sur une case inactive, il n'est pas détruit ; il est seulement inactif.
+                    </p>
+                </div>
                 <!-- END -->
                 <!-- BEGIN level4 level5 -->
                 <p>
@@ -235,14 +239,10 @@
                 <p>
                     Les unités d'armée peuvent se déplacer pour capturer des cases et pour détruire les bâtiments et unités adverses.
                 </p>
+                <!-- BEGIN level1 -->
                 <p>
-                    Il y a <const>3</const> niveaux d'unité. Plus ce niveau est haut, plus l'unité est puissante.
-                <!-- BEGIN level1 -->
-                <br/>
-                    Cependant, dans cette ligue, seule les unités de niveau 1 sont disponibles. Leur coût d'entraînement est de <const>10</const>.
-                <!-- END -->
+                    Les unités de niveau 1 peuvent être entraînées en utilisant la commande <action>TRAIN 1 x y</action>. La case cible <const>(x,y)</const> doit être une des cases du territoire du joueur ou de son voisinage direct (bordure). Leur coût d'entraînement est de <const>10</const>.
                 </p>
-                <!-- BEGIN level1 -->
                 <p>
                     Dans cette ligue <strong>seulement</strong>, les unités de niveau 1 peuvent détruire d'autres unités de niveau 1 en se déplaçant sur leur position. Seule l'unité attaquante survit.
                 </p>
@@ -252,21 +252,33 @@
                     background-color: rgba(124, 197, 118,.1);
                     padding: 2px;">
                     <p>
-                        Une unité ne peut détruire que des unités de niveau inférieur, excepté les unités de level 3 qui peuvent détruire toutes les unités
+                        Des unités d'armée de différents niveaux (<const>1</const>, <const>2</const> ou <const>3</const>) peuvent être entraînées en utilisant la commande <action>TRAIN level x y</action>. La case cible <const>(x,y)</const> doit être une des cases du territoire du joueur ou de son voisinage direct (bordure).
                     </p>
                     <p>
-                        Si l'unité attaquante ne peut pas détruire l'unité défendante, l'action est invalide ; rien ne se passe. </br>
-                        Si les unités sont toutes 2 de niveau 3, seule l'unité attaquante survit.
+                        Une unité ne peut détruire que des unités de niveau inférieur, excepté les unités de level 3 qui peuvent détruire toutes les unités.
                     </p>
                 </div>
                 <!-- END -->
                 <!-- BEGIN level3 level4 level5 -->
                 <p>
-                    Une unité ne peut détruire que des unités de niveau inférieur, excepté les unités de level 3 qui peuvent détruire toutes les unités
+                    Des unités d'armée de différents niveaux (<const>1</const>, <const>2</const> ou <const>3</const>) peuvent être entraînées en utilisant la commande <action>TRAIN level x y</action>. La case cible <const>(x,y)</const> doit être une des cases du territoire du joueur ou de son voisinage direct (bordure).
                 </p>
                 <p>
-                    Si l'unité attaquante ne peut pas détruire l'unité défendante, l'action est invalide ; rien ne se passe. </br>
-                    Si les unités sont toutes 2 de niveau 3, seule l'unité attaquante survit.
+                    Une unité ne peut détruire que des unités de niveau inférieur, excepté les unités de level 3 qui peuvent détruire toutes les unités.
+                </p>
+                <!-- END -->
+                <!-- BEGIN level2 -->
+                <div style="color: #7cc576;
+                    background-color: rgba(124, 197, 118,.1);
+                    padding: 2px;">
+                    <p>
+                        Toutes les unités peuvent détruire tous les bâtiments.
+                    </p>
+                </div>
+                <!-- END -->
+                <!-- BEGIN level3 -->
+                <p>
+                    Toutes les unités peuvent détruire tous les bâtiments.
                 </p>
                 <!-- END -->
                 <!-- BEGIN level4 -->
@@ -277,7 +289,7 @@
                         Les tours ne peuvent être détruites que par des unités de niveau 3.
                     </p>
                     <p>
-                        Une unité de niveau inférieur à 3 ne peut pas se déplacer sur une case protégée par une tour adverse.
+                        Seules les unités de niveau 3 peuvent être entraînées ou se déplacer sur une case protégée par une tour adverse.
                     </p>
                 </div>
                 <!-- END -->
@@ -286,87 +298,190 @@
                     Les tours ne peuvent être détruites que par des unités de niveau 3.
                 </p>
                 <p>
-                    Une unité de niveau inférieur à 3 ne peut pas se déplacer sur une case protégée par une tour adverse.
+                    Seules les unités de niveau 3 peuvent être entraînées ou se déplacer sur une case protégée par une tour adverse.
                 </p>
                 <!-- END -->
                 <p>
+                    Chaque unité ne peut se déplacer que d'une seule case par tour, à l'aide de la commande <action>MOVE id x y</action>.
+                </p>
+                <p> 
+                    Il n'est pas possible d'entraîner ou de déplacer une unité sur une case avec une unité ou un bâtiment allié.
+                </p>
+                <p>
+                    Une unité ne peut pas se déplacer le tour où elle est entraînée.
+                </p>
+                <p>
+                    En utilisant la commande <action>MOVE id x y</action>, si la distance entre l'unité et la case cible <const>(x,y)</const> est supérieure à <const>1</const>, l'unité se déplace vers sa cible.
+                </p>
+                <p>
+                    Pour entraîner ou déplacer une unité sur une case avec une unité ou un bâtiment adverse, l'unité attaquante doit être en mesure de détruire l'unité défendante ou le bâtiment. Si c'est le cas, l'unité attaquante survit toujours. Dans le cas contraire, l'action est invalide : rien ne se passe.
+                </p>
+                <p>
                     Si une unité se retrouve sur une case inactive au début d'un tour, elle est immédiatement détruite.
                 </p>
-                <!-- BEGIN level2 level3 level4 level5 -->
-                <p>
-                    Résumé des différentes caractéristiques de chaque unité.
-                </p>
-                    <table style="text-align:center; width: 100%; border-spacing: 10px; border-collapse: separate;">
-                        <tr>
-                            <th>Niveau</th>
-                            <td>1</td>
-                            <td>2</td>
-                            <td>3</td>
-                        </tr>
-                        <tr>
-                            <th>Coût d'entrainement</th>
-                            <td>10</td>
-                            <td>20</td>
-                            <td>30</td>
-                        </tr>
-                        <tr>
-                            <th>Coût d'entretien</th>
-                            <td>1</td>
-                            <td>4</td>
-                            <td>20</td>
-                        </tr>
-                        <tr>
-                            <th>Peut tuer les unités niveau</th>
-                            <td>-</td>
-                            <td>1</td>
-                            <td>1, 2, 3</td>
-                        </tr>
-                        <tr>
-                            <th>Peut détruire</th>
-                            <td>
-                                <!-- BEGIN level3 level4 level5 -->
-                                Mines<br/>
-                                <!-- END -->
-                                QG
-                            </td>
-                            <td>
-                                <!-- BEGIN level3 level4 level5 -->
-                                Mines<br/>
-                                <!-- END -->
-                                QG
-                            </td>
-                            <td>
-                                <!-- BEGIN level3 level4 level5 -->
-                                Mines<br/>
-                                <!-- END -->
-                                <!-- BEGIN level4 level5 -->
-                                Tours<br/>
-                                <!-- END -->
-                                QG
-                            </td>
-                        </tr>
-                    </table>
+                 <!-- BEGIN level1 -->
+                <table style="text-align:center; width: 100%; border-spacing: 10px; border-collapse: separate;">
+                    <tr>
+                        <th>Niveau</th>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <th>Coût d'entraînement</th>
+                        <td>10</td>
+                    </tr>
+                    <tr>
+                        <th>Coût d'entretien</th>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <th>Peut détruire les unités</th>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <th>Peut détruire</th>
+                        <td>
+                            QG
+                        </td>
+                    </tr>
+                </table>
+                <!-- END -->
+                <!-- BEGIN level2 -->
+                <table style="text-align:center; width: 100%; border-spacing: 10px; border-collapse: separate; color: #7cc576;
+                background-color: rgba(124, 197, 118,.1);
+                padding: 2px;">
+                    <tr>
+                        <th>Niveau</th>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <th>Coût d'entraînement</th>
+                        <td>10</td>
+                        <td>20</td>
+                        <td>30</td>
+                    </tr>
+                    <tr>
+                        <th>Coût d'entretien</th>
+                        <td>1</td>
+                        <td>4</td>
+                        <td>20</td>
+                    </tr>
+                    <tr>
+                        <th>Peut détruire les unités</th>
+                        <td>-</td>
+                        <td>1</td>
+                        <td>1, 2, 3</td>
+                    </tr>
+                    <tr>
+                        <th>Peut détruire</th>
+                        <td>
+                            QG
+                        </td>
+                        <td>
+                            QG
+                        </td>
+                        <td>
+                            QG
+                        </td>
+                    </tr>
+                </table>
+                <!-- END -->
+                <!-- BEGIN level3 level4 level5 -->
+                <table style="text-align:center; width: 100%; border-spacing: 10px; border-collapse: separate;">
+                    <tr>
+                        <th>Niveau</th>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <th>Coût d'entraînement</th>
+                        <td>10</td>
+                        <td>20</td>
+                        <td>30</td>
+                    </tr>
+                    <tr>
+                        <th>Coût d'entretien</th>
+                        <td>1</td>
+                        <td>4</td>
+                        <td>20</td>
+                    </tr>
+                    <tr>
+                        <th>Peut détruire les unités</th>
+                        <td>-</td>
+                        <td>1</td>
+                        <td>1, 2, 3</td>
+                    </tr>
+                    <!-- BEGIN level3 -->
+                    <tr style="color: #7cc576;
+                background-color: rgba(124, 197, 118,.1);
+                padding: 2px;">
+                        <th>Peut détruire</th>
+                        <td>
+                            Mines
+                            <br/>
+                            QG
+                        </td>
+                        <td>
+                            Mines
+                            <br/>
+                            QG
+                        </td>
+                        <td>
+                            Mines
+                            <br/>
+                            QG
+                        </td>
+                    </tr>
                     <!-- END -->
+                    <!-- BEGIN level4 level5 -->
+                    <tr>
+                        <th>Peut détruire</th>
+                        <td>
+                            Mines
+                            <br/>
+                            QG
+                        </td>
+                        <td>
+                            Mines
+                            <br/>
+                            QG
+                        </td>
+                        <!-- BEGIN level4 -->
+                        <td style="color: #7cc576;
+                background-color: rgba(124, 197, 118,.1);
+                padding: 2px;">
+                            Mines
+                            <br/>
+                            Tours
+                            <br/>
+                            QG
+                        </td>
+                        <!-- END -->
+                    <!-- BEGIN level5 -->
+                        <td>
+                            Mines
+                            <br/>
+                            Tours
+                            <br/>
+                            QG
+                        </td>
+                        <!-- END -->
+                    </tr>
+                    <!-- END -->
+                </table>
+                <!-- END -->
 
 
-                    <ul style="padding-top: 0; padding-bottom:0;">
-                        <li>Chaque unité ne peut se déplacer que d' <const>1</const> case par tour, à l'aide de la commande <action>MOVE id x y</action>.</li>
-                        <ul style="padding-top: 0; padding-bottom:0;">
-                            <li style="list-style-type: circle;">La case cible doit être libre ou capturable. Les bâtiments sont infranchissables par des unités alliées.</li>
-                            <li style="list-style-type: circle;">Si la distance entre l'unité et les coordonnées cibles (x,y) est supérieure à <const>1</const>, l'unité se déplace vers sa cible.</li>
-                            <li style="list-style-type: circle;">
-                                Une unité ne peut pas se déplacer le tour où elle est entraînée.
-                            </li>
-                        </ul>
-                        <li>Les unités sont entrainées avec la commande <action>TRAIN niveau x y</action>. Elles ne peuvent être entrainées que sur des cases du territoire du joueur ou de son voisinage direct (bordure).
-                        </li>
-                        <li>
-                            L'entraînement des unités d'armée suit les mêmes règles que le déplacement: aucune action <action>TRAIN</action> ne peut être fait sur une case occupée par une unité ou bâtiment allié, et l'unité doit être assez puissante pour être entrainée sur une case occupée par un adversaire.</li>
-                        <li>Toutes les actions sont faites séquentiellement. Chaque action invalide est ignorée.</li>
-                    </ul>
-                    <div style="margin-left:auto; margin-right:auto; width:500px;">
-                        <img src="https://i.imgur.com/6guSobH.png" alt="action-sequence-diagram" style="margin-left:auto; margin-right:auto; width:550px;" />
-                    </div>
+                 </br>
+                <p><strong>Ordre des actions</strong></p>
+                <p>
+                    Les actions sont effectuées séquentiellement. Les actions invalides sont ignorées.
+                </p>
+                <div style="margin-left:auto; margin-right:auto; width:500px;">
+                        <img src="https://www.codingame.com/servlet/mfileservlet?id=28959325237970" alt="action-sequence-diagram" style="margin-left:auto; margin-right:auto; width:550px;" />
+                </div>
             </div>
 
             <!-- Victory conditions -->

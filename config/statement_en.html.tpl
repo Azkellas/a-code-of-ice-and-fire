@@ -87,7 +87,6 @@
                     <li> inactive (<const>o</const> or <const>x</const>): belongs to a player but inactive.</li>
                 </ul>
 
-                <br/>
                 <p><strong>Territory ownership</strong></p>
                 <p>
                     Throughout the game, each player will capture cells to enlarge their territory. A player territory is composed of all the cells owned by the player that are <strong>active</strong>.
@@ -97,7 +96,7 @@
                 </p>
                 <div style="margin-left:auto; margin-right:auto; width:350px;">
                     <img src="https://www.codingame.com/servlet/mfileservlet?id=28933360811968" alt="territory-ownership" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
-                    <p>The red territory is composed of 6 cells. The 3 red-dark cells are now inactive because the blue player interrupted part of this territory. By capturing, for example, the cell marked by an X, the red player can make these cells active again.</p>
+                    <p><i>The red territory is composed of 6 cells. The 3 red-dark cells are now inactive because the blue player interrupted part of this territory. By capturing, for example, the cell marked by an X, the red player can make these cells active again.</i></p>
                 </div>
 
                 <br/>
@@ -148,18 +147,14 @@
                 <p>
                   If a player has negative income and cannot pay their upkeep using their gold, all of the player's units die and the player's gold is reset to <const>0</const>.
                 </p>
-
-                <br/>
-                <p><strong>Buildings</strong></p>
-                <!-- BEGIN level1 level2 -->
-                <p>
-                    In this league, players cannot build buildings.<br/>
-                </p>
-                <!-- END -->
+                
+                
                 <!-- BEGIN level3 -->
                 <div style="color: #7cc576;
                     background-color: rgba(124, 197, 118,.1);
                     padding: 2px;">
+                    <br/>
+                    <p><strong>Buildings</strong></p>
                     <p>
                         Players can <action>BUILD</action> buildings to improve their economy or military power. A player can only build on owned active cells that are unoccupied.
                     </p>
@@ -173,6 +168,8 @@
                 <!-- END -->
 
                 <!-- BEGIN level4 -->
+                <br/>
+                <p><strong>Buildings</strong></p>
                 <p>
                     Players can <action>BUILD</action> buildings to improve their economy or military power. A player can only build on owned active cells that are unoccupied.
                 </p>
@@ -191,15 +188,18 @@
                         <action>TOWER</action>: towers protect owned cells that are adjacent (up, down, left and right, but not diagonally). Cells protected by a tower can only be reached by enemy units of level <const>3</const>. Likewise, the tower can only be destroyed by a level <const>3</const> unit. A tower costs <const>15</const> gold to build and cannot be built on a mine spot.
                         Here is a figure of a tower protection range:
                         <div style="margin-left:auto; margin-right:auto; width:350px;">
-                            <img src="https://i.imgur.com/WWu1qPB.png" alt="tower-protection" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
+                            <img src="https://www.codingame.com/servlet/mfileservlet?id=28956841128576" alt="tower-protection" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
                             <p>
-                                The tower owned by the red player protects the nearby cells marked by a black cross. Cells are <strong>not</strong> protected diagonally. Moreover, the blue cell on the right of the tower is not protected as it is not a red cell.
+                                <i>The tower owned by the red player protects the adjacent cells marked by a black cross. Cells are <strong>not</strong> protected diagonally. Moreover, the blue cell on the right of the tower is not protected as it is not a red cell.
+                                </i>
                             </p>
                         </div>
                     </li>
                 </ul>
                 <!-- END -->
                 <!-- BEGIN level5 -->
+                <br/>
+                <p><strong>Buildings</strong></p>
                 <p>
                     Players can <action>BUILD</action> buildings to improve their economy or military power. A player can only build on owned active cells that are unoccupied.
                 </p>
@@ -212,9 +212,9 @@
                         <action>TOWER</action>: towers protect owned cells that are adjacent (up, down, left and right, but not diagonally). Cells protected by a tower can only be reached by enemy units of level <const>3</const>. Likewise, the tower can only be destroyed by a level <const>3</const> unit. A tower costs <const>15</const> gold to build and cannot be built on a mine spot.
                         Here is a figure of a tower protection range:
                         <div style="margin-left:auto; margin-right:auto; width:350px;">
-                            <img src="https://i.imgur.com/WWu1qPB.png" alt="tower-protection" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
+                            <img src="https://www.codingame.com/servlet/mfileservlet?id=28956841128576" alt="tower-protection" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
                             <p>
-                                The tower owned by the red player protects the nearby cells marked by a black cross. Cells are <strong>not</strong> protected diagonally. Moreover, the blue cell on the right of the tower is not protected as it is not a red cell.
+                                <i>The tower owned by the red player protects the adjacent cells marked by a black cross. Cells are <strong>not</strong> protected diagonally. Moreover, the blue cell on the right of the tower is not protected as it is not a red cell.</i>
                             </p>
                         </div>
                     </li>
@@ -260,7 +260,7 @@
                     </p>
                 </div>
                 <!-- END -->
-                <!-- BEGIN level2 level3 level4 level5 -->
+                <!-- BEGIN level3 level4 level5 -->
                 <p>
                     Army units of different levels (<const>1</const>, <const>2</const> or <const>3</const>) can be trained using the command <action>TRAIN level x y</action>. The target cell <const>(x,y)</const> must be in the player's territory or its direct neighbourhood (adjacent cells).
                 </p>
@@ -386,6 +386,8 @@
                             HQ
                         </td>
                     </tr>
+                </table>
+                <!-- END -->
                 <!-- BEGIN level3 level4 level5 -->
                 <table style="text-align:center; width: 100%; border-spacing: 10px; border-collapse: separate;">
                     <tr>
@@ -472,11 +474,13 @@
                 </table>
                 <!-- END -->
                 
+                </br>
+                <p><strong>Order of actions</strong></p>
                 <p>
                     All actions are processed sequentially. Invalid actions are ignored.
                 </p>
                 <div style="margin-left:auto; margin-right:auto; width:500px;">
-                        <img src="https://i.imgur.com/6guSobH.png" alt="action-sequence-diagram" style="margin-left:auto; margin-right:auto; width:550px;" />
+                        <img src="https://www.codingame.com/servlet/mfileservlet?id=28956987525427" alt="action-sequence-diagram" style="margin-left:auto; margin-right:auto; width:550px;" />
                 </div>
             </div>
 
