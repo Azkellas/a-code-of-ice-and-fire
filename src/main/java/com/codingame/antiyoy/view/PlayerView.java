@@ -59,7 +59,7 @@ public class PlayerView extends AbstractView {
                 .setY(baseY);
 
         int textGap = 110;
-        pseudo = entityModule.createText(this.model.getNicknameToken())
+        pseudo = entityModule.createText(this.model.getTrimedPseudo())
                 .setAnchor(0.5)
                 .setFillColor(0xffffff)
                 .setFontSize(60)

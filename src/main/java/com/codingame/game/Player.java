@@ -11,6 +11,14 @@ public class Player extends AbstractMultiplayerPlayer {
         return expectedOutputLines;
     }
 
+    public String getTrimedPseudo() {
+        String nickname = this.getNicknameToken();
+        nickname = "azertyuiopqsdfghjklmwxcvbn";
+        if (nickname.length() > 15) {
+            nickname = nickname.substring(0, 12) + "...";
+        }
+        return nickname;
+    }
     public void setExpectedOutputLines(int lines) {
         this.expectedOutputLines = lines;
     }
