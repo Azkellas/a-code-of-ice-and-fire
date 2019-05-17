@@ -1,8 +1,9 @@
-//---------------------------------------
+//----------------------------------------------
 // CODE OF ICE AND FIRE - Starter kit
-//---------------------------------------
-// Ce code de démarrage cherche une case d'entraînement pour toutes les cases actives
-//---------------------------------------
+//----------------------------------------------
+// Ce code de démarrage cherche une case 
+// d'entraînement autour de chaque case actives
+//----------------------------------------------
 
     #include <stdlib.h>
     #include <stdio.h>
@@ -10,26 +11,26 @@
 
 // --------- Constantes -----------
 
-    #define G_WIDTH        12
-    #define G_HEIGHT       12
-                            
-    #define NB_PLAYER      2
-    #define NB_MINE        144
-    #define NB_BUILDING    144
-    #define NB_UNIT        144
-
-    #define ME             0
-    #define HE             1
-    #define VOID           -1
-
-    #define T_QG           0
-    
-    #define M_WAIT         0
-    #define M_MOVE         1
-    #define M_TRAIN        2
-    
-    #define TRAIN_COST    10
-    #define LEVEL1_COST    1
+    #define G_WIDTH                    12
+    #define G_HEIGHT                   12
+                                        
+    #define NB_PLAYER                  2
+    #define NB_MINE                    144
+    #define NB_BUILDING                144
+    #define NB_UNIT                    144
+            
+    #define ME                         0
+    #define HE                         1
+    #define VOID                       -1
+            
+    #define T_QG                       0
+                
+    #define M_WAIT                     0
+    #define M_MOVE                     1
+    #define M_TRAIN                    2
+                
+    #define TRAIN_COST                 10
+    #define LEVEL1_COST                1
     
 // -------- Structures ------------
 
@@ -96,51 +97,51 @@
     
 //--------- Globales ---------
 
-    GAME initGame;                                  // Constantes du jeu
-    char message[100];                              // Message personnalisé   
+    GAME initGame;                                                              // Constantes du jeu
+    char message[100];                                                          // Message personnalisé   
 
 //--------- Programme ---------
 
 int main() {
     
-    inputInit(&initGame);                           // Lire les infos du jeu
+    inputInit(&initGame);                                                       // Lire les infos du jeu
 
     //------------ Boucle principale ---------
     
     while (1) {
         
-        STATE* s = newState();                      // Créer un état du jeu
-        inputLoop(s);                               // Lire les infos du tour
-        sprintf(message, "MSG Je tente ce coup");   // Initialiser le message
+        STATE* s = newState();                                                  // Créer un état du jeu
+        inputLoop(s);                                                           // Lire les infos du tour
+        sprintf(message, "MSG Je tente ce coup");                               // Initialiser le message
         
-        MOVE bestMove = {M_WAIT, 0, 0, 0};          // Initialiser un coup par défaut
-        int nbMove = 0;                             // Nombre de coups trouvés
+        MOVE bestMove = {M_WAIT, 0, 0, 0};                                      // Initialiser une action par défaut
+        int nbMove = 0;                                                         // Nombre de coups trouvés
         
         // Entraînement des unités
-        for(int j = 0; j < G_HEIGHT; j++) {
+        for(int j = 0; j < G_HEIGHT; j++) {                                     // Pour chaque case
             for(int i = 0; i < G_WIDTH; i++) {
-                if(s->player[ME].gold < TRAIN_COST) break;
-                if(s->grid[j][i] != 'O' && s->grid[j][i] != 'o') continue; 
+                if(s->player[ME].gold < TRAIN_COST) break;                      // Interrompre si pas assez d'or
+                if(s->grid[j][i] != 'O' && s->grid[j][i] != 'o') continue;      // Traiter uniquement les cases actives
                 
                 // Chercher une case pour l'entraînement
-                POSITION pos = {i, j};                // Initialiser une case de déplacement
-                if(i > 0 && s->grid[j][i - 1] == '.') pos.x--;
-                else if(i < G_WIDTH - 1 && s->grid[j][i + 1] == '.') pos.x++;
-                else if(j > 0 && s->grid[j - 1][i] == '.') pos.y--;
-                else if(j < G_HEIGHT - 1 && s->grid[j + 1][i] == '.') pos.y++;
+                POSITION pos = {i, j};                                          // Initialiser une case de déplacement
+                if(i > 0 && s->grid[j][i - 1] == '.') pos.x--;                  // Chercher une case neutre à droite
+                else if(i < G_WIDTH - 1 && s->grid[j][i + 1] == '.') pos.x++;   // Sinon à gauche
+                else if(j > 0 && s->grid[j - 1][i] == '.') pos.y--;             // Sinon en haut
+                else if(j < G_HEIGHT - 1 && s->grid[j + 1][i] == '.') pos.y++;  // Sinon en bas
                 
                 // Jouer le coup si il existe
-                if(pos.x != i || pos.y != j) {
-                    setMove(&bestMove, M_TRAIN, 1, pos.x, pos.y);
-                    playMove(&bestMove);                    
-                    nbMove++;
+                if(pos.x != i || pos.y != j) {                                  // Si on a trouvé ne case voisine neutre
+                    setMove(&bestMove, M_TRAIN, 1, pos.x, pos.y);               // Préparer l'action d'entraînement
+                    playMove(&bestMove);                                        // Lancer l'action
+                    nbMove++;                                                   // Compter les actions
                     }
                 }
             }      
         
-        if(!nbMove) playMove(&bestMove);            // Attendre si pas de coups trouvé
-        printf("%s\n", message);                    // Terminer la commande
-        free(s);                                    // Libérer la mémoire
+        if(!nbMove) playMove(&bestMove);                                        // Attendre si pas de coups trouvé
+        printf("%s\n", message);                                                // Terminer la ligne d'actions
+        free(s);                                                                // Libérer la mémoire
         }
 
     return 0;
