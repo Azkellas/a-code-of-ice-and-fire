@@ -7,7 +7,7 @@ HEIGHT = 12
 
 # OWNER
 ME = 0
-OPONENT = 1
+OPPONENT = 1
 
 # BUILDING TYPE
 HQ = 0
@@ -51,9 +51,9 @@ class Game:
                 return b
 
 
-    def get_oponent_HQ(self):
+    def get_opponent_HQ(self):
         for b in self.buildings:
-            if b.type == HQ and b.owner == OPONENT:
+            if b.type == HQ and b.owner == OPPONENT:
                 return b
 
 
