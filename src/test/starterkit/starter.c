@@ -44,13 +44,13 @@
         } PLAYER;
     
     typedef struct _mine {
-        char x;
-        char y;
+        int x;
+        int y;
         } MINE;
     
     typedef struct _building {
-        char x;
-        char y;
+        int x;
+        int y;
         int owner;
         int type;
         } BUILDING;
