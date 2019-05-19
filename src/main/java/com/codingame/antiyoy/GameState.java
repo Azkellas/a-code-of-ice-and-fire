@@ -481,7 +481,7 @@ public class GameState {
 
         // decrement for units
         for (Unit unit : this.units.values()) {
-            if (unit.getOwner() == playerId && unit.isAlive())
+            if (unit.getOwner() == playerId && unit.isAlive() && unit.getCell().isActive())
                 updatedIncome -= UNIT_UPKEEP[unit.getLevel()];
         }
 
