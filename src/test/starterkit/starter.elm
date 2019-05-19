@@ -1,0 +1,1 @@
+See https://github.com/mpizenberg/elm-codingame for an Elm template
