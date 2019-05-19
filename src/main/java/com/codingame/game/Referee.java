@@ -206,6 +206,8 @@ public class Referee extends AbstractReferee {
         this.gameState.moveUnit(unit, nextCell);
         this.gameState.computeAllActiveCells();
         gameManager.addToGameSummary(player.getNicknameToken() + " moved " + unitId + " to (" + nextCell.getX() + ", " + nextCell.getY() + ")");
+        for (int i = 0; i < PLAYER_COUNT; ++i)
+            gameState.computeIncome(i);
         return true;
     }
 
@@ -233,6 +235,8 @@ public class Referee extends AbstractReferee {
         this.gameState.computeAllActiveCells();
         viewController.createUnitView(unit);
         gameManager.addToGameSummary(player.getNicknameToken() + " trained a unit in (" + action.getCell().getX() + ", " + action.getCell().getY() + ")");
+        for (int i = 0; i < PLAYER_COUNT; ++i)
+            gameState.computeIncome(i);
         return true;
     }
 
@@ -277,6 +281,8 @@ public class Referee extends AbstractReferee {
         Building building = new Building(action.getCell(), action.getPlayer(), action.getBuildType());
         this.gameState.addBuilding(building);
         viewController.createBuildingView(building);
+        for (int i = 0; i < PLAYER_COUNT; ++i)
+            gameState.computeIncome(i);
         return true;
     }
 
