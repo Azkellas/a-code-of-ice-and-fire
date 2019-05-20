@@ -191,7 +191,7 @@ public class Referee extends AbstractReferee {
         Unit unit = gameState.getUnit(unitId);
 
         // Free cell or killable unit / destroyable building
-        if (!action.getCell().isCapturable(action.getPlayer(), unit.getLevel())) {
+        if (!action.getCell().isCapturable(action.getPlayer(), unit.getLevel()) && Math.abs(unit.getX() - action.getCell().getX()) + Math.abs(unit.getY() - action.getCell().getY()) == 1) {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell occupied) " + action);
             return false;
         }
