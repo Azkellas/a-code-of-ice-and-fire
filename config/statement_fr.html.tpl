@@ -529,6 +529,7 @@
                 <li>Il y a entre <const>8</const> et <const>20</const> emplacements de mine.</li>
                 <li>Un emplacement de mine est toujours présent sur la case directement à droite (resp. gauche) du QG rouge (resp. bleu).</li>
                 <li>Les cases à distance 1 autour du quartier général (incluant la diagonale) ne sont jamais des cases vides.</li>
+                <li> Le joueur bleu possède toujours la case <const>(11, 10)</const> au début de la partie.</li>
             </ul>
         </div>
     </div>

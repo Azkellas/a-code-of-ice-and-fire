@@ -529,6 +529,7 @@
                 <li>There are between <const>8</const> and <const>20</const> mine spots.</li>
                 <li>A mine spot is always present on the cell directly on the right of the red HQ and on the cell directly on the left of the blue HQ.</li>
                 <li>Cells surrounding the HQ at distance 1 (including diagonally) are never <strong>void</strong> cells.</li>
+                <li> The blue player always owns the <const>(11, 10)</const> cell at the beginning of the game.</li>
             </ul>
         </div>
     </div>

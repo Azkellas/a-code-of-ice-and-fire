@@ -33,7 +33,7 @@ public class GameState {
 
         for (int i = 0; i < PLAYER_COUNT; ++i) {
             this.playerGolds.add(new AtomicInteger(2 * UNIT_COST[1]));
-            this.playerIncome.add(new AtomicInteger(1));
+            this.playerIncome.add(new AtomicInteger(1 + i));  // Blue player starts with 2 cells
         }
         this.seed = seed;
         this.pathfinding = new Pathfinding();
@@ -328,7 +328,9 @@ public class GameState {
                 int randomX = generator.nextInt(MAP_WIDTH);
                 int randomY = generator.nextInt(MAP_HEIGHT);
 
-                while (this.map[randomX][randomY].getOwner() == VOID || this.map[randomX][randomY].isMineSpot() || randomX + randomY == 0 || randomX + randomY == MAP_WIDTH + MAP_HEIGHT - 2) {
+                while (this.map[randomX][randomY].getOwner() == VOID || this.map[randomX][randomY].isMineSpot() || randomX + randomY == 0 ||
+                        randomX + randomY == MAP_WIDTH + MAP_HEIGHT - 2 || randomX == 0 && randomY == 1 || randomX == MAP_WIDTH-1 && randomY == MAP_HEIGHT-2) {
+                    // we have to remove (0, 1) and (11, 10) from the generation since blue player now owns (11, 10) at the beginning of the game
                     randomX = generator.nextInt(MAP_WIDTH);
                     randomY = generator.nextInt(MAP_HEIGHT);
                 }
@@ -363,6 +365,8 @@ public class GameState {
         this.HQs.add(HQ1);
         HQ0.getCell().setOwner(0);
         HQ1.getCell().setOwner(1);
+
+        this.map[MAP_WIDTH - 1][MAP_HEIGHT-2].setOwner(1);
         this.addBuilding(HQ0);
         this.addBuilding(HQ1);
     }
