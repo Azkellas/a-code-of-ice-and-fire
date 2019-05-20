@@ -32,6 +32,16 @@ def clamp_coordinates(x, y):
 	return min(WIDTH-1, max(0, x)), min(HEIGHT-1, max(0, y))
 
 
+def is_in_range(x, y):
+	return x >= 0 and x < WIDTH and y >= 0 and y < HEIGHT
+
+def is_my_border(game_map, x, y):
+	return ((is_in_range(x + 1, y) and game_map[y][x + 1] == OWN_ACTIVE_CELL)
+		or (is_in_range(x - 1, y) and game_map[y][x - 1] == OWN_ACTIVE_CELL)
+		or (is_in_range(x, y + 1) and game_map[y + 1][x] == OWN_ACTIVE_CELL)
+		or (is_in_range(x, y - 1) and game_map[y - 1][x] == OWN_ACTIVE_CELL))
+
+
 mine_spots = []
 nb_mines = int(input())
 for i in range(nb_mines):
@@ -117,10 +127,19 @@ while True:
 
 		for (y, line) in enumerate(game_map) if not reverse else reversed(list(enumerate(game_map))):
 			for (x, cell) in enumerate(line) if not reverse else reversed(list(enumerate(line))):
-				if cell == OWN_ACTIVE_CELL and (x,y) != my_hq_pos and not (x,y) in occupied_cells:
+				if cell == OWN_ACTIVE_CELL and (x,y) != my_hq_pos and not (x,y) in occupied_cells and gold >= 2 * COST_UNIT:
 					actions.append("TRAIN 1 {} {}".format(x, y))
 					gold -= COST_UNIT
 					occupied_cells.append((x,y))
+				if cell == OPPONENT_ACTIVE_CELL and is_my_border(game_map, x, y):
+					if not (x,y) in occupied_cells:
+						actions.append("TRAIN 1 {} {}".format(x, y))
+						gold -= COST_UNIT
+						occupied_cells.append((x,y))
+					elif gold >= 2 * COST_UNIT:
+						actions.append("TRAIN 2 {} {}".format(x, y))
+						gold -= COST_UNIT * 2
+						occupied_cells.append((x,y))
 			if gold < COST_UNIT: break
 
 	print(";".join(actions))
