@@ -281,6 +281,10 @@ public class Referee extends AbstractReferee {
         Building building = new Building(action.getCell(), action.getPlayer(), action.getBuildType());
         this.gameState.addBuilding(building);
         viewController.createBuildingView(building);
+        if (action.getBuildType() == BUILDING_TYPE.MINE)
+            gameManager.addToGameSummary(player.getNicknameToken() + " built a MINE in (" + action.getCell().getX() + ", " + action.getCell().getY() + ")");
+        else if (action.getBuildType() == BUILDING_TYPE.TOWER)
+            gameManager.addToGameSummary(player.getNicknameToken() + " built a TOWER in (" + action.getCell().getX() + ", " + action.getCell().getY() + ")");
         for (int i = 0; i < PLAYER_COUNT; ++i)
             gameState.computeIncome(i);
         return true;
