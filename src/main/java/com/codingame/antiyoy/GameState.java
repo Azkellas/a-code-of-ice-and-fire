@@ -399,7 +399,8 @@ public class GameState {
     public void initTurn(int playerId) {
         this.computeActiveCells(playerId);
         this.killSeparatedUnits(playerId);
-        this.computeIncome(playerId);
+        for (int i = 0; i < PLAYER_COUNT; ++i)
+            this.computeIncome(i);
         this.computeGold(playerId);
         if (this.playerGolds.get(playerId).intValue() < 0) {
             negativeGoldWipeout(playerId);
@@ -461,7 +462,7 @@ public class GameState {
         }
     }
 
-    private void computeIncome(int playerId) {
+    public void computeIncome(int playerId) {
         int updatedIncome = 0;
 
         // increments golds of player
@@ -480,7 +481,7 @@ public class GameState {
 
         // decrement for units
         for (Unit unit : this.units.values()) {
-            if (unit.getOwner() == playerId && unit.isAlive())
+            if (unit.getOwner() == playerId && unit.isAlive() && unit.getCell().isActive())
                 updatedIncome -= UNIT_UPKEEP[unit.getLevel()];
         }
 

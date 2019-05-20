@@ -19,7 +19,7 @@ public final class Constants {
 
     static public final int CELL_INCOME = 1;
     static public final int MINE_INCOME = 4; // So a cell with a mine earns 1+4 = 5
-    static public final int MINE_INCREMENT = 2; // So the first mine costs 20, then 24, then 28
+    static public final int MINE_INCREMENT = 4; // So the first mine costs 20, then 24, then 28
 
     static public final int UNIT_COST[] = {0, 10, 20, 30};
     static public final int UNIT_UPKEEP[] = {0, 1, 4, 20};

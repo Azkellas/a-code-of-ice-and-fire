@@ -191,7 +191,7 @@ public class Referee extends AbstractReferee {
         Unit unit = gameState.getUnit(unitId);
 
         // Free cell or killable unit / destroyable building
-        if (!action.getCell().isCapturable(action.getPlayer(), unit.getLevel())) {
+        if (!action.getCell().isCapturable(action.getPlayer(), unit.getLevel()) && Math.abs(unit.getX() - action.getCell().getX()) + Math.abs(unit.getY() - action.getCell().getY()) == 1) {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell occupied) " + action);
             return false;
         }
@@ -206,6 +206,8 @@ public class Referee extends AbstractReferee {
         this.gameState.moveUnit(unit, nextCell);
         this.gameState.computeAllActiveCells();
         gameManager.addToGameSummary(player.getNicknameToken() + " moved " + unitId + " to (" + nextCell.getX() + ", " + nextCell.getY() + ")");
+        for (int i = 0; i < PLAYER_COUNT; ++i)
+            gameState.computeIncome(i);
         return true;
     }
 
@@ -233,6 +235,8 @@ public class Referee extends AbstractReferee {
         this.gameState.computeAllActiveCells();
         viewController.createUnitView(unit);
         gameManager.addToGameSummary(player.getNicknameToken() + " trained a unit in (" + action.getCell().getX() + ", " + action.getCell().getY() + ")");
+        for (int i = 0; i < PLAYER_COUNT; ++i)
+            gameState.computeIncome(i);
         return true;
     }
 
@@ -277,6 +281,12 @@ public class Referee extends AbstractReferee {
         Building building = new Building(action.getCell(), action.getPlayer(), action.getBuildType());
         this.gameState.addBuilding(building);
         viewController.createBuildingView(building);
+        if (action.getBuildType() == BUILDING_TYPE.MINE)
+            gameManager.addToGameSummary(player.getNicknameToken() + " built a MINE in (" + action.getCell().getX() + ", " + action.getCell().getY() + ")");
+        else if (action.getBuildType() == BUILDING_TYPE.TOWER)
+            gameManager.addToGameSummary(player.getNicknameToken() + " built a TOWER in (" + action.getCell().getX() + ", " + action.getCell().getY() + ")");
+        for (int i = 0; i < PLAYER_COUNT; ++i)
+            gameState.computeIncome(i);
         return true;
     }
 
