@@ -21,6 +21,9 @@ public class GameTurnView extends AbstractView {
 
     private Text text;
     private Sprite background;
+
+    private int currentTurn = -1;
+    private int currentPlayer = -1;
     public GameTurnView(GraphicEntityModule entityModule, TooltipModule tooltipModule, AtomicInteger gameTurn, AtomicInteger playerTurn) {
         super(entityModule, tooltipModule);
         this.gameTurn = gameTurn;
@@ -53,10 +56,16 @@ public class GameTurnView extends AbstractView {
     }
 
     public void updateView() {
-        this.text
-            .setText("Turn " + gameTurn.intValue())
-            .setFillColor(getTurnColor(playerTurn.intValue()), Curve.IMMEDIATE);
-        entityModule.commitEntityState(0, this.text);
+        if (gameTurn.intValue() != this.currentTurn) {
+            this.text.setText("Turn " + gameTurn.toString());
+            this.currentTurn = gameTurn.intValue();
+        }
+        if (playerTurn.intValue() != this.currentPlayer) {
+            this.currentPlayer = playerTurn.intValue();
+            this.text.setFillColor(getTurnColor(playerTurn.intValue()), Curve.IMMEDIATE);
+
+            entityModule.commitEntityState(0, this.text);
+        }
     }
 
     public Entity getEntity() {

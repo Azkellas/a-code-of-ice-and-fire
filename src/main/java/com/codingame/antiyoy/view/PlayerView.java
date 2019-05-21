@@ -30,6 +30,10 @@ public class PlayerView extends AbstractView {
     AtomicInteger goldModel;
     AtomicInteger incomeModel;
 
+    private int currentGold = -1;
+    private int currentIncome = -1;
+    private String currentMessage = "";
+
     public PlayerView(GraphicEntityModule entityModule, TooltipModule tooltipModule, Player player, GameState gameState) {
         super(entityModule, tooltipModule);
         this.model = player;
@@ -105,13 +109,22 @@ public class PlayerView extends AbstractView {
     }
     
     public void updateView() {
-        this.gold.setText("Gold: " + goldModel.toString());
-        if (incomeModel.intValue() > 0) {
-            this.income.setText("Income: +" + incomeModel.toString());
-        } else {
-            this.income.setText("Income: " + incomeModel.toString());
+        if (goldModel.intValue() != this.currentGold) {
+            this.currentGold = goldModel.intValue();
+            this.gold.setText("Gold: " + goldModel.toString());
         }
-        this.message.setText(model.getMessage());
+        if (incomeModel.get() != this.currentIncome) {
+            this.currentIncome = incomeModel.intValue();
+            if (incomeModel.intValue() > 0) {
+                this.income.setText("Income: +" + incomeModel.toString());
+            } else {
+                this.income.setText("Income: " + incomeModel.toString());
+            }
+        }
+        if (!model.getMessage().equals(currentMessage)) {
+            this.currentMessage = model.getMessage();
+            this.message.setText(model.getMessage());
+        }
     }
 
     public Entity getEntity() {
