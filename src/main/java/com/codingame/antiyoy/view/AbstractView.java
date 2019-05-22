@@ -27,5 +27,9 @@ public abstract class AbstractView implements Observer {
         disposable = true;
     }
 
+    public void doReuse() {
+        disposable = false;
+    }
+
     public void update(Observable observable, Object arg) {}
 }

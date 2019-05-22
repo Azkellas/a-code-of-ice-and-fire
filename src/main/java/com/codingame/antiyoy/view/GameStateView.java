@@ -22,9 +22,16 @@ public class GameStateView extends AbstractView {
     List<UnitView> units;
     List<BuildingView> buildings;
     List<Rectangle> grid;
+
+    List<UnitView> unitsStorage;
+
+    int reused = 0;
+    int created = 0;
     GameState model;
     public GameStateView(GraphicEntityModule entityModule, TooltipModule tooltipModule, GameState gameState){
         super(entityModule, tooltipModule);
+
+        unitsStorage = new ArrayList<>();
 
         this.model = gameState;
         cells = new ArrayList<>();
@@ -74,10 +81,27 @@ public class GameStateView extends AbstractView {
     }
 
     public UnitView createUnitView(Unit unit) {
-        UnitView unitView= new UnitView(entityModule, tooltipModule, unit);
-        group.add(unitView.getEntity());
-        units.add(unitView);
-        return unitView;
+        UnitView reusable = null;
+        for (UnitView view : this.unitsStorage) {
+            Unit viewModel = view.getModel();
+            if (viewModel.getOwner() == unit.getOwner() && viewModel.getLevel() == unit.getLevel()) {
+                reusable = view;
+                break;
+            }
+        }
+        if (reusable != null) {
+            // we reuse a unit sprite
+            this.unitsStorage.remove(reusable);
+            reusable.replace(unit);
+            this.reused += 1;
+            return reusable;
+        } else {
+            UnitView unitView = new UnitView(entityModule, tooltipModule, unit);
+            group.add(unitView.getEntity());
+            units.add(unitView);
+            this.created += 1;
+            return unitView;
+        }
     }
 
     public BuildingView createBuildingView(Building building) {
@@ -96,6 +120,14 @@ public class GameStateView extends AbstractView {
 
 
     public void updateView() {
+        for (UnitView unit : this.units) {
+            if (unit.isDisposable()) {
+                unitsStorage.add(unit);
+            }
+        }
+        for (UnitView unit : this.unitsStorage) {
+            this.units.remove(unit);
+        }
     }
 
     public GameState getModel() { return this.model; }

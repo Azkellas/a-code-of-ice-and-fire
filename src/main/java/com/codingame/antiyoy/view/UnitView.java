@@ -47,6 +47,13 @@ public class UnitView extends AbstractView {
     }
 //
 
+    public void replace(Unit unit) {
+        this.doReuse();
+        this.group.setVisible(true);
+        this.model = unit;
+        tooltipModule.setTooltipText(group,  "id: " + model.getId() + "\nlevel: " + model.getLevel() + "\nx: " + model.getX() + "\ny: " + model.getY());
+    }
+
     public void updateView() {
         if (this.isDisposable())
             group.setVisible(false);
@@ -62,4 +69,6 @@ public class UnitView extends AbstractView {
     public Entity getEntity() {
         return group;
     }
+
+    public Unit getModel() { return model; }
 }
