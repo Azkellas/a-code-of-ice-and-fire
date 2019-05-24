@@ -1,8 +1,8 @@
 import 'dart:io';
 
-enum BuildingType { Hq, Mine, Tower }
+enum BuildingType { hq, mine, tower }
 
-enum Team { Fire, Ice }
+enum Team { fire, ice }
 
 const int WIDTH = 12;
 const int HEIGHT = 12;
@@ -22,46 +22,46 @@ const MINE_COST = 20;
 
 void main() {
   var game = Game();
-  game.Init();
+  game.init();
 
   // game loop
   while (true) {
-    game.Update();
-    game.Solve();
-    print(game.Output.join(';'));
+    game.update();
+    game.solve();
+    print(game.output.join(';'));
   }
 }
 
 class Game {
-  List<String> Output = [];
+  List<String> output = [];
 
   List<List<Tile>> map = List.generate(WIDTH, (i) => List(HEIGHT));
 
-  List<Position> MineSpots = [];
+  List<Position> mineSpots = [];
 
-  List<Unit> MyUnits = [];
-  List<Unit> OpponentUnits = [];
+  List<Unit> myUnits = [];
+  List<Unit> opponentUnits = [];
 
-  List<Building> MyBuildings = [];
-  List<Building> OpponentBuildings = [];
+  List<Building> myBuildings = [];
+  List<Building> opponentBuildings = [];
 
-  int MyGold;
-  int MyIncome;
-  Team MyTeam;
+  int myGold;
+  int myIncome;
+  Team myTeam;
 
-  int OpponentGold;
-  int OpponentIncome;
-  int Turn = 0;
+  int opponentGold;
+  int opponentIncome;
+  int turn = 0;
 
-  Position MyHq() => MyTeam == Team.Fire ? Position(0, 0) : Position(11, 11);
-  Position OpponentHq() =>
-      MyTeam == Team.Fire ? Position(11, 11) : Position(0, 0);
+  Position myHq() => myTeam == Team.fire ? Position(0, 0) : Position(11, 11);
+  Position opponentHq() =>
+      myTeam == Team.fire ? Position(11, 11) : Position(0, 0);
 
-  List<Position> MyPositions = new List<Position>();
-  List<Position> OpponentPositions = new List<Position>();
-  List<Position> NeutralPositions = new List<Position>();
+  List<Position> myPositions = [];
+  List<Position> opponentPositions = [];
+  List<Position> neutralPositions = [];
 
-  void Init() {
+  void init() {
     for (var y = 0; y < HEIGHT; y++) {
       for (var x = 0; x < WIDTH; x++) {
         map[x][y] = Tile(Position(x, y));
@@ -71,51 +71,51 @@ class Game {
     var numberMineSpots = int.parse(stdin.readLineSync());
     for (var i = 0; i < numberMineSpots; i++) {
       var inputs = stdin.readLineSync().split(' ');
-      MineSpots.add(Position(int.parse(inputs[0]), int.parse(inputs[1])));
+      mineSpots.add(Position(int.parse(inputs[0]), int.parse(inputs[1])));
     }
   }
 
-  void Update() {
-    MyUnits.clear();
-    OpponentUnits.clear();
+  void update() {
+    myUnits.clear();
+    opponentUnits.clear();
 
-    MyBuildings.clear();
-    OpponentBuildings.clear();
+    myBuildings.clear();
+    opponentBuildings.clear();
 
-    MyPositions.clear();
-    OpponentPositions.clear();
-    NeutralPositions.clear();
+    myPositions.clear();
+    opponentPositions.clear();
+    neutralPositions.clear();
 
-    Output.clear();
+    output.clear();
 
     // --------------------------------------
 
-    MyGold = int.parse(stdin.readLineSync());
-    MyIncome = int.parse(stdin.readLineSync());
-    OpponentGold = int.parse(stdin.readLineSync());
-    OpponentIncome = int.parse(stdin.readLineSync());
+    myGold = int.parse(stdin.readLineSync());
+    myIncome = int.parse(stdin.readLineSync());
+    opponentGold = int.parse(stdin.readLineSync());
+    opponentIncome = int.parse(stdin.readLineSync());
 
     // Read map
     for (var y = 0; y < HEIGHT; y++) {
       var line = stdin.readLineSync();
       for (var x = 0; x < WIDTH; x++) {
         var c = line[x] + "";
-        map[x][y].IsWall = c == "#";
-        map[x][y].Active = "OX".contains(c);
-        map[x][y].Owner = c.toLowerCase() == "o"
+        map[x][y].isWall = c == "#";
+        map[x][y].active = "OX".contains(c);
+        map[x][y].owner = c.toLowerCase() == "o"
             ? ME
             : c.toLowerCase() == "x" ? OPPONENT : NEUTRAL;
-        map[x][y].HasMineSpot = MineSpots.fold(
+        map[x][y].hasMineSpot = mineSpots.fold(
                 0, (c, spot) => c + (spot == Position(x, y) ? 1 : 0)) >
             0;
 
         Position p = Position(x, y);
-        if (map[x][y].IsOwned()) {
-          MyPositions.add(p);
-        } else if (map[x][y].IsOpponent()) {
-          OpponentPositions.add(p);
-        } else if (!map[x][y].IsWall) {
-          NeutralPositions.add(p);
+        if (map[x][y].isOwned()) {
+          myPositions.add(p);
+        } else if (map[x][y].isOpponent()) {
+          opponentPositions.add(p);
+        } else if (!map[x][y].isWall) {
+          neutralPositions.add(p);
         }
       }
     }
@@ -128,9 +128,9 @@ class Game {
       int type = int.parse(inputs[1]);
       Position pos = Position(int.parse(inputs[2]), int.parse(inputs[3]));
       if (owner == ME) {
-        MyBuildings.add(Building(BuildingType.values[type], pos));
+        myBuildings.add(Building(BuildingType.values[type], pos));
       } else if (owner == OPPONENT) {
-        OpponentBuildings.add(Building(BuildingType.values[type], pos));
+        opponentBuildings.add(Building(BuildingType.values[type], pos));
       }
     }
 
@@ -143,167 +143,151 @@ class Game {
       int level = int.parse(inputs[2]);
       Position pos = Position(int.parse(inputs[3]), int.parse(inputs[4]));
       if (owner == ME) {
-        MyUnits.add(Unit(id, level, pos));
+        myUnits.add(Unit(id, level, pos));
       } else if (owner == OPPONENT) {
-        OpponentUnits.add(Unit(id, level, pos));
+        opponentUnits.add(Unit(id, level, pos));
       }
     }
 
     // --------------------------------
 
     // Get Team
-    MyTeam = MyBuildings.singleWhere((b) => b.IsHq()).position == Position(0, 0)
-        ? Team.Fire
-        : Team.Ice;
+    myTeam = myBuildings.singleWhere((b) => b.isHq()).position == Position(0, 0)
+        ? Team.fire
+        : Team.ice;
 
     // Usefull for symmetric AI
-    if (MyTeam == Team.Ice) {
-      MyPositions = MyPositions.reversed;
-      OpponentPositions = OpponentPositions.reversed;
-      NeutralPositions = NeutralPositions.reversed;
+    if (myTeam == Team.ice) {
+      myPositions = myPositions.reversed;
+      opponentPositions = opponentPositions.reversed;
+      neutralPositions = neutralPositions.reversed;
     }
 
     // --------------------------------
 
-    Debug();
+    debug();
   }
 
-  void Debug() {
-    stderr.writeln("Turn: $Turn");
-    stderr.writeln("My team: $MyTeam");
-    stderr.writeln("My gold: $MyGold (+$MyIncome)");
-    stderr.writeln("Opponent gold: $OpponentGold (+$OpponentIncome)");
+  void debug() {
+    stderr.writeln("Turn: $turn");
+    stderr.writeln("My team: $myTeam");
+    stderr.writeln("My gold: $myGold (+$myIncome)");
+    stderr.writeln("Opponent gold: $opponentGold (+$opponentIncome)");
 
     stderr.writeln("=== My ===");
-    for (var b in MyBuildings) stderr.writeln(b);
-    for (var u in MyUnits) stderr.writeln(u);
+    for (var b in myBuildings) stderr.writeln(b);
+    for (var u in myUnits) stderr.writeln(u);
 
     stderr.writeln("=== Opponent ===");
-    for (var b in OpponentBuildings) stderr.writeln(b);
-    for (var u in MyUnits) stderr.writeln(u);
+    for (var b in opponentBuildings) stderr.writeln(b);
+    for (var u in myUnits) stderr.writeln(u);
   }
 
-  void Solve() {
+  void solve() {
     // Make sur the AI doesn't timeout
-    Wait();
+    wait();
 
-    MoveUnits();
+    moveUnits();
 
-    TrainUnits();
+    trainUnits();
 
-    Turn++;
+    turn++;
   }
 
-  void MoveUnits() {
+  void moveUnits() {
     // Rush center
-    Position target = MyTeam == Team.Fire ? Position(5, 5) : Position(6, 6);
+    Position target = myTeam == Team.fire ? Position(5, 5) : Position(6, 6);
 
-    if (map[target.X][target.Y].IsOwned()) return;
+    if (map[target.x][target.y].isOwned()) return;
 
-    for (var unit in MyUnits) {
-      Move(unit.Id, target);
+    for (var unit in myUnits) {
+      move(unit.id, target);
     }
   }
 
-  void TrainUnits() {
-    Position target = MyTeam == Team.Fire ? Position(1, 0) : Position(10, 11);
+  void trainUnits() {
+    Position target = myTeam == Team.fire ? Position(1, 0) : Position(10, 11);
 
-    if (MyGold >= UNIT_COST[1]['train']) Train(1, target);
+    if (myGold >= UNIT_COST[1]['train']) train(1, target);
   }
 
-  void Wait() {
-    Output.add("WAIT");
+  void wait() {
+    output.add("WAIT");
   }
 
-  void Train(int level, Position position) {
+  void train(int level, Position position) {
     // TODO: Handle upkeep
-    MyGold -= UNIT_COST[level]['train'];
-    Output.add("TRAIN $level $position");
+    myGold -= UNIT_COST[level]['train'];
+    output.add("TRAIN $level $position");
   }
 
-  void Move(int id, Position position) {
+  void move(int id, Position position) {
     // TODO: Handle map change
-    Output.add("MOVE $id $position");
+    output.add("MOVE $id $position");
   }
 
   // TODO: Handle Build command
 }
 
 class Unit {
-  int Id;
-  int Level;
+  int id;
+  int level;
   Position position;
 
-  Unit(this.Id, this.Level, this.position);
+  Unit(this.id, this.level, this.position);
 
-  String toString() => "Unit => Id: $Id Level: $Level Position: $position";
+  String toString() => "Unit => Id: $id Level: $level Position: $position";
 }
 
 class Building {
-  BuildingType Type;
+  BuildingType type;
   Position position;
 
-  Building(this.Type, this.position);
+  Building(this.type, this.position);
 
-  bool IsHq() => Type == BuildingType.Hq;
-  bool IsTower() => Type == BuildingType.Tower;
-  bool IsMine() => Type == BuildingType.Mine;
+  bool isHq() => type == BuildingType.hq;
+  bool isTower() => type == BuildingType.tower;
+  bool isMine() => type == BuildingType.mine;
 
-  String toString() => "Building => Type: $Type Position: $position";
-}
-
-class Entity {
-  int Owner;
-  Position position;
-
-  bool IsOwned() => Owner == ME;
-  bool IsOpponent() => Owner == OPPONENT;
-
-  int X() => position.X;
-  int Y() => position.Y;
-
-  String toString() => 'Owner: $Owner Position: $position';
+  String toString() => "Building => Type: $type Position: $position";
 }
 
 class Tile {
   Position position;
 
-  bool Active;
-  bool HasMineSpot;
-  bool IsWall;
-  int Owner = NEUTRAL;
+  bool active;
+  bool hasMineSpot;
+  bool isWall;
+  int owner = NEUTRAL;
 
   Tile(this.position);
 
-  int X() => position.X;
-  int Y() => position.Y;
-
-  bool IsOwned() => Owner == ME;
-  bool IsOpponent() => Owner == OPPONENT;
-  bool IsNeutral() => Owner == NEUTRAL;
+  bool isOwned() => owner == ME;
+  bool isOpponent() => owner == OPPONENT;
+  bool isNeutral() => owner == NEUTRAL;
 }
 
 class Position {
-  int X;
-  int Y;
+  int x;
+  int y;
 
-  Position(this.X, this.Y);
+  Position(this.x, this.y);
 
-  String toString() => '$X $Y';
+  String toString() => '$x $y';
 
   @override
   int get hashCode {
     int result = 17;
-    result = 37 * result + X;
-    result = 37 * result + Y;
+    result = 37 * result + x;
+    result = 37 * result + y;
     return result;
   }
 
   @override
   bool operator ==(dynamic other) {
     if (other is! Position) return false;
-    return other.X == X && other.Y == Y;
+    return other.x == x && other.y == y;
   }
 
-  int Dist(Position p) => (X - p.X).abs() + (Y - p.Y).abs();
+  int distance(Position p) => (x - p.x).abs() + (y - p.y).abs();
 }
