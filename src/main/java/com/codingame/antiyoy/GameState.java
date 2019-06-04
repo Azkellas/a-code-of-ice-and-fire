@@ -39,13 +39,8 @@ public class GameState {
         this.pathfinding = new Pathfinding();
 
         Random generator = new Random(seed);
-        //if even number, fair distribution
-        //if odd number, one is central (TODO)
-        if (league == LEAGUE.WOOD1 || league == LEAGUE.BRONZE) {
-            this.nbMineSpots = 2* Math.round((generator.nextInt(NUMBER_MINESPOTS_MAX - NUMBER_MINESPOTS_MIN + 1) + NUMBER_MINESPOTS_MIN)/2.0f);
-        } else {
-            this.nbMineSpots = 0;
-        }
+
+
     }
 
     // getters
@@ -321,6 +316,22 @@ public class GameState {
 
 
         if (league == LEAGUE.WOOD1 || league == LEAGUE.BRONZE) {
+
+
+            // Define the maximum number of mine spots to generate, based on amount of walkable tiles (NEUTRAL).
+            // It is set as 15% max of nbNeutral
+            int nbNeutral= 0;
+            // Count the number of TILE cells
+            for (int x = 0; x < MAP_WIDTH; ++x) {
+                for (int y = 0; y < MAP_HEIGHT; ++y) {
+                    if(this.map[x][y].getOwner() == NEUTRAL)
+                        nbNeutral++;
+                }
+            }
+
+            int maxMineSpots = Math.max(NUMBER_MINESPOTS_MIN, (int)(nbNeutral*0.15f));
+            this.nbMineSpots = 2* (int)((generator.nextInt(maxMineSpots - NUMBER_MINESPOTS_MIN + 1) + NUMBER_MINESPOTS_MIN)/2.0);
+
             // generate mine spots (-2 because already 1 generated near HQ)
             for (int i = 0; i < Math.round(this.nbMineSpots / 2) - 1; i++) {
 
