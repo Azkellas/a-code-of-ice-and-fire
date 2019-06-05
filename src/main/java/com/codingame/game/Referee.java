@@ -366,12 +366,13 @@ public class Referee extends AbstractReferee {
                     gameManager.addToGameSummary(player.getNicknameToken() + ": Unrecognised command (\"" + actionStr+"\")");
                     // clear actions
                     actionList.clear();
-                    player.deactivate(String.format("$%d: unrecognised command (\"%s\")", player.getIndex(), actionStr));
+                    player.deactivate(String.format("$%d: Unrecognised command (\"%s\")", player.getIndex(), actionStr));
                     checkForEndGame();
                     break;
                 }
             }
         } catch (TimeoutException e) {
+            gameManager.addToGameSummary(player.getNicknameToken() + " timeout!");
             player.deactivate(String.format("$%d timeout!", player.getIndex()));
             checkForEndGame();
         }
@@ -434,8 +435,8 @@ public class Referee extends AbstractReferee {
             x = Integer.parseInt(moveTrainMatcher.group(3));
             y = Integer.parseInt(moveTrainMatcher.group(4));
         } catch (NumberFormatException e) {
-            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (out of bounds) " + actionStr);
-            return true;
+            // could not parse: timeout
+            return false;
         }
     
         if (!gameState.isInside(x, y)) {
@@ -471,8 +472,8 @@ public class Referee extends AbstractReferee {
             x = Integer.parseInt(buildMatcher.group(2));
             y = Integer.parseInt(buildMatcher.group(3));
         } catch (NumberFormatException e) {
-            gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (out of bounds) " + actionStr);
-            return true;
+            // could not parse: timeout
+            return false;
         }
 
         if (!gameState.isInside(x, y)) {
