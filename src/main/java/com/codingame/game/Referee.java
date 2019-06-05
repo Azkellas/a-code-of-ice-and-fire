@@ -150,11 +150,12 @@ public class Referee extends AbstractReferee {
             // Read and parse answer
             readInput(player);
 
+            /*
             // Make the first action to save frames
             boolean madeAnAction = false;
             while (hasAction() && !madeAnAction) {
                 madeAnAction = makeAction();
-            }
+            }*/
         }
         updateView();
         checkForHqCapture();
