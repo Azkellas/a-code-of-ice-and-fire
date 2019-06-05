@@ -526,7 +526,7 @@
         <div class="statement-expert-rules-content">
             Le code source du jeu se trouve ici : <a target="_blank" href="https://github.com/Azkellas/a-code-of-ice-and-fire">https://github.com/Azkellas/a-code-of-ice-and-fire</a>.
             <ul style="padding-top: 0; padding-bottom:0;">
-                <li>Il y a entre <const>8</const> et <const>20</const> emplacements de mine.</li>
+                <li>Il y a entre <const>6</const> et <const>X</const> emplacements de mine où X est <const>15%</const> du nombre de cases non vides.</li>
                 <li>Un emplacement de mine est toujours présent sur la case directement à droite (resp. gauche) du QG rouge (resp. bleu).</li>
                 <li>Les cases à distance 1 autour du quartier général (incluant la diagonale) ne sont jamais des cases vides.</li>
                 <li> Le joueur bleu possède toujours la case <const>(11, 10)</const> au début de la partie.</li>

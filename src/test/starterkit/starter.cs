@@ -323,13 +323,17 @@ namespace ACOIF
 
             public override string ToString() => $"({X},{Y})";
 
-            public static bool operator ==(Position obj1, Position obj2) => obj1.Equals(obj2);
+            public static bool operator ==(Position obj1, Position obj2) => obj1?.Equals(obj2) ?? ReferenceEquals(obj2, null);
 
-            public static bool operator !=(Position obj1, Position obj2) => !obj1.Equals(obj2);
+            public static bool operator !=(Position obj1, Position obj2) => !(obj1 == obj2);
 
             public override bool Equals(object obj) => Equals((Position) obj);
 
-            protected bool Equals(Position other) => X == other.X && Y == other.Y;
+            protected bool Equals(Position other)
+            {
+                if (other == null) return false;
+                return X == other.X && Y == other.Y;
+            }
 
             public double Dist(Position p) => Math.Abs(X - p.X) + Math.Abs(Y - p.Y);
         }
