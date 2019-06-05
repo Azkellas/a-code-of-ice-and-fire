@@ -163,7 +163,7 @@
                         Dans cette ligue, les joueurs ne peuvent construire qu'un batiment : la <action>MINE</action>.
                     </p>
                     <ul style="padding-top: 0; padding-bottom:0;">
-                        <li><img src="http://file.azke.fr/mine_neutre.png" style="height:20px;"/><action>MINE</action>: les mines produisent de l'or chaque tour et ne peuvent être construites qu'à certains endroits spécifiques. Le coût de construction d'une mine vaut <const>20 + 4 * nbMinesDuJoueur</const> soit la première coûte <const>20</const>, la seconde coûte <const>24</const>, etc. Chaque mine possédée et active augmente le revenu de son propriétaire de <const>4</const>.</li>
+                        <li><img src="http://file.azke.fr/COIF/mine_neutre.png" style="height:20px;"/><action>MINE</action>: les mines produisent de l'or chaque tour et ne peuvent être construites qu'à certains endroits spécifiques. Le coût de construction d'une mine vaut <const>15</const>. Chaque mine possédée et active augmente le revenu de son propriétaire de <const>4</const>.</li>
                     </ul>
                 </div>
                 <!-- END -->
@@ -182,11 +182,11 @@
                     </p>
                 </div>
                 <ul style="padding-top: 0; padding-bottom:0;">
-                    <li><img src="http://file.azke.fr/mine_neutre.png" style="height:20px;"/>
-                        <action>MINE</action>: les mines produisent de l'or chaque tour et ne peuvent être construites qu'à certains endroits spécifiques. Le coût de construction d'une mine vaut <const>20 + 4 * nbMinesDuJoueur</const> soit la première coûte <const>20</const>, la seconde coûte <const>24</const>, etc. Chaque mine possédée et active augmente le revenu de son propriétaire de <const>4</const>.</li>
+                    <li><img src="http://file.azke.fr/COIF/mine_neutre.png" style="height:20px;"/>
+                        <action>MINE</action>: les mines produisent de l'or chaque tour et ne peuvent être construites qu'à certains endroits spécifiques. Le coût de construction d'une mine vaut <const>15</const>. Chaque mine possédée et active augmente le revenu de son propriétaire de <const>4</const>.</li>
                     <li style="color: #7cc576;
                 background-color: rgba(124, 197, 118,.1);
-                padding: 2px;"><img src="http://file.azke.fr/tower_red.png" style="height:20px;"/>
+                padding: 2px;"><img src="http://file.azke.fr/COIF/tower_red.png" style="height:20px;"/>
                         <action>TOWER</action>: les tours protègent les cases possedées et directement adjacentes (en haut, en bas, à gauche et à droite, mais pas en diagonale). Une case protégée par une tour ne peut être atteinte par une unité ennemie, à moins qu'elle soit de niveau <const>3</const>. De même, une tour ne peut être détruite que par une unité de niveau <const>3</const>. Une tour coûte 15 d'or à construire et ne peut pas être construite sur un emplacement de mine.
                         <div style="margin-left:auto; margin-right:auto; width:350px;">
                             <img src="https://www.codingame.com/servlet/mfileservlet?id=28956841128576" alt="tower-protection" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
@@ -207,9 +207,9 @@
                     Les joueurs peuvent construire deux types de batiment : la <action>MINE</action> et la <action>TOUR</action>.
                 </p>
                 <ul style="padding-top: 0; padding-bottom:0;">
-                    <li><img src="http://file.azke.fr/mine_neutre.png" style="height:20px;"/>
-                        <action>MINE</action>: les mines produisent de l'or chaque tour et ne peuvent être construites qu'à certains endroits spécifiques. Le coût de construction d'une mine vaut <const>20 + 4 * nbMinesDuJoueur</const> soit la première coûte <const>20</const>, la seconde coûte <const>24</const>, etc. Chaque mine possédée et active augmente le revenu de son propriétaire de <const>4</const>.</li>
-                    <li><img src="http://file.azke.fr/tower_red.png" style="height:20px;"/>
+                    <li><img src="http://file.azke.fr/COIF/mine_neutre.png" style="height:20px;"/>
+                        <action>MINE</action>: les mines produisent de l'or chaque tour et ne peuvent être construites qu'à certains endroits spécifiques. Le coût de construction d'une mine vaut <const>15</const>. Chaque mine possédée et active augmente le revenu de son propriétaire de <const>4</const>.</li>
+                    <li><img src="http://file.azke.fr/COIF/tower_red.png" style="height:20px;"/>
                         <action>TOWER</action>: les tours protègent les cases possedées et directement adjacentes (en haut, en bas, à gauche et à droite, mais pas en diagonale). Une case protégée par une tour ne peut être atteinte par une unité ennemie, à moins qu'elle soit de niveau <const>3</const>. De même, une tour ne peut être détruite que par une unité de niveau <const>3</const>. Une tour coûte 15 d'or à construire et ne peut pas être construite sur un emplacement de mine.
                         <div style="margin-left:auto; margin-right:auto; width:350px;">
                             <img src="https://www.codingame.com/servlet/mfileservlet?id=28956841128576" alt="tower-protection" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>

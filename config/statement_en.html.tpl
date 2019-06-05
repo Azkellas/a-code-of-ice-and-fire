@@ -163,7 +163,7 @@
                         In this league, players can only build one building: the <action>MINE</action>.
                     </p>
                     <ul style="padding-top: 0; padding-bottom: 0;">
-                        <li><img src="http://file.azke.fr/mine_neutre.png" style="height:20px;"/><action>MINE</action>: mines produce gold each turn and can only be built on mine spots. Mines cost <const>20 + 4 * playerNbOfMines</const> to build. So the first costs <const>20</const>, the second one <const>24</const>... A mine's income is always <const>+4</const>.</li>
+                        <li><img src="http://file.azke.fr/COIF/mine_neutre.png" style="height:20px;"/><action>MINE</action>: mines produce gold each turn and can only be built on mine spots. Mines cost <const>15</const> to build. A mine's income is always <const>+4</const>.</li>
                     </ul>
                 </div>
                 <!-- END -->
@@ -182,10 +182,10 @@
                     </p>
                 </div>
                 <ul style="padding-top: 0; padding-bottom: 0;">
-                    <li><img src="http://file.azke.fr/mine_neutre.png" style="height:20px;"/><action>MINE</action>: mines produce gold each turn and can only be built on mine spots. Mines cost <const>20 + 4 * playerNbOfMines</const>. So the first costs <const>20</const>, the second one <const>24</const>... A mine's income is always <const>+4</const>.</li>
+                    <li><img src="http://file.azke.fr/COIF/mine_neutre.png" style="height:20px;"/><action>MINE</action>: mines produce gold each turn and can only be built on mine spots. Mines cost <const>15</const>. A mine's income is always <const>+4</const>.</li>
                     <li style="color: #7cc576;
                     background-color: rgba(124, 197, 118,.1);
-                    padding: 2px;"><img src="http://file.azke.fr/tower_red.png" style="height:20px;"/>
+                    padding: 2px;"><img src="http://file.azke.fr/COIF/tower_red.png" style="height:20px;"/>
                         <action>TOWER</action>: towers protect owned cells that are adjacent (up, down, left and right, but not diagonally). Cells protected by a tower can only be reached by enemy units of level <const>3</const>. Likewise, the tower can only be destroyed by a level <const>3</const> unit. A tower costs <const>15</const> gold to build and cannot be built on a mine spot.
                         Here is a figure of a tower protection range:
                         <div style="margin-left:auto; margin-right:auto; width:350px;">
@@ -208,8 +208,8 @@
                     Players can build two different buildings: the <action>MINE</action> and the <action>TOWER</action>.
                 </p>
                 <ul style="padding-top: 0; padding-bottom: 0;">
-                    <li><img src="http://file.azke.fr/mine_neutre.png" style="height:20px;"/><action>MINE</action>: mines produce gold each turn and can only be built on mine spots. Mines cost <const>20 + 4 * playerNbOfMines</const>. So the first costs <const>20</const>, the second one <const>24</const>... A mine's income is always <const>+4</const>.</li>
-                    <li><img src="http://file.azke.fr/tower_red.png" style="height:20px;"/>
+                    <li><img src="http://file.azke.fr/COIF/mine_neutre.png" style="height:20px;"/><action>MINE</action>: mines produce gold each turn and can only be built on mine spots. Mines cost <const>15</const>. A mine's income is always <const>+4</const>.</li>
+                    <li><img src="http://file.azke.fr/COIF/tower_red.png" style="height:20px;"/>
                         <action>TOWER</action>: towers protect owned cells that are adjacent (up, down, left and right, but not diagonally). Cells protected by a tower can only be reached by enemy units of level <const>3</const>. Likewise, the tower can only be destroyed by a level <const>3</const> unit. A tower costs <const>15</const> gold to build and cannot be built on a mine spot.
                         Here is a figure of a tower protection range:
                         <div style="margin-left:auto; margin-right:auto; width:350px;">

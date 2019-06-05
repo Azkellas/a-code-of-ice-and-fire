@@ -19,7 +19,7 @@ public final class Constants {
 
     static public final int CELL_INCOME = 1;
     static public final int MINE_INCOME = 4; // So a cell with a mine earns 1+4 = 5
-    static public final int MINE_INCREMENT = 4; // So the first mine costs 20, then 24, then 28
+    static public final int MINE_INCREMENT = 0; // Mines cost 15 flat, there is no increment anymore
 
     static public final int UNIT_COST[] = {0, 10, 20, 30};
     static public final int UNIT_UPKEEP[] = {0, 1, 4, 20};
@@ -44,7 +44,7 @@ public final class Constants {
     public static final int BUILDING_COST(BUILDING_TYPE type) {
         switch (type) {
             case MINE:
-                return 20;
+                return 15;
             case TOWER:
                 return 15;
             default:  // case HQ
