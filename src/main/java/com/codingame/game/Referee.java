@@ -247,13 +247,17 @@ public class Referee extends AbstractReferee {
         if (league == LEAGUE.WOOD3 || league == LEAGUE.WOOD2) {
             String message = "Invalid action (no building in this league)";
 
-            if (league == LEAGUE.WOOD2 && action.getBuildType() == BUILDING_TYPE.TOWER)
-                message = "Invalid action (no TOWER in this league)";
-
             gameManager.addToGameSummary(player.getNicknameToken() + ": " + message + " " + action);
             return false;
         }
 
+        if (league == LEAGUE.WOOD1 && action.getBuildType() == BUILDING_TYPE.TOWER) {
+            String message = "Invalid action (no TOWER in this league)";
+
+            gameManager.addToGameSummary(player.getNicknameToken() + ": " + message + " " + action);
+            return false;
+        }
+        
         if (!action.getCell().isFree()) {
             gameManager.addToGameSummary(player.getNicknameToken() + ": Invalid action (cell occupied) " + action);
             return false;
