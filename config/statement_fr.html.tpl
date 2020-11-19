@@ -95,7 +95,7 @@
                     Une case est dite <strong>active</strong> si et seulement si la case est connectée au QG ; c'est à dire, s'il existe un chemin menant du QG jusqu'à cette case.
                 </p>
                 <div style="margin-left:auto; margin-right:auto; width:350px;">
-                    <img src="https://www.codingame.com/servlet/mfileservlet?id=28933360811968" alt="territory-ownership" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
+                    <img src="https://www.codingame.com/servlet/fileservlet?id=28933360811968" alt="territory-ownership" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
                     <p><i>Ici, le territoire rouge est composé de 6 cases. Les 3 cases rouge foncé sont maintenant inactives car le joueur bleu a coupé une partie du territoire. En capturant, par exemple, la case marquée par un X, le joueur rouge peut rendre ces cases actives à nouveau.</i></p>
                 </div>
 
@@ -163,7 +163,7 @@
                         Dans cette ligue, les joueurs ne peuvent construire qu'un batiment : la <action>MINE</action>.
                     </p>
                     <ul style="padding-top: 0; padding-bottom:0;">
-                        <li><img src="http://file.azke.fr/COIF/mine_neutre.png" style="height:20px;"/><action>MINE</action>: les mines produisent de l'or chaque tour et ne peuvent être construites qu'à certains endroits spécifiques. Le coût de construction d'une mine vaut <const>15</const>. Chaque mine possédée et active augmente le revenu de son propriétaire de <const>4</const>.</li>
+                        <li><img src="https://www.codingame.com/servlet/fileservlet?id=54135165678827" style="height:20px;"/><action>MINE</action>: les mines produisent de l'or chaque tour et ne peuvent être construites qu'à certains endroits spécifiques. Le coût de construction d'une mine vaut <const>15</const>. Chaque mine possédée et active augmente le revenu de son propriétaire de <const>4</const>.</li>
                     </ul>
                 </div>
                 <!-- END -->
@@ -182,14 +182,14 @@
                     </p>
                 </div>
                 <ul style="padding-top: 0; padding-bottom:0;">
-                    <li><img src="http://file.azke.fr/COIF/mine_neutre.png" style="height:20px;"/>
+                    <li><img src="https://www.codingame.com/servlet/fileservlet?id=54135165678827" style="height:20px;"/>
                         <action>MINE</action>: les mines produisent de l'or chaque tour et ne peuvent être construites qu'à certains endroits spécifiques. Le coût de construction d'une mine vaut <const>15</const>. Chaque mine possédée et active augmente le revenu de son propriétaire de <const>4</const>.</li>
                     <li style="color: #7cc576;
                 background-color: rgba(124, 197, 118,.1);
-                padding: 2px;"><img src="http://file.azke.fr/COIF/tower_red.png" style="height:20px;"/>
+                padding: 2px;"><img src="https://www.codingame.com/servlet/fileservlet?id=54135185447008" style="height:20px;"/>
                         <action>TOWER</action>: les tours protègent les cases possedées et directement adjacentes (en haut, en bas, à gauche et à droite, mais pas en diagonale). Une case protégée par une tour ne peut être atteinte par une unité ennemie, à moins qu'elle soit de niveau <const>3</const>. De même, une tour ne peut être détruite que par une unité de niveau <const>3</const>. Une tour coûte 15 d'or à construire et ne peut pas être construite sur un emplacement de mine.
                         <div style="margin-left:auto; margin-right:auto; width:350px;">
-                            <img src="https://www.codingame.com/servlet/mfileservlet?id=28956841128576" alt="tower-protection" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
+                            <img src="https://www.codingame.com/servlet/fileservlet?id=28956841128576" alt="tower-protection" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
                             <p>
                                 <i>La tour possédée par le joueur rouge protège les cases adjacentes marquées par une croix noire. Les cases en diagonale <strong>ne sont pas</strong> protégées. De plus, la case bleue à droite de la tour n'est pas protégée non plus car ce n'est pas une case rouge.</i>
                             </p>
@@ -207,12 +207,12 @@
                     Les joueurs peuvent construire deux types de batiment : la <action>MINE</action> et la <action>TOUR</action>.
                 </p>
                 <ul style="padding-top: 0; padding-bottom:0;">
-                    <li><img src="http://file.azke.fr/COIF/mine_neutre.png" style="height:20px;"/>
+                    <li><img src="https://www.codingame.com/servlet/fileservlet?id=54135165678827" style="height:20px;"/>
                         <action>MINE</action>: les mines produisent de l'or chaque tour et ne peuvent être construites qu'à certains endroits spécifiques. Le coût de construction d'une mine vaut <const>15</const>. Chaque mine possédée et active augmente le revenu de son propriétaire de <const>4</const>.</li>
-                    <li><img src="http://file.azke.fr/COIF/tower_red.png" style="height:20px;"/>
+                    <li><img src="https://www.codingame.com/servlet/fileservlet?id=54135185447008" style="height:20px;"/>
                         <action>TOWER</action>: les tours protègent les cases possedées et directement adjacentes (en haut, en bas, à gauche et à droite, mais pas en diagonale). Une case protégée par une tour ne peut être atteinte par une unité ennemie, à moins qu'elle soit de niveau <const>3</const>. De même, une tour ne peut être détruite que par une unité de niveau <const>3</const>. Une tour coûte 15 d'or à construire et ne peut pas être construite sur un emplacement de mine.
                         <div style="margin-left:auto; margin-right:auto; width:350px;">
-                            <img src="https://www.codingame.com/servlet/mfileservlet?id=28956841128576" alt="tower-protection" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
+                            <img src="https://www.codingame.com/servlet/fileservlet?id=28956841128576" alt="tower-protection" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
                             <p>
                                 <i>La tour possédée par le joueur rouge protège les cases adjacentes marquées par une croix noire. Les cases en diagonale <strong>ne sont pas</strong> protégées. De plus, la case bleue à droite de la tour n'est pas protégée non plus car ce n'est pas une case rouge.</i>
                             </p>
@@ -481,7 +481,7 @@
                     Les actions sont effectuées séquentiellement. Les actions invalides sont ignorées.
                 </p>
                 <div style="margin-left:auto; margin-right:auto; width:500px;">
-                        <img src="https://www.codingame.com/servlet/mfileservlet?id=28959325237970" alt="action-sequence-diagram" style="margin-left:auto; margin-right:auto; width:550px;" />
+                        <img src="https://www.codingame.com/servlet/fileservlet?id=28959325237970" alt="action-sequence-diagram" style="margin-left:auto; margin-right:auto; width:550px;" />
                 </div>
             </div>
 
