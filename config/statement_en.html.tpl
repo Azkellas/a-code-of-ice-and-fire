@@ -96,7 +96,7 @@
                     A cell is said to be <strong>active</strong> if and only if the cell is connected to the headquarters. That is, there exists a path of owned cells from the headquarters to this cell.
                 </p>
                 <div style="margin-left:auto; margin-right:auto; width:350px;">
-                    <img src="https://www.codingame.com/servlet/mfileservlet?id=28933360811968" alt="territory-ownership" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
+                    <img src="https://www.codingame.com/servlet/fileservlet?id=28933360811968" alt="territory-ownership" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
                     <p><i>The red territory is composed of 6 cells. The 3 red-dark cells are now inactive because the blue player interrupted part of this territory. By capturing, for example, the cell marked by an X, the red player can make these cells active again.</i></p>
                 </div>
 
@@ -163,7 +163,7 @@
                         In this league, players can only build one building: the <action>MINE</action>.
                     </p>
                     <ul style="padding-top: 0; padding-bottom: 0;">
-                        <li><img src="http://file.azke.fr/COIF/mine_neutre.png" style="height:20px;"/><action>MINE</action>: mines produce gold each turn and can only be built on mine spots. Mines cost <const>15</const> to build. A mine's income is always <const>+4</const>.</li>
+                        <li><img src="https://www.codingame.com/servlet/fileservlet?id=54135165678827" style="height:20px;"/><action>MINE</action>: mines produce gold each turn and can only be built on mine spots. Mines cost <const>15</const> to build. A mine's income is always <const>+4</const>.</li>
                     </ul>
                 </div>
                 <!-- END -->
@@ -182,14 +182,14 @@
                     </p>
                 </div>
                 <ul style="padding-top: 0; padding-bottom: 0;">
-                    <li><img src="http://file.azke.fr/COIF/mine_neutre.png" style="height:20px;"/><action>MINE</action>: mines produce gold each turn and can only be built on mine spots. Mines cost <const>15</const>. A mine's income is always <const>+4</const>.</li>
+                    <li><img src="https://www.codingame.com/servlet/fileservlet?id=54135165678827" style="height:20px;"/><action>MINE</action>: mines produce gold each turn and can only be built on mine spots. Mines cost <const>15</const>. A mine's income is always <const>+4</const>.</li>
                     <li style="color: #7cc576;
                     background-color: rgba(124, 197, 118,.1);
-                    padding: 2px;"><img src="http://file.azke.fr/COIF/tower_red.png" style="height:20px;"/>
+                    padding: 2px;"><img src="https://www.codingame.com/servlet/fileservlet?id=54135185447008" style="height:20px;"/>
                         <action>TOWER</action>: towers protect owned cells that are adjacent (up, down, left and right, but not diagonally). Cells protected by a tower can only be reached by enemy units of level <const>3</const>. Likewise, the tower can only be destroyed by a level <const>3</const> unit. A tower costs <const>15</const> gold to build and cannot be built on a mine spot.
                         Here is a figure of a tower protection range:
                         <div style="margin-left:auto; margin-right:auto; width:350px;">
-                            <img src="https://www.codingame.com/servlet/mfileservlet?id=28956841128576" alt="tower-protection" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
+                            <img src="https://www.codingame.com/servlet/fileservlet?id=28956841128576" alt="tower-protection" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
                             <p>
                                 <i>The tower owned by the red player protects the adjacent cells marked by a black cross. Cells are <strong>not</strong> protected diagonally. Moreover, the blue cell on the right of the tower is not protected as it is not a red cell.
                                 </i>
@@ -208,12 +208,12 @@
                     Players can build two different buildings: the <action>MINE</action> and the <action>TOWER</action>.
                 </p>
                 <ul style="padding-top: 0; padding-bottom: 0;">
-                    <li><img src="http://file.azke.fr/COIF/mine_neutre.png" style="height:20px;"/><action>MINE</action>: mines produce gold each turn and can only be built on mine spots. Mines cost <const>15</const>. A mine's income is always <const>+4</const>.</li>
-                    <li><img src="http://file.azke.fr/COIF/tower_red.png" style="height:20px;"/>
+                    <li><img src="https://www.codingame.com/servlet/fileservlet?id=54135165678827" style="height:20px;"/><action>MINE</action>: mines produce gold each turn and can only be built on mine spots. Mines cost <const>15</const>. A mine's income is always <const>+4</const>.</li>
+                    <li><img src="https://www.codingame.com/servlet/fileservlet?id=54135185447008" style="height:20px;"/>
                         <action>TOWER</action>: towers protect owned cells that are adjacent (up, down, left and right, but not diagonally). Cells protected by a tower can only be reached by enemy units of level <const>3</const>. Likewise, the tower can only be destroyed by a level <const>3</const> unit. A tower costs <const>15</const> gold to build and cannot be built on a mine spot.
                         Here is a figure of a tower protection range:
                         <div style="margin-left:auto; margin-right:auto; width:350px;">
-                            <img src="https://www.codingame.com/servlet/mfileservlet?id=28956841128576" alt="tower-protection" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
+                            <img src="https://www.codingame.com/servlet/fileservlet?id=28956841128576" alt="tower-protection" style="margin-left:auto; margin-right:auto; width:350px;" /><br/>
                             <p>
                                 <i>The tower owned by the red player protects the adjacent cells marked by a black cross. Cells are <strong>not</strong> protected diagonally. Moreover, the blue cell on the right of the tower is not protected as it is not a red cell.</i>
                             </p>
@@ -481,7 +481,7 @@
                     All actions are processed sequentially. Invalid actions are ignored.
                 </p>
                 <div style="margin-left:auto; margin-right:auto; width:500px;">
-                        <img src="https://www.codingame.com/servlet/mfileservlet?id=28956987525427" alt="action-sequence-diagram" style="margin-left:auto; margin-right:auto; width:550px;" />
+                        <img src="https://www.codingame.com/servlet/fileservlet?id=28956987525427" alt="action-sequence-diagram" style="margin-left:auto; margin-right:auto; width:550px;" />
                 </div>
             </div>
 
